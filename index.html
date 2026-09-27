@@ -19,8 +19,9 @@
       margin: 0; padding: 0;
       font-family: var(--font-base);
       color: var(--text-light);
-      background-color: var(--bg-dark); /* 흰색 배경 제거 및 어두운 배경 적용 */
+      background-color: var(--bg-dark);
       scroll-behavior: smooth;
+      overflow-x: hidden;
     }
 
     /* ---------- 헤더 ---------- */
@@ -30,10 +31,16 @@
       height: 60px;
       background: rgba(0,0,0,0.7);
       display: flex;
+      justify-content: center;
+      z-index: 10;
+    }
+    .header-inner {
+      display: flex;
       align-items: center;
       justify-content: space-between;
+      width: 100%;
+      max-width: 1200px;
       padding: 0 2rem;
-      z-index: 10;
     }
     header .logo {
       font-weight: 700;
@@ -53,44 +60,42 @@
     }
 
     /* ---------- Hero Section ---------- */
-#home {
-  position: relative;
-  width: 100%;
-  max-width: none;
-  height: 100vh;
-  height: 100svh;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  overflow: hidden;
-  background-color: #000;
-}
-/* 화면 비율을 유지하면서 히어로 영역 전체를 채움. 화면 비율에 따라 영상 가장자리는 잘릴 수 있음. */
-#home video#hero-video {
+    #home {
+      position: relative;
+      width: 100vw;
+      max-width: 100%;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      overflow: hidden;
+      background-color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #home video#hero-video {
       position: absolute;
       inset: 0;
-      width: 100%; height: 100%;
+      width: 100%; 
+      height: 100%;
       object-fit: cover;
       object-position: center center;
       opacity: 0.5;
-  z-index: 0;
-  pointer-events: none;
-}
+      z-index: 0;
+      pointer-events: none;
+    }
     .hero-content {
       position: relative;
       z-index: 1;
       max-width: 90%;
-      margin: 0 auto;
       text-align: center;
-      top: 50%;
-      transform: translateY(-50%);
     }
     .hero-title {
       font-size: clamp(3rem, 5vw, 5rem);
-      font-weight: 300; /* 기존 400에서 더 얇게 수정 */
+      font-weight: 300; 
       text-transform: uppercase;
       margin: 0;
-      /* text-shadow: 0 0 15px var(--accent); 엠버 발광 효과 제거 */
     }
     .hero-subtitle {
       margin-top: 1rem;
@@ -112,58 +117,229 @@
     h2 {
       font-size: clamp(2.5rem, 4vw, 4rem);
       text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 3rem;
     }
     h3 {
       font-size: clamp(1.8rem, 3vw, 2.5rem);
     }
 
-    /* ---------- Project Section ---------- */
+    /* ---------- Project (PORTFOLIO) Carousel ---------- */
     #project {
-      background-color: var(--bg-dark); /* 명시적 배경색 추가 */
+      background-color: var(--bg-dark);
       max-width: 100%;
+      overflow: hidden; 
+      padding: 5rem 0; 
     }
     #project .featured {
       max-width: 1200px;
-      margin: 0 auto 3rem;
+      margin: 0 auto 2rem;
       text-align: center;
+      padding: 0 2rem;
     }
     #project .featured h3 {
-      margin-bottom: 0.5rem;
+      margin-bottom: 2rem;
       font-size: clamp(2rem, 3.5vw, 3rem);
     }
-    #project .grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
+
+    /* 필터 버튼 스타일 */
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-bottom: 3rem;
     }
-    #project figure {
-      margin: 0;
-      overflow: hidden;
-      border-radius: 8px;
-      background: #222;
-    }
-    #project figure img {
-      width: 100%;
-      height: 250px;
-      display: block;
-      object-fit: cover;
-    }
-    #project figure figcaption {
-      padding: 1rem;
-      font-size: clamp(0.9rem, 2vw, 1rem);
+    .filter-btn {
+      background: transparent;
+      border: 1px solid #555;
       color: var(--text-light);
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+    }
+    
+    /* 슬라이더 컨테이너 */
+    .slider-wrapper {
+      position: relative;
+      width: 100%; 
+      margin: 0 auto;
+    }
+    
+    .scroll-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 2rem; 
+      scroll-behavior: smooth; 
+      padding: 0 5vw 1rem 5vw; 
+      -ms-overflow-style: none; 
+      scrollbar-width: none; 
+    }
+    .scroll-container::-webkit-scrollbar {
+      display: none; 
+    }
+
+    .scroll-container figure {
+      flex: 0 0 auto;
+      width: clamp(320px, 60vw, 800px); 
+      margin: 0;
+      background: #222;
+      border-radius: 8px;
+      overflow: hidden;
+      user-select: none;
+      transition: opacity 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    }
+    
+    /* 유튜브 썸네일 & 래퍼 */
+    .video-wrapper {
+      position: relative;
+      display: block;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      background: #000;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .video-wrapper img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: opacity 0.3s;
+    }
+    .video-wrapper:hover img {
+      opacity: 0.7;
+    }
+
+    /* 썸네일 안전장치 (가운데 로고 배경) */
+    .video-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: #333 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>') no-repeat center;
+      background-size: 50px;
+      z-index: 0;
+    }
+    .video-wrapper img {
+      z-index: 1; /* 썸네일 이미지가 있으면 이 레이어를 덮음 */
+    }
+
+    /* 좌측 상단 카테고리 태그 (Badge) */
+    .badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background-color: var(--accent);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      z-index: 5;
+    }
+    
+    /* 커스텀 플레이 버튼 */
+    .play-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 64px; height: 64px; 
+      background: rgba(0,0,0,0.7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: background 0.3s;
+      z-index: 2;
+    }
+    .play-btn::after {
+      content: '▶';
+      color: #fff;
+      font-size: 1.8rem;
+      margin-left: 6px; 
+    }
+    .video-wrapper:hover .play-btn {
+      background: var(--accent);
+    }
+
+    /* 제목 바 - 드래그 활성화 영역 */
+    .scroll-container figure figcaption {
+      padding: 2rem 1.5rem; 
+      background-color: #1a1a1a;
+      border-top: 1px solid #333;
+      cursor: grab; 
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: left; 
+    }
+    .scroll-container figure figcaption:active {
+      cursor: grabbing;
+    }
+    .scroll-container figure figcaption .proj-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-light);
+      margin: 0;
+    }
+    .scroll-container figure figcaption .proj-desc {
+      font-size: 0.9rem;
+      color: #aaa;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* 드래그 힌트와 슬라이더 인디케이터 컨테이너 */
+    .slider-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 0; 
+    }
+    .drag-hint {
+      font-size: 0.85rem;
+      color: #888;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.8rem;
+    }
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      background-color: #555;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .dot.active {
+      background-color: var(--accent);
     }
 
     /* ---------- News Section ---------- */
     #news {
-      background-color: var(--bg-lighter); /* 명시적 배경색 추가 및 구분감 부여 */
+      background-color: var(--bg-lighter);
       max-width: 100%;
     }
     #news .news-container {
       max-width: 1200px;
       margin: 0 auto;
+      padding: 0 2rem;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1.5rem;
@@ -193,6 +369,7 @@
     #about .about-inner {
       max-width: 1200px;
       margin: 0 auto;
+      padding: 0 2rem;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 3rem;
@@ -231,23 +408,29 @@
 
     /* ---------- 미디어 쿼리 ---------- */
     @media (max-width: 768px) {
+      .header-inner { padding: 0 1rem; }
       header nav a { margin-left: 1rem; }
+      #home { min-height: 60vh; }
       #about .about-inner { grid-template-columns: 1fr; gap: 2rem; }
       #about .col { text-align: center; align-items: center; }
       #about .col:nth-child(2) { border-left: none; padding-left: 0; border-top: 2px solid var(--accent-light); padding-top: 2rem; }
+      
+      .scroll-container figure { width: clamp(280px, 85vw, 400px); }
     }
   </style>
 </head>
 <body>
   <!-- 헤더 -->
   <header>
-    <div class="logo">Film Sospeso</div>
-    <nav>
-      <a href="#home">홈</a>
-      <a href="#project">프로젝트</a>
-      <a href="#news">진행사항</a>
-      <a href="#about">Filmsospeso 란</a>
-    </nav>
+    <div class="header-inner">
+      <div class="logo">Film Sospeso</div>
+      <nav>
+        <a href="#home">홈</a>
+        <a href="#project">프로젝트</a>
+        <a href="#news">진행사항</a>
+        <a href="#about">Filmsospeso 란</a>
+      </nav>
+    </div>
   </header>
 
   <!-- Hero -->
@@ -265,35 +448,297 @@
     </div>
   </section>
 
-  <!-- Project -->
+  <!-- Project (PORTFOLIO) -->
   <section id="project">
     <div class="featured">
-      <h3>OUT OF FRAME</h3>
-      <p>아티스트로 시작하는 첫 번째 콘텐츠 개발 프로젝트. 지속적인 개인 콘텐츠와 숏폼 기록을 통해 RESCENE(리센느)의 멜론 TOP100 1위 역주행을 이끌어낸 시네마틱 다큐멘터리 기획입니다.</p>
+      <h3>PORTFOLIO</h3>
+      
+      <!-- 카테고리 필터 버튼 -->
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="mv">뮤직비디오</button>
+        <button class="filter-btn" data-filter="film">영화</button>
+        <button class="filter-btn" data-filter="brand">브랜드/광고</button>
+        <button class="filter-btn" data-filter="pr">기업홍보영상</button>
+        <button class="filter-btn" data-filter="vj">VJ</button>
+        <button class="filter-btn" data-filter="event">행사</button>
+      </div>
     </div>
-    <div class="grid">
-      <figure>
-        <img src="images/1.jpg" alt="달샤벳 Serri">
-        <figcaption>[Music Video] 달샤벳 Serri 솔로 'LIKE', 'Spotlight' 뮤직비디오 및 무대 연출</figcaption>
-      </figure>
-      <figure>
-        <img src="images/2.jpg" alt="더블트러블">
-        <figcaption>[Original Content] 왓챠 오리지널 '더블트러블' VJ 및 인터뷰 제작</figcaption>
-      </figure>
-      <figure>
-        <img src="images/3.jpg" alt="안녕하세요">
-        <figcaption>[Making & Still] 영화 '안녕하세요', '나는 여기에 있다' 메이킹 및 시사회 스틸</figcaption>
-      </figure>
-      <figure>
-        <img src="images/4.jpg" alt="IHHI">
-        <figcaption>[Brand & Commercial] IHHI 패션 브랜드, 수작카츠, 은파 더레이크 홍보 영상</figcaption>
-      </figure>
+    
+    <!-- 슬라이더 래퍼 -->
+    <div class="slider-wrapper">
+      <div class="scroll-container" id="projectSlider">
+        
+        <!-- [뮤직비디오] -->
+        <figure class="portfolio-item" data-category="mv">
+          <a href="https://www.youtube.com/watch?v=FCWUGhVX-D4" target="_blank" class="video-wrapper">
+            <span class="badge">뮤직비디오</span>
+            <img src="https://img.youtube.com/vi/FCWUGhVX-D4/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">달샤벳 Serri - LIKE</p>
+            <p class="proj-desc">달샤벳 세리 솔로 뮤직비디오 프로젝트의 디테일한 설명 문구를 이곳에 작성해 주세요.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="mv">
+          <a href="https://www.youtube.com/watch?v=LUlyTXQG2Hk" target="_blank" class="video-wrapper">
+            <span class="badge">뮤직비디오</span>
+            <img src="https://img.youtube.com/vi/LUlyTXQG2Hk/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">달샤벳 Serri - Spotlight</p>
+            <p class="proj-desc">Spotlight 뮤직비디오 기획 및 무대 연출에 대한 부가 설명을 적는 공간입니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="mv">
+          <a href="https://www.youtube.com/watch?v=fLhuUJyFfeQ" target="_blank" class="video-wrapper">
+            <span class="badge">뮤직비디오</span>
+            <img src="https://img.youtube.com/vi/fLhuUJyFfeQ/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">아티스트 뮤직비디오 1</p>
+            <p class="proj-desc">뮤직비디오 포트폴리오 작업 배경이나 연출 포인트를 설명할 수 있습니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="mv">
+          <a href="https://www.youtube.com/watch?v=BHlT0ypEcWI" target="_blank" class="video-wrapper">
+            <span class="badge">뮤직비디오</span>
+            <img src="https://img.youtube.com/vi/BHlT0ypEcWI/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">아티스트 뮤직비디오 2</p>
+            <p class="proj-desc">뮤직비디오 포트폴리오 작업 배경이나 연출 포인트를 설명할 수 있습니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="mv">
+          <a href="https://www.youtube.com/watch?v=wUmlWvrNcTc" target="_blank" class="video-wrapper">
+            <span class="badge">뮤직비디오</span>
+            <img src="https://img.youtube.com/vi/wUmlWvrNcTc/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">아티스트 뮤직비디오 3</p>
+            <p class="proj-desc">뮤직비디오 포트폴리오 작업 배경이나 연출 포인트를 설명할 수 있습니다.</p>
+          </figcaption>
+        </figure>
+
+        <!-- [영화] -->
+        <figure class="portfolio-item" data-category="film">
+          <a href="https://www.youtube.com/watch?v=yrsDCDcqLu8" target="_blank" class="video-wrapper">
+            <span class="badge">영화</span>
+            <img src="https://img.youtube.com/vi/yrsDCDcqLu8/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">투헤븐</p>
+            <p class="proj-desc">촬영감독</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="film">
+          <a href="https://www.youtube.com/watch?v=pDIuyAMA8Nk" target="_blank" class="video-wrapper">
+            <span class="badge">영화</span>
+            <img src="https://img.youtube.com/vi/pDIuyAMA8Nk/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">사운드 오브 호프 : 포썸 트롯의 기적</p>
+            <p class="proj-desc">자막 후반작업</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="film">
+          <a href="https://www.youtube.com/watch?v=J-pmjGgqfpo" target="_blank" class="video-wrapper">
+            <span class="badge">영화</span>
+            <img src="https://img.youtube.com/vi/J-pmjGgqfpo/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">본회퍼 : 목사. 스파이. 암살자</p>
+            <p class="proj-desc">자막 후반작업</p>
+          </figcaption>
+        </figure>
+
+        <!-- [브랜드/광고] -->
+        <figure class="portfolio-item" data-category="brand">
+          <!-- 일부공개 영상이므로 hqdefault를 기본으로 사용합니다. -->
+          <a href="https://www.youtube.com/watch?v=S8koo5hrLOE" target="_blank" class="video-wrapper">
+            <span class="badge">브랜드/광고</span>
+            <img src="https://img.youtube.com/vi/S8koo5hrLOE/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">IHHI 브랜드 영상</p>
+            <p class="proj-desc">브랜드의 철학과 이미지를 감각적인 시네마틱 톤으로 연출한 캠페인 영상입니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="brand">
+          <a href="https://www.youtube.com/watch?v=bc7jdEes0eM" target="_blank" class="video-wrapper">
+            <span class="badge">브랜드/광고</span>
+            <img src="https://img.youtube.com/vi/bc7jdEes0eM/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">수작카츠 홍보영상</p>
+            <p class="proj-desc">브랜드의 철학과 이미지를 감각적인 시네마틱 톤으로 연출한 캠페인 영상입니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="brand">
+          <a href="https://www.youtube.com/watch?v=NjuMTw3MobQ" target="_blank" class="video-wrapper">
+            <span class="badge">브랜드/광고</span>
+            <img src="https://img.youtube.com/vi/NjuMTw3MobQ/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">커머셜 브랜드 필름 1</p>
+            <p class="proj-desc">브랜드의 철학과 이미지를 감각적인 시네마틱 톤으로 연출한 캠페인 영상입니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="brand">
+          <a href="https://www.youtube.com/watch?v=PE_o2DZI8GU" target="_blank" class="video-wrapper">
+            <span class="badge">브랜드/광고</span>
+            <img src="https://img.youtube.com/vi/PE_o2DZI8GU/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">커머셜 브랜드 필름 2</p>
+            <p class="proj-desc">브랜드의 철학과 이미지를 감각적인 시네마틱 톤으로 연출한 캠페인 영상입니다.</p>
+          </figcaption>
+        </figure>
+
+        <!-- [기업홍보영상] -->
+        <figure class="portfolio-item" data-category="pr">
+          <a href="https://www.youtube.com/watch?v=Ih2UpxsUHAQ" target="_blank" class="video-wrapper">
+            <span class="badge">기업홍보영상</span>
+            <img src="https://img.youtube.com/vi/Ih2UpxsUHAQ/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">기업홍보영상 1</p>
+            <p class="proj-desc">기업의 가치와 비전을 전달하는 고품질 PR 영상 프로젝트입니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="pr">
+          <a href="https://www.youtube.com/watch?v=y6ftaIf7RWg" target="_blank" class="video-wrapper">
+            <span class="badge">기업홍보영상</span>
+            <img src="https://img.youtube.com/vi/y6ftaIf7RWg/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">기업홍보영상 2</p>
+            <p class="proj-desc">기업의 가치와 비전을 전달하는 고품질 PR 영상 프로젝트입니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="pr">
+          <a href="https://www.youtube.com/watch?v=e91iszdiXqU" target="_blank" class="video-wrapper">
+            <span class="badge">기업홍보영상</span>
+            <img src="https://img.youtube.com/vi/e91iszdiXqU/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">기업홍보영상 3</p>
+            <p class="proj-desc">기업의 가치와 비전을 전달하는 고품질 PR 영상 프로젝트입니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="pr">
+          <a href="https://www.youtube.com/watch?v=W2lk9aiMfQI" target="_blank" class="video-wrapper">
+            <span class="badge">기업홍보영상</span>
+            <img src="https://img.youtube.com/vi/W2lk9aiMfQI/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">기업홍보영상 4</p>
+            <p class="proj-desc">기업의 가치와 비전을 전달하는 고품질 PR 영상 프로젝트입니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="pr">
+          <a href="https://www.youtube.com/watch?v=8SOej24g3QQ" target="_blank" class="video-wrapper">
+            <span class="badge">기업홍보영상</span>
+            <img src="https://img.youtube.com/vi/8SOej24g3QQ/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">기업홍보영상 5</p>
+            <p class="proj-desc">기업의 가치와 비전을 전달하는 고품질 PR 영상 프로젝트입니다.</p>
+          </figcaption>
+        </figure>
+
+        <!-- [VJ] -->
+        <figure class="portfolio-item" data-category="vj">
+          <a href="https://www.youtube.com/watch?v=c2GJCM3nfiU" target="_blank" class="video-wrapper">
+            <span class="badge">VJ</span>
+            <img src="https://img.youtube.com/vi/c2GJCM3nfiU/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 1</p>
+            <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담아낸 오리지널 콘텐츠입니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="vj">
+          <a href="https://www.youtube.com/watch?v=s7p3lONBj5w" target="_blank" class="video-wrapper">
+            <span class="badge">VJ</span>
+            <img src="https://img.youtube.com/vi/s7p3lONBj5w/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 2</p>
+            <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담아낸 오리지널 콘텐츠입니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="vj">
+          <a href="https://www.youtube.com/watch?v=jWxlofvzpYI" target="_blank" class="video-wrapper">
+            <span class="badge">VJ</span>
+            <img src="https://img.youtube.com/vi/jWxlofvzpYI/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 3</p>
+            <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담아낸 오리지널 콘텐츠입니다.</p>
+          </figcaption>
+        </figure>
+
+        <!-- [행사] -->
+        <figure class="portfolio-item" data-category="event">
+          <a href="https://www.youtube.com/watch?v=f9RdOgIAJCc" target="_blank" class="video-wrapper">
+            <span class="badge">행사</span>
+            <img src="https://img.youtube.com/vi/f9RdOgIAJCc/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">이벤트 행사 스케치 1</p>
+            <p class="proj-desc">현장의 열기와 하이라이트 순간을 놓치지 않고 생동감 있게 기록합니다.</p>
+          </figcaption>
+        </figure>
+        <figure class="portfolio-item" data-category="event">
+          <a href="https://www.youtube.com/watch?v=d2dkXeVkUTc" target="_blank" class="video-wrapper">
+            <span class="badge">행사</span>
+            <img src="https://img.youtube.com/vi/d2dkXeVkUTc/hqdefault.jpg" alt="thumbnail">
+            <div class="play-btn"></div>
+          </a>
+          <figcaption>
+            <p class="proj-title">이벤트 행사 스케치 2</p>
+            <p class="proj-desc">현장의 열기와 하이라이트 순간을 놓치지 않고 생동감 있게 기록합니다.</p>
+          </figcaption>
+        </figure>
+
+      </div>
+      
+      <!-- 안내 문구 및 인디케이터 점을 감싸는 컨테이너 -->
+      <div class="slider-controls">
+        <p class="drag-hint">Drag to explore ↔</p>
+        <div class="slider-dots" id="sliderDots">
+          <!-- JS로 동적 생성됨 -->
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- News -->
+  <!-- News Section -->
   <section id="news">
-    <h2>콘텐츠 개발 4단계 시스템</h2>
+    <h2>콘텐츠 개발 시스템</h2>
     <div class="news-container">
       <div class="card">
         <h4>01 발견 (Discovery)</h4>
@@ -314,7 +759,7 @@
     </div>
   </section>
 
-  <!-- About -->
+  <!-- About Section -->
   <section id="about">
     <div class="about-inner">
       <div class="col">
@@ -338,5 +783,109 @@
   <footer>
     <p>© 2026 Film Sospeso – A story in motion. <a href="mailto:contact@filmsospeso.com">contact@filmsospeso.com</a></p>
   </footer>
+
+  <!-- JavaScript: 필터링 및 슬라이더 로직 -->
+  <script>
+    const slider = document.getElementById('projectSlider');
+    const dotsContainer = document.getElementById('sliderDots');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let visibleSlides = [];
+
+    // --- 필터링 로직 ---
+    function renderSlider(filterValue) {
+      visibleSlides = [];
+      portfolioItems.forEach(item => {
+        if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+          item.style.display = 'block';
+          visibleSlides.push(item);
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      slider.scrollLeft = 0;
+      dotsContainer.innerHTML = '';
+      
+      visibleSlides.forEach((_, i) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (i === 0) dot.classList.add('active');
+        
+        dot.addEventListener('click', () => {
+          const slideWidth = visibleSlides[0].offsetWidth + parseInt(window.getComputedStyle(slider).gap || 32);
+          slider.scrollTo({
+            left: slideWidth * i,
+            behavior: 'smooth'
+          });
+        });
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    renderSlider('all');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filterValue = btn.getAttribute('data-filter');
+        renderSlider(filterValue);
+      });
+    });
+
+    // --- 슬라이더 드래그 & 점 동기화 로직 ---
+    slider.addEventListener('scroll', () => {
+      if (visibleSlides.length === 0) return;
+      const dots = Array.from(dotsContainer.children);
+      const slideWidth = visibleSlides[0].offsetWidth + parseInt(window.getComputedStyle(slider).gap || 32);
+      const scrollPosition = slider.scrollLeft;
+      const index = Math.round(scrollPosition / slideWidth); 
+
+      dots.forEach((dot, i) => {
+        if (i === index) {
+          dot.classList.add('active');
+        } else {
+          dot.classList.remove('active');
+        }
+      });
+    });
+
+    // 캡션(제목바) 클릭 시에만 드래그 시작 (스냅 삭제로 부드러운 드래그 가능)
+    slider.addEventListener('mousedown', (e) => {
+      if (!e.target.closest('figcaption')) return; 
+
+      isDown = true;
+      slider.style.scrollBehavior = 'auto'; 
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+
+    slider.addEventListener('mouseleave', () => {
+      if(!isDown) return;
+      isDown = false;
+      slider.style.scrollBehavior = 'smooth';
+    });
+
+    slider.addEventListener('mouseup', () => {
+      if(!isDown) return;
+      isDown = false;
+      slider.style.scrollBehavior = 'smooth';
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX); // 이동 거리 1:1 매칭
+      
+      slider.scrollLeft = scrollLeft - walk;
+    });
+  </script>
 </body>
 </html>
