@@ -47,17 +47,41 @@
       font-weight: 700;
       font-size: 1.4rem;
     }
-    nav a {
+    
+    /* ★ 상단 메뉴(네비게이션) 언더라인 글로우 이펙트 적용 ★ */
+    header nav {
+      display: flex;
+      align-items: center;
+    }
+    header nav a {
+      position: relative;
       margin-left: 2rem;
       text-decoration: none;
       color: var(--text-light);
       font-weight: 600;
-      transition: all .3s ease;
+      padding: 0.3rem 0; /* 텍스트와 밑줄 사이의 간격 */
+      transition: color 0.3s ease;
+      text-transform: capitalize; /* 첫 글자 대문자 유지 */
     }
-    nav a:hover {
+    header nav a:hover {
       color: var(--accent);
-      text-shadow: 0 0 10px var(--accent);
-      transform: translateY(-2px);
+    }
+    /* 얇은 주황색 바 빛나는 효과 (Underline Glow) */
+    header nav a::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--accent);
+      transform: translateX(-50%);
+      transition: width 0.3s ease-out;
+      box-shadow: 0 0 10px var(--accent);
+      border-radius: 2px;
+    }
+    header nav a:hover::after {
+      width: 100%;
     }
 
     /* ---------- Hero Section ---------- */
@@ -143,7 +167,7 @@
       font-size: clamp(2rem, 3.5vw, 3rem);
     }
 
-    /* ★ 필터 버튼 스타일 (텍스트 언더라인 글로우 효과) ★ */
+    /* 필터 버튼 스타일 (텍스트 언더라인 글로우 효과) */
     .filter-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -155,7 +179,7 @@
       position: relative;
       background: transparent;
       border: none;
-      color: #777; /* 비활성 텍스트 색상 */
+      color: #777; 
       padding: 0.5rem 0.2rem;
       cursor: pointer;
       font-size: 1.05rem;
@@ -170,7 +194,6 @@
       color: var(--accent);
     }
     
-    /* 얇은 주황색 바 빛나는 효과 (Underline Glow) */
     .filter-btn::after {
       content: '';
       position: absolute;
@@ -428,9 +451,10 @@
       user-select: none;
     }
 
-    /* ★ 카드 그리드 공통 레이아웃 (3-1 방지 로직 적용) ★ */
+    /* 카드 그리드 공통 레이아웃 (3-1 방지 로직 적용) */
     .card-grid {
       display: grid;
+      /* PC 화면에서는 무조건 4칸으로 딱 떨어지게 설정 */
       grid-template-columns: repeat(4, 1fr); 
       gap: 1.5rem;
       animation: fadeIn 0.4s ease-out forwards;
@@ -440,6 +464,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
     
+    /* 1024px 이하의 좁은 PC나 태블릿에서는 무조건 2칸씩 2줄(2x2)로 강제 변환 */
     @media (max-width: 1024px) {
       .card-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -503,6 +528,7 @@
       line-height: 1.8;
     }
     
+    /* 철학(매니페스토) 특정 문구 강조 */
     .highlight-text {
       color: var(--accent);
       font-weight: 700;
@@ -549,23 +575,27 @@
       
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
 
-      /* ★ 포트폴리오 모바일 태그 버튼 자동 줄바꿈 분배 처리 ★ */
+      /* 포트폴리오 모바일 스크롤 및 필터 버튼 여백 */
       .filter-buttons {
-        flex-wrap: wrap; /* 스크롤 대신 여러 줄로 깔끔하게 떨어지도록 설정 */
+        flex-wrap: wrap;
         justify-content: center;
-        gap: 1rem 1.2rem; /* 위아래 1rem, 좌우 1.2rem 간격 */
+        overflow-x: visible;
         padding-bottom: 0;
+        gap: 1rem 1.2rem; 
       }
       .filter-btn {
         flex: 0 0 auto;
         white-space: nowrap;
+        font-size: 1rem;
       }
       
+      /* 모바일 대형 텍스트 토글 간격 조정 */
       .process-title-toggles {
         gap: 0.8rem;
         margin-bottom: 2.5rem;
       }
 
+      /* 모바일 환경에서는 카드를 1줄로 표시 */
       .card-grid {
         grid-template-columns: 1fr;
       }
@@ -577,11 +607,12 @@
   <header>
     <div class="header-inner">
       <div class="logo">Film Sospeso</div>
+      <!-- ★ 헤더 메뉴 영문 변경 완료 ★ -->
       <nav>
-        <a href="#home">홈</a>
-        <a href="#project">프로젝트</a>
-        <a href="#process">진행사항</a>
-        <a href="#about">Filmsospeso 란</a>
+        <a href="#home">Home</a>
+        <a href="#project">Portfolio</a>
+        <a href="#process">Project</a>
+        <a href="#about">Filmsospeso</a>
       </nav>
     </div>
   </header>
@@ -971,7 +1002,7 @@
           • Camera: RED Komodo 6k<br>
           • Lens: Canon K35 Cine, FD 빈티지 렌즈군<br>
           • Audio: Zoom F3, Sennheiser 8060, Sony UWP D27<br>
-          • Stabilizer: DJI Ronin RS3 시네마틱 스테디캠
+          • Stabilizer: DJI Ronin RS3 Pro, Tilta Float 스테디캠
         </p>
       </div>
     </div>
@@ -1078,11 +1109,10 @@
       slider.scrollLeft = scrollLeft - walk;
     });
 
-    // ----- ★ 자동 스크롤(마키) 로직 -----
+    // ----- 자동 스크롤(마키) 로직 -----
     const sliderWrapper = document.querySelector('.slider-wrapper');
     let autoScrollEnabled = true;
 
-    // 마우스 올리거나 터치하면 자동 스크롤 일시 정지
     sliderWrapper.addEventListener('mouseenter', () => autoScrollEnabled = false);
     sliderWrapper.addEventListener('mouseleave', () => autoScrollEnabled = true);
     sliderWrapper.addEventListener('touchstart', () => autoScrollEnabled = false);
@@ -1092,7 +1122,6 @@
       if (autoScrollEnabled && !isDown && visibleSlides.length > 0) {
         if (slider.scrollWidth > slider.clientWidth) {
           slider.scrollLeft += 1; 
-          
           if (slider.scrollLeft >= slider.scrollWidth - slider.clientWidth - 1) {
             slider.scrollLeft = 0;
           }
@@ -1100,7 +1129,7 @@
       }
       requestAnimationFrame(autoScroll);
     }
-    autoScroll(); 
+    autoScroll();
 
     // ----- 대형 텍스트 제목 탭 토글 -----
     const processToggleBtns = document.querySelectorAll('.process-title-btn');
@@ -1108,13 +1137,17 @@
 
     processToggleBtns.forEach(btn => {
       btn.addEventListener('click', () => {
+        // 모든 버튼 활성화 제거
         processToggleBtns.forEach(b => b.classList.remove('active'));
+        // 클릭된 버튼 활성화
         btn.classList.add('active');
         
+        // 모든 탭 내용 숨기기
         processTabContents.forEach(content => {
           content.style.display = 'none';
         });
         
+        // 타겟 탭 내용 보여주기
         const targetId = btn.getAttribute('data-target');
         document.getElementById(targetId).style.display = 'grid';
       });
