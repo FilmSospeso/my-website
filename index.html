@@ -22,6 +22,9 @@
       background-color: var(--bg-dark);
       scroll-behavior: smooth;
       overflow-x: hidden;
+      /* ★ 어절 단위 매끄러운 줄바꿈 적용 ★ */
+      word-break: keep-all; 
+      overflow-wrap: break-word;
     }
 
     /* ---------- 헤더 ---------- */
@@ -142,29 +145,50 @@
       font-size: clamp(2rem, 3.5vw, 3rem);
     }
 
-    /* 필터 버튼 스타일 */
+    /* ★ 필터 버튼 스타일 (텍스트 언더라인 글로우 효과) ★ */
     .filter-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 0.8rem;
+      gap: 1.5rem;
       margin-bottom: 3rem;
     }
     .filter-btn {
+      position: relative;
       background: transparent;
-      border: 1px solid #555;
-      color: var(--text-light);
-      padding: 0.5rem 1.2rem;
-      border-radius: 20px;
+      border: none;
+      color: #777; /* 비활성 텍스트 색상 */
+      padding: 0.5rem 0.2rem;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 1.05rem;
       font-weight: 600;
-      transition: all 0.3s ease;
+      transition: color 0.3s ease;
+      -webkit-tap-highlight-color: transparent;
     }
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #000;
+    .filter-btn:hover {
+      color: var(--text-light);
+    }
+    .filter-btn.active {
+      color: var(--accent);
+    }
+    
+    /* 얇은 주황색 바 빛나는 효과 (Underline Glow) */
+    .filter-btn::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--accent);
+      transform: translateX(-50%);
+      transition: width 0.3s ease-out;
+      box-shadow: 0 0 10px var(--accent);
+      border-radius: 2px;
+    }
+    .filter-btn:hover::after,
+    .filter-btn.active::after {
+      width: 100%;
     }
     
     /* 슬라이더 컨테이너 */
@@ -230,7 +254,7 @@
       z-index: 0;
     }
     .video-wrapper img {
-      z-index: 1; /* 썸네일 이미지가 있으면 이 레이어를 덮음 */
+      z-index: 1; 
     }
 
     /* 좌측 상단 카테고리 태그 (Badge) */
@@ -247,6 +271,12 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       z-index: 5;
+      opacity: 0.7; /* 30% 투명도 적용 */
+      transition: opacity 0.3s ease;
+    }
+    
+    .video-wrapper:hover .badge {
+      opacity: 1; 
     }
     
     /* 커스텀 플레이 버튼 */
@@ -331,34 +361,119 @@
       background-color: var(--accent);
     }
 
-    /* ---------- News Section ---------- */
-    #news {
+    /* ---------- Process (Project & Workflow) Section ---------- */
+    #process {
       background-color: var(--bg-lighter);
       max-width: 100%;
     }
-    #news .news-container {
+    .section-inner {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 2rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
     }
-    #news .card {
+    
+    /* 대형 영문 텍스트 토글 버튼 (제목 겸용) */
+    .process-title-toggles {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+      flex-wrap: wrap;
+    }
+    
+    .process-title-btn {
+      position: relative; /* 애니메이션 기준점 */
+      background: transparent;
+      border: none;
+      color: #555; 
+      font-size: clamp(1.8rem, 4vw, 3rem); 
+      font-weight: 700;
+      font-family: var(--font-base);
+      text-transform: uppercase; 
+      letter-spacing: 0.05em; 
+      cursor: pointer;
+      transition: color 0.3s ease;
+      padding: 0.5rem 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .process-title-btn:hover {
+      color: var(--text-light);
+    }
+    .process-title-btn.active {
+      color: var(--accent); 
+    }
+
+    .process-title-btn::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 0; 
+      height: 2px; 
+      background-color: var(--accent);
+      transform: translateX(-50%);
+      transition: width 0.3s ease-out; 
+      box-shadow: 0 0 10px var(--accent); 
+      border-radius: 2px;
+    }
+
+    .process-title-btn:hover::after,
+    .process-title-btn.active::after {
+      width: 100%; 
+    }
+
+    .process-title-divider {
+      color: #333;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 300;
+      user-select: none;
+    }
+
+    /* ★ 카드 그리드 공통 레이아웃 (3-1 방지 로직 적용) ★ */
+    .card-grid {
+      display: grid;
+      /* PC 화면에서는 무조건 4칸으로 딱 떨어지게 설정 (auto-fit 제거) */
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 1.5rem;
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* 1024px 이하의 좁은 PC나 태블릿에서는 3, 1 방지를 위해 무조건 2칸씩 2줄(2x2)로 강제 변환 */
+    @media (max-width: 1024px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .card-grid .card {
       background: var(--bg-dark);
-      padding: 1.5rem;
+      padding: 1.5rem 2rem;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      border-top: 3px solid transparent;
+      transition: transform 0.3s ease, border-color 0.3s ease;
     }
-    #news .card h4 {
-      margin: 0 0 0.5rem 0;
+    .card-grid .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent);
+    }
+    .card-grid .card h4 {
+      margin: 0 0 0.8rem 0;
       color: var(--accent);
-      font-size: 1.2rem;
+      font-size: 1.25rem;
+      line-height: 1.4;
     }
-    #news .card p {
+    .card-grid .card p {
       margin: 0;
       font-size: 0.95rem;
       line-height: 1.6;
+      color: #ccc;
     }
 
     /* ---------- About Section ---------- */
@@ -391,7 +506,12 @@
     #about .col p {
       font-size: clamp(0.95rem, 1.2vw, 1.1rem);
       line-height: 1.8;
-      word-break: keep-all;
+    }
+    
+    /* 철학(매니페스토) 특정 문구 강조 */
+    .highlight-text {
+      color: var(--accent);
+      font-weight: 700;
     }
 
     /* ---------- Footer ---------- */
@@ -406,16 +526,63 @@
       text-decoration: none;
     }
 
-    /* ---------- 미디어 쿼리 ---------- */
+    /* ---------- 미디어 쿼리 (모바일 최적화) ---------- */
     @media (max-width: 768px) {
-      .header-inner { padding: 0 1rem; }
-      header nav a { margin-left: 1rem; }
+      header { 
+        height: auto; 
+        padding: 12px 0; 
+      }
+      .header-inner { 
+        flex-direction: column; 
+        padding: 0 1rem; 
+        gap: 12px;
+      }
+      header nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+      }
+      header nav a { 
+        margin-left: 0; 
+        font-size: 0.95rem; 
+      }
+
       #home { min-height: 60vh; }
       #about .about-inner { grid-template-columns: 1fr; gap: 2rem; }
       #about .col { text-align: center; align-items: center; }
       #about .col:nth-child(2) { border-left: none; padding-left: 0; border-top: 2px solid var(--accent-light); padding-top: 2rem; }
       
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
+
+      /* 포트폴리오 모바일 스크롤 및 필터 버튼 여백 */
+      .filter-buttons {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        gap: 1.2rem; 
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .filter-buttons::-webkit-scrollbar {
+        display: none;
+      }
+      .filter-btn {
+        flex: 0 0 auto;
+        white-space: nowrap;
+      }
+      
+      /* 모바일 대형 텍스트 토글 간격 조정 */
+      .process-title-toggles {
+        gap: 0.8rem;
+        margin-bottom: 2.5rem;
+      }
+
+      /* 모바일 환경에서는 카드를 1줄로 표시 */
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -427,7 +594,7 @@
       <nav>
         <a href="#home">홈</a>
         <a href="#project">프로젝트</a>
-        <a href="#news">진행사항</a>
+        <a href="#process">진행사항</a>
         <a href="#about">Filmsospeso 란</a>
       </nav>
     </div>
@@ -442,8 +609,8 @@
     <div class="hero-content">
       <h1 class="hero-title">Film Sospeso</h1>
       <p class="hero-subtitle">
-        이야기를 발견하고, 콘텐츠와 사업으로 확장합니다.<br>
-        A connection point for all to enjoy.
+        이야기를 발견하고, 콘텐츠와 사업으로 확장합니다<br>
+        A connection point for all to enjoy
       </p>
     </div>
   </section>
@@ -478,7 +645,7 @@
           </a>
           <figcaption>
             <p class="proj-title">달샤벳 Serri - LIKE</p>
-            <p class="proj-desc">달샤벳 세리 솔로 뮤직비디오 프로젝트의 디테일한 설명 문구를 이곳에 작성해 주세요.</p>
+            <p class="proj-desc">LIKE 뮤직비디오 기획, 연출, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
@@ -489,7 +656,7 @@
           </a>
           <figcaption>
             <p class="proj-title">달샤벳 Serri - Spotlight</p>
-            <p class="proj-desc">Spotlight 뮤직비디오 기획 및 무대 연출에 대한 부가 설명을 적는 공간입니다.</p>
+            <p class="proj-desc">Spotlight 뮤직비디오 기획, 연출, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
@@ -499,8 +666,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">아티스트 뮤직비디오 1</p>
-            <p class="proj-desc">뮤직비디오 포트폴리오 작업 배경이나 연출 포인트를 설명할 수 있습니다.</p>
+            <p class="proj-title">익스펜더블4 x 넉살</p>
+            <p class="proj-desc">영화 뮤직비디오 기획, 연출, 촬영, 조명</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
@@ -510,8 +677,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">아티스트 뮤직비디오 2</p>
-            <p class="proj-desc">뮤직비디오 포트폴리오 작업 배경이나 연출 포인트를 설명할 수 있습니다.</p>
+            <p class="proj-title">I Wish I knew 퍼포먼스</p>
+            <p class="proj-desc">박찬종 콘트란베이시스트 퍼포먼스 뮤직비디오 연출, 촬영, 조명, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
@@ -521,8 +688,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">아티스트 뮤직비디오 3</p>
-            <p class="proj-desc">뮤직비디오 포트폴리오 작업 배경이나 연출 포인트를 설명할 수 있습니다.</p>
+            <p class="proj-title">1980 x 임을 위한 행진곡</p>
+            <p class="proj-desc">영화 뮤직비디오 촬영</p>
           </figcaption>
         </figure>
 
@@ -534,8 +701,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">투헤븐</p>
-            <p class="proj-desc">촬영감독</p>
+            <p class="proj-title">투헤븐 To Heaven</p>
+            <p class="proj-desc">촬영 감독</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="film">
@@ -563,7 +730,6 @@
 
         <!-- [브랜드/광고] -->
         <figure class="portfolio-item" data-category="brand">
-          <!-- 일부공개 영상이므로 hqdefault를 기본으로 사용합니다. -->
           <a href="https://www.youtube.com/watch?v=S8koo5hrLOE" target="_blank" class="video-wrapper">
             <span class="badge">브랜드/광고</span>
             <img src="https://img.youtube.com/vi/S8koo5hrLOE/hqdefault.jpg" alt="thumbnail">
@@ -571,7 +737,7 @@
           </a>
           <figcaption>
             <p class="proj-title">IHHI 브랜드 영상</p>
-            <p class="proj-desc">브랜드의 철학과 이미지를 감각적인 시네마틱 톤으로 연출한 캠페인 영상입니다.</p>
+            <p class="proj-desc">브랜드의 철학을 인터뷰형식으로 풀어낸 브랜드 필름</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="brand">
@@ -582,7 +748,7 @@
           </a>
           <figcaption>
             <p class="proj-title">수작카츠 홍보영상</p>
-            <p class="proj-desc">브랜드의 철학과 이미지를 감각적인 시네마틱 톤으로 연출한 캠페인 영상입니다.</p>
+            <p class="proj-desc">브랜드 오픈에 맞춰 제작한 홍보영상</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="brand">
@@ -592,8 +758,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">커머셜 브랜드 필름 1</p>
-            <p class="proj-desc">브랜드의 철학과 이미지를 감각적인 시네마틱 톤으로 연출한 캠페인 영상입니다.</p>
+            <p class="proj-title">yhel 제품 브랜드 필름</p>
+            <p class="proj-desc">브랜드의 철학과 이미지를 위트 있게 연출한 브랜드 필름</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="brand">
@@ -603,8 +769,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">커머셜 브랜드 필름 2</p>
-            <p class="proj-desc">브랜드의 철학과 이미지를 감각적인 시네마틱 톤으로 연출한 캠페인 영상입니다.</p>
+            <p class="proj-title">JART 은파 더 레이크 분양 홍보 영상</p>
+            <p class="proj-desc">분양 홍보영상 대본, 연출, 촬영, 편집</p>
           </figcaption>
         </figure>
 
@@ -616,8 +782,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">기업홍보영상 1</p>
-            <p class="proj-desc">기업의 가치와 비전을 전달하는 고품질 PR 영상 프로젝트입니다.</p>
+            <p class="proj-title">에코플러스바이오차 #1</p>
+            <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
@@ -627,8 +793,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">기업홍보영상 2</p>
-            <p class="proj-desc">기업의 가치와 비전을 전달하는 고품질 PR 영상 프로젝트입니다.</p>
+            <p class="proj-title">에코플러스바이오차 #2</p>
+            <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
@@ -638,8 +804,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">기업홍보영상 3</p>
-            <p class="proj-desc">기업의 가치와 비전을 전달하는 고품질 PR 영상 프로젝트입니다.</p>
+            <p class="proj-title">에코플러스바이오차 #3</p>
+            <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
@@ -649,8 +815,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">기업홍보영상 4</p>
-            <p class="proj-desc">기업의 가치와 비전을 전달하는 고품질 PR 영상 프로젝트입니다.</p>
+            <p class="proj-title">에코플러스바이오차 #4</p>
+            <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
@@ -660,8 +826,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">기업홍보영상 5</p>
-            <p class="proj-desc">기업의 가치와 비전을 전달하는 고품질 PR 영상 프로젝트입니다.</p>
+            <p class="proj-title">에코플러스바이오차 #5</p>
+            <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
 
@@ -708,7 +874,7 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">이벤트 행사 스케치 1</p>
+            <p class="proj-title">풀파티 행사 스케치</p>
             <p class="proj-desc">현장의 열기와 하이라이트 순간을 놓치지 않고 생동감 있게 기록합니다.</p>
           </figcaption>
         </figure>
@@ -719,8 +885,8 @@
             <div class="play-btn"></div>
           </a>
           <figcaption>
-            <p class="proj-title">이벤트 행사 스케치 2</p>
-            <p class="proj-desc">현장의 열기와 하이라이트 순간을 놓치지 않고 생동감 있게 기록합니다.</p>
+            <p class="proj-title">첸웬링 전시 제이미컬렉션 갤러리</p>
+            <p class="proj-desc">갤러리에서 진행한 오픈식 행사 촬영</p>
           </figcaption>
         </figure>
 
@@ -736,26 +902,57 @@
     </div>
   </section>
 
-  <!-- News Section -->
-  <section id="news">
-    <h2>콘텐츠 개발 시스템</h2>
-    <div class="news-container">
-      <div class="card">
-        <h4>01 발견 (Discovery)</h4>
-        <p>인물과의 만남을 통해 서사를 수집하고 심층 인터뷰로 아티스트의 고유한 서사를 진단합니다.</p>
+  <!-- Process (Project & Workflow) Section -->
+  <section id="process">
+    <div class="section-inner">
+      
+      <!-- ★ 대형 영문 텍스트 토글 버튼 (제목 겸용) ★ -->
+      <div class="process-title-toggles">
+        <button class="process-title-btn active" data-target="tab-project">PROJECT</button>
+        <span class="process-title-divider">/</span>
+        <button class="process-title-btn" data-target="tab-workflow">WORKFLOW</button>
       </div>
-      <div class="card">
-        <h4>02 관심 (Interest)</h4>
-        <p>서사의 핵심 포인트와 가장 강한 감정을 포착하여 임팩트 있는 퍼포먼스 숏필름을 제작합니다.</p>
+
+      <!-- 프로젝트 탭 내용 -->
+      <div id="tab-project" class="card-grid">
+        <div class="card">
+          <h4>01 발견 (Discovery)</h4>
+          <p>인물과의 만남을 통해 서사를 수집하고 심층 인터뷰로 아티스트의 고유한 서사를 진단합니다.</p>
+        </div>
+        <div class="card">
+          <h4>02 관심 (Interest)</h4>
+          <p>서사의 핵심 포인트와 가장 강한 감정을 포착하여 임팩트 있는 퍼포먼스 숏필름을 제작합니다.</p>
+        </div>
+        <div class="card">
+          <h4>03 이해 (Understanding)</h4>
+          <p>창작 세계와 변화의 시간을 영화적 언어로 풀어내어 시네마틱 다큐멘터리로 깊이 있게 기록합니다.</p>
+        </div>
+        <div class="card">
+          <h4>04 신뢰와 확장 (Expansion)</h4>
+          <p>구축된 아티스트의 정체성을 바탕으로 IP 확장, 공동 기획, 문화 프로젝트로 사업 영역을 넓힙니다.</p>
+        </div>
       </div>
-      <div class="card">
-        <h4>03 이해 (Understanding)</h4>
-        <p>창작 세계와 변화의 시간을 영화적 언어로 풀어내어 시네마틱 다큐멘터리로 깊이 있게 기록합니다.</p>
+
+      <!-- 워크플로우 탭 내용 (초기 숨김) -->
+      <div id="tab-workflow" class="card-grid" style="display: none;">
+        <div class="card">
+          <h4>01 미팅 (Meeting)</h4>
+          <p>클라이언트와의 소통을 통해 프로젝트의 목적, 타겟, 그리고 기획 의도와 방향성을 수립합니다.</p>
+        </div>
+        <div class="card">
+          <h4>02 프리프로덕션 (Pre-Production)</h4>
+          <p>대본 및 스토리보드 작성, 로케이션 헌팅, 캐스팅 등 원활한 촬영을 위한 모든 준비를 철저히 마칩니다.</p>
+        </div>
+        <div class="card">
+          <h4>03 메인프로덕션 (Main Production)</h4>
+          <p>기획을 바탕으로 최적의 장비와 전문 인력을 투입하여 고품질의 본 촬영을 진행합니다.</p>
+        </div>
+        <div class="card">
+          <h4>04 포스트프로덕션 (Post-Production)</h4>
+          <p>컷 편집, 색보정(DI), 사운드 믹싱 및 모션 그래픽 등 후반 작업을 통해 영상의 완성도를 극대화합니다.</p>
+        </div>
       </div>
-      <div class="card">
-        <h4>04 신뢰와 확장 (Expansion)</h4>
-        <p>구축된 아티스트의 정체성을 바탕으로 IP 확장, 공동 기획, 문화 프로젝트로 사업 영역을 넓힙니다.</p>
-      </div>
+      
     </div>
   </section>
 
@@ -763,8 +960,12 @@
   <section id="about">
     <div class="about-inner">
       <div class="col">
-        <h3>우리의 매니페스토</h3>
-        <p>Filmsospeso는 단순히 영상을 제작하는 회사가 아닙니다. 기획부터 유통, 홍보, IP 확장까지 설계하며, 누군가 삶의 원동력이 필요할 때 언제든 꺼내어 볼 수 있는 변치 않는 서사 기록(Archive)을 만듭니다.</p>
+        <h3>Film Sospeso 철학</h3>
+        <p>
+          Filmsospeso(필름 소스페소)는 이탈리아 나폴리의 '카페 소스페소(Caffè Sospeso)' 문화에서 영감을 받아 탄생했습니다. 누군가를 위해 커피 한 잔의 값을 미리 지불해두는 그 따뜻한 전통처럼, <span class="highlight-text">'필요한 사람을 위해 나눈다'</span>는 철학을 영상에 담습니다.
+          <br><br>
+          우리는 단순히 영상을 제작하는 회사를 넘어 기획부터 유통, 홍보, IP 확장까지 설계하며, 누군가 삶의 원동력이 필요할 때 언제든 꺼내어 볼 수 있는 변치 않는 서사 기록(Archive)을 만듭니다.
+        </p>
       </div>
       <div class="col">
         <h3>인하우스 장비 셋업</h3>
@@ -784,8 +985,9 @@
     <p>© 2026 Film Sospeso – A story in motion. <a href="mailto:contact@filmsospeso.com">contact@filmsospeso.com</a></p>
   </footer>
 
-  <!-- JavaScript: 필터링 및 슬라이더 로직 -->
+  <!-- JavaScript: 필터링 및 슬라이더 로직 + 토글 로직 -->
   <script>
+    // ----- 포트폴리오 슬라이더 및 카테고리 필터 -----
     const slider = document.getElementById('projectSlider');
     const dotsContainer = document.getElementById('sliderDots');
     const filterBtns = document.querySelectorAll('.filter-btn');
@@ -796,7 +998,6 @@
     let scrollLeft;
     let visibleSlides = [];
 
-    // --- 필터링 로직 ---
     function renderSlider(filterValue) {
       visibleSlides = [];
       portfolioItems.forEach(item => {
@@ -838,7 +1039,6 @@
       });
     });
 
-    // --- 슬라이더 드래그 & 점 동기화 로직 ---
     slider.addEventListener('scroll', () => {
       if (visibleSlides.length === 0) return;
       const dots = Array.from(dotsContainer.children);
@@ -855,7 +1055,6 @@
       });
     });
 
-    // 캡션(제목바) 클릭 시에만 드래그 시작 (스냅 삭제로 부드러운 드래그 가능)
     slider.addEventListener('mousedown', (e) => {
       if (!e.target.closest('figcaption')) return; 
 
@@ -882,9 +1081,31 @@
       e.preventDefault();
       
       const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startX); // 이동 거리 1:1 매칭
+      const walk = (x - startX); 
       
       slider.scrollLeft = scrollLeft - walk;
+    });
+
+    // ----- 대형 텍스트 제목 탭 토글 -----
+    const processToggleBtns = document.querySelectorAll('.process-title-btn');
+    const processTabContents = document.querySelectorAll('.card-grid');
+
+    processToggleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // 모든 버튼 활성화 제거
+        processToggleBtns.forEach(b => b.classList.remove('active'));
+        // 클릭된 버튼 활성화
+        btn.classList.add('active');
+        
+        // 모든 탭 내용 숨기기
+        processTabContents.forEach(content => {
+          content.style.display = 'none';
+        });
+        
+        // 타겟 탭 내용 보여주기
+        const targetId = btn.getAttribute('data-target');
+        document.getElementById(targetId).style.display = 'grid';
+      });
     });
   </script>
 </body>
