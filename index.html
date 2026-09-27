@@ -20,8 +20,6 @@
       font-family: var(--font-base);
       color: var(--text-light);
       background-color: var(--bg-dark);
-      scroll-behavior: smooth;
-      overflow-x: hidden;
       /* ★ 어절 단위 매끄러운 줄바꿈 적용 ★ */
       word-break: keep-all; 
       overflow-wrap: break-word;
@@ -202,10 +200,10 @@
       display: flex;
       overflow-x: auto;
       gap: 2rem; 
-      scroll-behavior: smooth; 
       padding: 0 5vw 1rem 5vw; 
       -ms-overflow-style: none; 
       scrollbar-width: none; 
+      /* 자동 스크롤 시 덜컥거리지 않도록 CSS smooth 속성 제거 (JS에서 제어) */
     }
     .scroll-container::-webkit-scrollbar {
       display: none; 
@@ -383,7 +381,7 @@
     }
     
     .process-title-btn {
-      position: relative; /* 애니메이션 기준점 */
+      position: relative;
       background: transparent;
       border: none;
       color: #555; 
@@ -434,7 +432,7 @@
     /* ★ 카드 그리드 공통 레이아웃 (3-1 방지 로직 적용) ★ */
     .card-grid {
       display: grid;
-      /* PC 화면에서는 무조건 4칸으로 딱 떨어지게 설정 (auto-fit 제거) */
+      /* PC 화면에서는 무조건 4칸으로 딱 떨어지게 설정 */
       grid-template-columns: repeat(4, 1fr); 
       gap: 1.5rem;
       animation: fadeIn 0.4s ease-out forwards;
@@ -996,7 +994,7 @@
     <p>© 2026 Film Sospeso – A story in motion. <a href="mailto:contact@filmsospeso.com">contact@filmsospeso.com</a></p>
   </footer>
 
-  <!-- JavaScript: 필터링 및 슬라이더 로직 + 토글 로직 -->
+  <!-- JavaScript -->
   <script>
     // ----- 포트폴리오 슬라이더 및 카테고리 필터 -----
     const slider = document.getElementById('projectSlider');
@@ -1066,11 +1064,10 @@
       });
     });
 
+    // 드래그 기능 구현
     slider.addEventListener('mousedown', (e) => {
       if (!e.target.closest('figcaption')) return; 
-
       isDown = true;
-      slider.style.scrollBehavior = 'auto'; 
       startX = e.pageX - slider.offsetLeft;
       scrollLeft = slider.scrollLeft;
     });
@@ -1078,24 +1075,46 @@
     slider.addEventListener('mouseleave', () => {
       if(!isDown) return;
       isDown = false;
-      slider.style.scrollBehavior = 'smooth';
     });
 
     slider.addEventListener('mouseup', () => {
       if(!isDown) return;
       isDown = false;
-      slider.style.scrollBehavior = 'smooth';
     });
 
     slider.addEventListener('mousemove', (e) => {
       if (!isDown) return;
       e.preventDefault();
-      
       const x = e.pageX - slider.offsetLeft;
       const walk = (x - startX); 
-      
       slider.scrollLeft = scrollLeft - walk;
     });
+
+    // ----- ★ 자동 스크롤(마키) 로직 추가 ★ -----
+    const sliderWrapper = document.querySelector('.slider-wrapper');
+    let autoScrollEnabled = true;
+
+    // 마우스 올리거나 터치하면 자동 스크롤 일시 정지
+    sliderWrapper.addEventListener('mouseenter', () => autoScrollEnabled = false);
+    sliderWrapper.addEventListener('mouseleave', () => autoScrollEnabled = true);
+    sliderWrapper.addEventListener('touchstart', () => autoScrollEnabled = false);
+    sliderWrapper.addEventListener('touchend', () => autoScrollEnabled = true);
+
+    function autoScroll() {
+      if (autoScrollEnabled && !isDown && visibleSlides.length > 0) {
+        // 슬라이더 내용이 컨테이너보다 클 때만 스크롤
+        if (slider.scrollWidth > slider.clientWidth) {
+          slider.scrollLeft += 1; // 1px씩 이동 (천천히 흐름)
+          
+          // 맨 끝에 도달하면 처음으로 리셋
+          if (slider.scrollLeft >= slider.scrollWidth - slider.clientWidth - 1) {
+            slider.scrollLeft = 0;
+          }
+        }
+      }
+      requestAnimationFrame(autoScroll);
+    }
+    autoScroll(); // 자동 스크롤 시작
 
     // ----- 대형 텍스트 제목 탭 토글 -----
     const processToggleBtns = document.querySelectorAll('.process-title-btn');
