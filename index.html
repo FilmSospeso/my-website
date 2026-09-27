@@ -203,7 +203,6 @@
       padding: 0 5vw 1rem 5vw; 
       -ms-overflow-style: none; 
       scrollbar-width: none; 
-      /* 자동 스크롤 시 덜컥거리지 않도록 CSS smooth 속성 제거 (JS에서 제어) */
     }
     .scroll-container::-webkit-scrollbar {
       display: none; 
@@ -432,7 +431,6 @@
     /* ★ 카드 그리드 공통 레이아웃 (3-1 방지 로직 적용) ★ */
     .card-grid {
       display: grid;
-      /* PC 화면에서는 무조건 4칸으로 딱 떨어지게 설정 */
       grid-template-columns: repeat(4, 1fr); 
       gap: 1.5rem;
       animation: fadeIn 0.4s ease-out forwards;
@@ -442,7 +440,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
     
-    /* 1024px 이하의 좁은 PC나 태블릿에서는 3, 1 방지를 위해 무조건 2칸씩 2줄(2x2)로 강제 변환 */
     @media (max-width: 1024px) {
       .card-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -506,7 +503,6 @@
       line-height: 1.8;
     }
     
-    /* 철학(매니페스토) 특정 문구 강조 */
     .highlight-text {
       color: var(--accent);
       font-weight: 700;
@@ -553,31 +549,23 @@
       
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
 
-      /* 포트폴리오 모바일 스크롤 및 필터 버튼 여백 */
+      /* ★ 포트폴리오 모바일 태그 버튼 자동 줄바꿈 분배 처리 ★ */
       .filter-buttons {
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        overflow-x: auto;
-        padding-bottom: 10px;
-        gap: 1.2rem; 
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      .filter-buttons::-webkit-scrollbar {
-        display: none;
+        flex-wrap: wrap; /* 스크롤 대신 여러 줄로 깔끔하게 떨어지도록 설정 */
+        justify-content: center;
+        gap: 1rem 1.2rem; /* 위아래 1rem, 좌우 1.2rem 간격 */
+        padding-bottom: 0;
       }
       .filter-btn {
         flex: 0 0 auto;
         white-space: nowrap;
       }
       
-      /* 모바일 대형 텍스트 토글 간격 조정 */
       .process-title-toggles {
         gap: 0.8rem;
         margin-bottom: 2.5rem;
       }
 
-      /* 모바일 환경에서는 카드를 1줄로 표시 */
       .card-grid {
         grid-template-columns: 1fr;
       }
@@ -983,7 +971,7 @@
           • Camera: RED Komodo 6k<br>
           • Lens: Canon K35 Cine, FD 빈티지 렌즈군<br>
           • Audio: Zoom F3, Sennheiser 8060, Sony UWP D27<br>
-          • Stabilizer: DJI Ronin RS3 Pro, Tilta Float 스테디캠
+          • Stabilizer: DJI Ronin RS3 시네마틱 스테디캠
         </p>
       </div>
     </div>
@@ -1090,7 +1078,7 @@
       slider.scrollLeft = scrollLeft - walk;
     });
 
-    // ----- ★ 자동 스크롤(마키) 로직 추가 ★ -----
+    // ----- ★ 자동 스크롤(마키) 로직 -----
     const sliderWrapper = document.querySelector('.slider-wrapper');
     let autoScrollEnabled = true;
 
@@ -1102,11 +1090,9 @@
 
     function autoScroll() {
       if (autoScrollEnabled && !isDown && visibleSlides.length > 0) {
-        // 슬라이더 내용이 컨테이너보다 클 때만 스크롤
         if (slider.scrollWidth > slider.clientWidth) {
-          slider.scrollLeft += 1; // 1px씩 이동 (천천히 흐름)
+          slider.scrollLeft += 1; 
           
-          // 맨 끝에 도달하면 처음으로 리셋
           if (slider.scrollLeft >= slider.scrollWidth - slider.clientWidth - 1) {
             slider.scrollLeft = 0;
           }
@@ -1114,7 +1100,7 @@
       }
       requestAnimationFrame(autoScroll);
     }
-    autoScroll(); // 자동 스크롤 시작
+    autoScroll(); 
 
     // ----- 대형 텍스트 제목 탭 토글 -----
     const processToggleBtns = document.querySelectorAll('.process-title-btn');
@@ -1122,17 +1108,13 @@
 
     processToggleBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        // 모든 버튼 활성화 제거
         processToggleBtns.forEach(b => b.classList.remove('active'));
-        // 클릭된 버튼 활성화
         btn.classList.add('active');
         
-        // 모든 탭 내용 숨기기
         processTabContents.forEach(content => {
           content.style.display = 'none';
         });
         
-        // 타겟 탭 내용 보여주기
         const targetId = btn.getAttribute('data-target');
         document.getElementById(targetId).style.display = 'grid';
       });
