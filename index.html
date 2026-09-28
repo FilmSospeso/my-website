@@ -29,7 +29,7 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       height: 60px;
-      background: rgba(0,0,0,0.7);
+      background: #000;
       display: flex;
       justify-content: center;
       z-index: 10;
@@ -50,6 +50,7 @@
     header nav {
       display: flex;
       align-items: center;
+      position: relative; 
     }
     header nav a {
       position: relative;
@@ -61,24 +62,22 @@
       transition: color 0.3s ease;
       text-transform: capitalize;
     }
-    header nav a:hover {
+    header nav a:hover,
+    header nav a.active {
       color: var(--accent);
     }
-    header nav a::after {
-      content: '';
+    
+    /* 슬라이딩 메뉴 라인 (마그네틱 인디케이터) */
+    .nav-indicator {
       position: absolute;
-      left: 50%;
-      bottom: 0;
-      width: 0;
+      left: 0;
+      top: 0; 
       height: 2px;
       background-color: var(--accent);
-      transform: translateX(-50%);
-      transition: width 0.3s ease-out;
       box-shadow: 0 0 10px var(--accent);
       border-radius: 2px;
-    }
-    header nav a:hover::after {
-      width: 100%;
+      transition: left 0.3s ease-out, width 0.3s ease-out, top 0.3s ease-out;
+      pointer-events: none;
     }
 
     /* ---------- Hero Section ---------- */
@@ -164,7 +163,6 @@
       font-size: clamp(2rem, 3.5vw, 3rem);
     }
 
-    /* 태그(버튼) 사이 간격 조정 */
     .filter-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -267,7 +265,6 @@
       z-index: 1; 
     }
 
-    /* ★ 배지(태그) 좌측 상단 고정 및 30% 투명도 적용 ★ */
     .badge {
       position: absolute;
       top: 0;
@@ -281,11 +278,9 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       z-index: 5;
-      opacity: 0.5; /* 30% 투명도 */
+      opacity: 0.7; 
       transition: opacity 0.3s ease;
     }
-    
-    /* 카드에 마우스를 올렸을 때 태그가 선명해짐 */
     .scroll-container figure:hover .badge {
       opacity: 1;
     }
@@ -314,7 +309,6 @@
       background: var(--accent);
     }
 
-    /* 설명글 영역 */
     .scroll-container figure figcaption {
       position: relative; 
       padding: 2.8rem 1.5rem 1.5rem 1.5rem; 
@@ -384,7 +378,6 @@
       padding: 0 2rem;
     }
     
-    /* 수직 교체형(스택) 타이틀 토글 */
     .process-title-toggles {
       display: flex;
       flex-direction: column;
@@ -407,7 +400,6 @@
       transition: opacity 0.3s ease;
     }
     
-    /* 애니메이션: 중앙에서 양옆으로 늘어나는 설정 */
     .main-toggle-text::after {
       content: '';
       position: absolute;
@@ -444,7 +436,6 @@
       transform: translateY(-2px);
     }
 
-    /* 카드 그리드 공통 레이아웃 */
     .card-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr); 
@@ -557,7 +548,11 @@
         font-size: 0.95rem; 
       }
 
-      #home { min-height: 60vh; }
+      #home { 
+        min-height: 60vh; 
+        padding-top: 80px; 
+      }
+      
       #about .about-inner { grid-template-columns: 1fr; gap: 2rem; }
       #about .col { text-align: center; align-items: center; }
       #about .col:nth-child(2) { border-left: none; padding-left: 0; border-top: 2px solid var(--accent-light); padding-top: 2rem; }
@@ -593,7 +588,8 @@
     <div class="header-inner">
       <div class="logo">Film Sospeso</div>
       <nav>
-        <a href="#home">Home</a>
+        <div class="nav-indicator"></div>
+        <a href="#home" class="active">Home</a>
         <a href="#project">Portfolio</a>
         <a href="#process">Project</a>
         <a href="#about">Filmsospeso</a>
@@ -601,7 +597,7 @@
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- Hero Section -->
   <section id="home">
     <video id="hero-video" autoplay muted loop playsinline>
       <source src="assets/REEL.mp4" type="video/mp4">
@@ -616,7 +612,7 @@
     </div>
   </section>
 
-  <!-- Project (PORTFOLIO) -->
+  <!-- Project (PORTFOLIO) Section -->
   <section id="project">
     <div class="featured">
       <h3>PORTFOLIO</h3>
@@ -914,11 +910,8 @@
   <section id="process">
     <div class="section-inner">
       
-      <!-- 수직 교체형(스택) 타이틀 토글 -->
       <div class="process-title-toggles" id="processToggleContainer">
-        <!-- 현재 활성화 된 텍스트 (초기값 Project에 play-anim 클래스 추가) -->
         <div class="main-toggle-text play-anim" id="mainToggleTitle">PROJECT</div>
-        <!-- 대기 중인 텍스트 (초기값 Workflow) -->
         <div class="sub-toggle-text" id="subToggleTitle">WORKFLOW</div>
       </div>
 
@@ -942,7 +935,7 @@
         </div>
       </div>
 
-      <!-- 워크플로우 탭 내용 (초기 숨김) -->
+      <!-- 워크플로우 탭 내용 -->
       <div id="tab-workflow" class="card-grid" style="display: none;">
         <div class="card">
           <h4>01 미팅 (Meeting)</h4>
@@ -969,7 +962,7 @@
   <section id="about">
     <div class="about-inner">
       <div class="col">
-        <h3>Film Sospeso</h3>
+        <h3>Film Sospeso 철학</h3>
         <p>
           Filmsospeso(필름 소스페소)는 이탈리아 나폴리의 '카페 소스페소(Caffè Sospeso)' 문화에서 영감을 받아 탄생했습니다. 누군가를 위해 커피 한 잔의 값을 미리 지불해두는 그 따뜻한 전통처럼, <span class="highlight-text">'필요한 사람을 위해 나눈다'</span>는 철학을 영상에 담습니다.
           <br><br>
@@ -1109,7 +1102,7 @@
     }
     autoScroll();
 
-    // ★ 수직형 타이틀 탭 토글 + 언더라인 애니메이션 스크립트 ★
+    // ----- 수직형 타이틀 탭 토글 + 언더라인 애니메이션 스크립트 -----
     let isProjectActive = true; 
     const processToggleContainer = document.getElementById('processToggleContainer');
     const mainToggleTitle = document.getElementById('mainToggleTitle');
@@ -1120,7 +1113,6 @@
     processToggleContainer.addEventListener('click', () => {
       isProjectActive = !isProjectActive;
       
-      // 상태에 따라 텍스트 및 그리드 교체
       if (isProjectActive) {
         mainToggleTitle.textContent = 'PROJECT';
         subToggleTitle.textContent = 'WORKFLOW';
@@ -1133,11 +1125,64 @@
         tabWorkflow.style.display = 'grid';
       }
 
-      // ★ 클릭 시마다 애니메이션 재실행 로직 ★
       mainToggleTitle.classList.remove('play-anim'); 
-      void mainToggleTitle.offsetWidth; // 브라우저 리플로우 강제 발생
+      void mainToggleTitle.offsetWidth; 
       mainToggleTitle.classList.add('play-anim');
     });
+
+    // ★ 상단 메뉴(네비게이션) 스크롤 스파이 및 슬라이딩 인디케이터 ★
+    const navLinksMenu = document.querySelectorAll('header nav a');
+    const navIndicator = document.querySelector('.nav-indicator');
+    const pageSections = document.querySelectorAll('section');
+    let currentActiveNav = document.querySelector('header nav a.active') || navLinksMenu[0];
+
+    function moveIndicator(link) {
+      if (!link) return;
+      navIndicator.style.width = `${link.offsetWidth}px`;
+      navIndicator.style.left = `${link.offsetLeft}px`;
+      navIndicator.style.top = `${link.offsetTop + link.offsetHeight}px`;
+    }
+
+    // 스크롤 감지 로직 (바닥 도달 시 예외 처리 추가)
+    window.addEventListener('scroll', () => {
+      let currentSectionId = 'home';
+      
+      pageSections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (scrollY >= (sectionTop - window.innerHeight / 3)) {
+          currentSectionId = section.getAttribute('id');
+        }
+      });
+
+      // ★ 사용자가 문서 맨 아래 바닥까지 스크롤을 내렸을 경우 무조건 마지막 메뉴(about) 강제 선택 ★
+      // (기기별 소수점 오차를 대비해 -10px 여유값 적용)
+      if (Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 10) {
+        currentSectionId = pageSections[pageSections.length - 1].getAttribute('id');
+      }
+
+      navLinksMenu.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${currentSectionId}`) {
+          link.classList.add('active');
+          currentActiveNav = link;
+          moveIndicator(currentActiveNav);
+        }
+      });
+    });
+
+    navLinksMenu.forEach(link => {
+      link.addEventListener('mouseenter', () => moveIndicator(link));
+      link.addEventListener('mouseleave', () => moveIndicator(currentActiveNav));
+      
+      link.addEventListener('click', function() {
+         currentActiveNav = this;
+         moveIndicator(this);
+      });
+    });
+
+    window.addEventListener('load', () => moveIndicator(currentActiveNav));
+    window.addEventListener('resize', () => moveIndicator(currentActiveNav));
+    
   </script>
 </body>
 </html>
