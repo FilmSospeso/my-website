@@ -229,19 +229,17 @@
       user-select: none;
       transition: opacity 0.3s ease;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-      /* 카드 내 텍스트 유연 배치를 위한 flex 설정 */
       display: flex;
       flex-direction: column;
     }
     
-    /* ★ 수정된 부분: All 필터 클릭 시 두 줄 배치 (Grid 모드) ★ */
     .scroll-container.two-rows {
       display: grid;
-      grid-template-rows: repeat(2, auto); /* 1fr에서 auto로 변경하여 내용만큼만 공간 차지 */
+      grid-template-rows: repeat(2, auto);
       grid-auto-flow: column; 
       grid-auto-columns: clamp(320px, 60vw, 800px); 
       gap: 2rem;
-      align-items: start; /* 세로로 꽉 차게 늘어나는 stretch 방지 */
+      align-items: start;
     }
     .scroll-container.two-rows figure {
       width: 100%; 
@@ -325,7 +323,6 @@
 
     .scroll-container figure figcaption {
       position: relative; 
-      /* padding: 위, 오른쪽, 아래, 왼쪽 */
       padding: 2.8rem 1.5rem 1.5rem 1.5rem; 
       background-color: #1a1a1a;
       border-top: 1px solid #333;
@@ -335,7 +332,7 @@
       gap: 0.5rem;
       text-align: left; 
       box-sizing: border-box;
-      flex-grow: 1; /* 그리드 외 상황에서도 하단 여백이 일정하도록 추가 */
+      flex-grow: 1;
     }
     .scroll-container figure figcaption:active {
       cursor: grabbing;
@@ -393,6 +390,7 @@
       padding: 0 2rem;
     }
     
+    /* 타이틀 토글 영역 수정 */
     .process-title-toggles {
       display: flex;
       flex-direction: column;
@@ -437,18 +435,53 @@
       100% { width: 100%; }
     }
     
+    /* 서브 텍스트 및 스왑 아이콘 그룹 */
+    .sub-toggle-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 0.6rem;
+      transition: transform 0.3s ease;
+    }
+
     .sub-toggle-text {
       color: #777;
       font-size: clamp(0.9rem, 2vw, 1.2rem);
       font-weight: 500;
-      margin-top: 0.4rem; 
       text-transform: uppercase;
       letter-spacing: 0.1em;
+      transition: color 0.3s ease;
+    }
+
+    .swap-icon {
+      color: #777;
       transition: color 0.3s ease, transform 0.3s ease;
     }
-    .process-title-toggles:hover .sub-toggle-text {
-      color: var(--text-light);
+
+    .process-title-toggles:hover .sub-toggle-group {
       transform: translateY(-2px);
+    }
+    .process-title-toggles:hover .sub-toggle-text,
+    .process-title-toggles:hover .swap-icon {
+      color: var(--text-light);
+    }
+    .process-title-toggles:hover .swap-icon {
+      transform: scale(1.1);
+    }
+
+    /* 클릭 힌트 마이크로 카피 */
+    .click-hint {
+      font-size: 0.75rem;
+      color: #555;
+      margin-top: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: pulseHint 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseHint {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
     }
 
     .card-grid {
@@ -574,7 +607,6 @@
       
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
 
-      /* 2줄 모바일 너비 대응 추가 */
       .scroll-container.two-rows {
         grid-auto-columns: clamp(280px, 85vw, 400px);
       }
@@ -595,6 +627,7 @@
       .process-title-toggles {
         margin-bottom: 2.5rem;
       }
+      .click-hint { margin-top: 0.8rem; font-size: 0.7rem; }
 
       .card-grid {
         grid-template-columns: 1fr;
@@ -930,9 +963,18 @@
   <section id="process">
     <div class="section-inner">
       
+      <!-- 수정된 토글 부분 -->
       <div class="process-title-toggles" id="processToggleContainer">
         <div class="main-toggle-text play-anim" id="mainToggleTitle">PROJECT</div>
-        <div class="sub-toggle-text" id="subToggleTitle">WORKFLOW</div>
+        
+        <div class="sub-toggle-group">
+          <div class="sub-toggle-text" id="subToggleTitle">WORKFLOW</div>
+          <svg class="swap-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7 16V4M7 4L3 8M7 4L11 8M17 8V20M17 20L21 16M17 20L13 16"/>
+          </svg>
+        </div>
+
+        <div class="click-hint">Tap to switch</div>
       </div>
 
       <!-- 프로젝트 탭 내용 -->
