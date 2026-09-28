@@ -164,11 +164,12 @@
       font-size: clamp(2rem, 3.5vw, 3rem);
     }
 
+    /* ★ 태그(버튼) 사이 간격 조정 ★ */
     .filter-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1.5rem;
+      gap: 0.8rem 1.2rem; /* 상하 0.8rem, 좌우 1.2rem으로 밀도있게 축소 */
       margin-bottom: 3rem;
     }
     .filter-btn {
@@ -376,7 +377,7 @@
       padding: 0 2rem;
     }
     
-    /* ★ 수직 교체형(스택) 타이틀 토글 ★ */
+    /* 수직 교체형(스택) 타이틀 토글 */
     .process-title-toggles {
       display: flex;
       flex-direction: column;
@@ -399,13 +400,13 @@
       transition: opacity 0.3s ease;
     }
     
-    /* ★ 애니메이션: 중앙에서 양옆으로 늘어나는 설정 ★ */
+    /* 애니메이션: 중앙에서 양옆으로 늘어나는 설정 */
     .main-toggle-text::after {
       content: '';
       position: absolute;
       left: 50%;
       bottom: 0;
-      width: 100%; /* 기본 가로 길이는 텍스트 크기에 맞춤(100%) */
+      width: 100%; 
       height: 2px; 
       background-color: var(--accent);
       transform: translateX(-50%);
@@ -413,7 +414,6 @@
       border-radius: 2px;
     }
 
-    /* play-anim 클래스가 붙었을 때 애니메이션 실행 */
     .main-toggle-text.play-anim::after {
       animation: expandLine 0.4s ease-out forwards;
     }
@@ -557,12 +557,13 @@
       
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
 
+      /* ★ 모바일에서도 태그 간격을 더 촘촘하게 적용 ★ */
       .filter-buttons {
         flex-wrap: wrap;
         justify-content: center;
         overflow-x: visible;
         padding-bottom: 0;
-        gap: 1rem 1.2rem; 
+        gap: 0.6rem 0.8rem; 
       }
       .filter-btn {
         flex: 0 0 auto;
