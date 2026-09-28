@@ -20,7 +20,6 @@
       font-family: var(--font-base);
       color: var(--text-light);
       background-color: var(--bg-dark);
-      /* ★ 어절 단위 매끄러운 줄바꿈 적용 ★ */
       word-break: keep-all; 
       overflow-wrap: break-word;
     }
@@ -48,7 +47,6 @@
       font-size: 1.4rem;
     }
     
-    /* ★ 상단 메뉴(네비게이션) 언더라인 글로우 이펙트 적용 ★ */
     header nav {
       display: flex;
       align-items: center;
@@ -59,14 +57,13 @@
       text-decoration: none;
       color: var(--text-light);
       font-weight: 600;
-      padding: 0.3rem 0; /* 텍스트와 밑줄 사이의 간격 */
+      padding: 0.3rem 0;
       transition: color 0.3s ease;
-      text-transform: capitalize; /* 첫 글자 대문자 유지 */
+      text-transform: capitalize;
     }
     header nav a:hover {
       color: var(--accent);
     }
-    /* 얇은 주황색 바 빛나는 효과 (Underline Glow) */
     header nav a::after {
       content: '';
       position: absolute;
@@ -167,7 +164,6 @@
       font-size: clamp(2rem, 3.5vw, 3rem);
     }
 
-    /* 필터 버튼 스타일 (텍스트 언더라인 글로우 효과) */
     .filter-buttons {
       display: flex;
       flex-wrap: wrap;
@@ -193,7 +189,6 @@
     .filter-btn.active {
       color: var(--accent);
     }
-    
     .filter-btn::after {
       content: '';
       position: absolute;
@@ -212,13 +207,11 @@
       width: 100%;
     }
     
-    /* 슬라이더 컨테이너 */
     .slider-wrapper {
       position: relative;
       width: 100%; 
       margin: 0 auto;
     }
-    
     .scroll-container {
       display: flex;
       overflow-x: auto;
@@ -230,7 +223,6 @@
     .scroll-container::-webkit-scrollbar {
       display: none; 
     }
-
     .scroll-container figure {
       flex: 0 0 auto;
       width: clamp(320px, 60vw, 800px); 
@@ -243,12 +235,11 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
     }
     
-    /* 유튜브 썸네일 & 래퍼 */
     .video-wrapper {
       position: relative;
       display: block;
       width: 100%;
-      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      padding-bottom: 56.25%; 
       background: #000;
       cursor: pointer;
       text-decoration: none;
@@ -263,8 +254,6 @@
     .video-wrapper:hover img {
       opacity: 0.7;
     }
-
-    /* 썸네일 안전장치 (가운데 로고 배경) */
     .video-wrapper::before {
       content: '';
       position: absolute;
@@ -277,7 +266,6 @@
       z-index: 1; 
     }
 
-    /* 좌측 상단 카테고리 태그 (Badge) */
     .badge {
       position: absolute;
       top: 1rem;
@@ -291,15 +279,13 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       z-index: 5;
-      opacity: 0.7; /* 30% 투명도 적용 */
+      opacity: 0.7; 
       transition: opacity 0.3s ease;
     }
-    
     .video-wrapper:hover .badge {
       opacity: 1; 
     }
     
-    /* 커스텀 플레이 버튼 */
     .play-btn {
       position: absolute;
       top: 50%; left: 50%;
@@ -324,7 +310,6 @@
       background: var(--accent);
     }
 
-    /* 제목 바 - 드래그 활성화 영역 */
     .scroll-container figure figcaption {
       padding: 2rem 1.5rem; 
       background-color: #1a1a1a;
@@ -351,7 +336,6 @@
       line-height: 1.5;
     }
 
-    /* 드래그 힌트와 슬라이더 인디케이터 컨테이너 */
     .slider-controls {
       display: flex;
       flex-direction: column;
@@ -392,69 +376,70 @@
       padding: 0 2rem;
     }
     
-    /* 대형 영문 텍스트 토글 버튼 (제목 겸용) */
+    /* ★ 수직 교체형(스택) 타이틀 토글 ★ */
     .process-title-toggles {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      gap: 1.5rem;
       margin-bottom: 4rem;
-      flex-wrap: wrap;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
     
-    .process-title-btn {
+    .main-toggle-text {
       position: relative;
-      background: transparent;
-      border: none;
-      color: #555; 
-      font-size: clamp(1.8rem, 4vw, 3rem); 
+      color: var(--accent); 
+      font-size: clamp(2rem, 5vw, 3.5rem); 
       font-weight: 700;
       font-family: var(--font-base);
       text-transform: uppercase; 
       letter-spacing: 0.05em; 
-      cursor: pointer;
-      transition: color 0.3s ease;
-      padding: 0.5rem 0;
-      -webkit-tap-highlight-color: transparent;
+      padding-bottom: 0.5rem;
+      transition: opacity 0.3s ease;
     }
-
-    .process-title-btn:hover {
-      color: var(--text-light);
-    }
-    .process-title-btn.active {
-      color: var(--accent); 
-    }
-
-    .process-title-btn::after {
+    
+    /* ★ 애니메이션: 중앙에서 양옆으로 늘어나는 설정 ★ */
+    .main-toggle-text::after {
       content: '';
       position: absolute;
       left: 50%;
       bottom: 0;
-      width: 0; 
+      width: 100%; /* 기본 가로 길이는 텍스트 크기에 맞춤(100%) */
       height: 2px; 
       background-color: var(--accent);
       transform: translateX(-50%);
-      transition: width 0.3s ease-out; 
       box-shadow: 0 0 10px var(--accent); 
       border-radius: 2px;
     }
 
-    .process-title-btn:hover::after,
-    .process-title-btn.active::after {
-      width: 100%; 
+    /* play-anim 클래스가 붙었을 때 애니메이션 실행 */
+    .main-toggle-text.play-anim::after {
+      animation: expandLine 0.4s ease-out forwards;
     }
 
-    .process-title-divider {
-      color: #333;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 300;
-      user-select: none;
+    @keyframes expandLine {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
+    
+    .sub-toggle-text {
+      color: #777;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      font-weight: 500;
+      margin-top: 0.4rem; 
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    .process-title-toggles:hover .sub-toggle-text {
+      color: var(--text-light);
+      transform: translateY(-2px);
     }
 
-    /* 카드 그리드 공통 레이아웃 (3-1 방지 로직 적용) */
+    /* 카드 그리드 공통 레이아웃 */
     .card-grid {
       display: grid;
-      /* PC 화면에서는 무조건 4칸으로 딱 떨어지게 설정 */
       grid-template-columns: repeat(4, 1fr); 
       gap: 1.5rem;
       animation: fadeIn 0.4s ease-out forwards;
@@ -464,7 +449,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
     
-    /* 1024px 이하의 좁은 PC나 태블릿에서는 무조건 2칸씩 2줄(2x2)로 강제 변환 */
     @media (max-width: 1024px) {
       .card-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -527,8 +511,6 @@
       font-size: clamp(0.95rem, 1.2vw, 1.1rem);
       line-height: 1.8;
     }
-    
-    /* 철학(매니페스토) 특정 문구 강조 */
     .highlight-text {
       color: var(--accent);
       font-weight: 700;
@@ -575,7 +557,6 @@
       
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
 
-      /* 포트폴리오 모바일 스크롤 및 필터 버튼 여백 */
       .filter-buttons {
         flex-wrap: wrap;
         justify-content: center;
@@ -589,13 +570,10 @@
         font-size: 1rem;
       }
       
-      /* 모바일 대형 텍스트 토글 간격 조정 */
       .process-title-toggles {
-        gap: 0.8rem;
         margin-bottom: 2.5rem;
       }
 
-      /* 모바일 환경에서는 카드를 1줄로 표시 */
       .card-grid {
         grid-template-columns: 1fr;
       }
@@ -607,7 +585,6 @@
   <header>
     <div class="header-inner">
       <div class="logo">Film Sospeso</div>
-      <!-- ★ 헤더 메뉴 영문 변경 완료 ★ -->
       <nav>
         <a href="#home">Home</a>
         <a href="#project">Portfolio</a>
@@ -649,7 +626,6 @@
       </div>
     </div>
     
-    <!-- 슬라이더 래퍼 -->
     <div class="slider-wrapper">
       <div class="scroll-container" id="projectSlider">
         
@@ -920,12 +896,9 @@
 
       </div>
       
-      <!-- 안내 문구 및 인디케이터 점을 감싸는 컨테이너 -->
       <div class="slider-controls">
         <p class="drag-hint">Drag to explore ↔</p>
-        <div class="slider-dots" id="sliderDots">
-          <!-- JS로 동적 생성됨 -->
-        </div>
+        <div class="slider-dots" id="sliderDots"></div>
       </div>
     </div>
   </section>
@@ -934,11 +907,12 @@
   <section id="process">
     <div class="section-inner">
       
-      <!-- ★ 대형 영문 텍스트 토글 버튼 (제목 겸용) ★ -->
-      <div class="process-title-toggles">
-        <button class="process-title-btn active" data-target="tab-project">PROJECT</button>
-        <span class="process-title-divider">/</span>
-        <button class="process-title-btn" data-target="tab-workflow">WORKFLOW</button>
+      <!-- ★ 클릭 시 위아래 글씨가 교체되는 수직형 토글 컨테이너 ★ -->
+      <div class="process-title-toggles" id="processToggleContainer">
+        <!-- 현재 활성화 된 텍스트 (초기값 Project에 play-anim 클래스 추가) -->
+        <div class="main-toggle-text play-anim" id="mainToggleTitle">PROJECT</div>
+        <!-- 대기 중인 텍스트 (초기값 Workflow) -->
+        <div class="sub-toggle-text" id="subToggleTitle">WORKFLOW</div>
       </div>
 
       <!-- 프로젝트 탭 내용 -->
@@ -1082,7 +1056,6 @@
       });
     });
 
-    // 드래그 기능 구현
     slider.addEventListener('mousedown', (e) => {
       if (!e.target.closest('figcaption')) return; 
       isDown = true;
@@ -1108,7 +1081,6 @@
       slider.scrollLeft = scrollLeft - walk;
     });
 
-    // ----- 자동 스크롤(마키) 로직 -----
     const sliderWrapper = document.querySelector('.slider-wrapper');
     let autoScrollEnabled = true;
 
@@ -1130,26 +1102,34 @@
     }
     autoScroll();
 
-    // ----- 대형 텍스트 제목 탭 토글 -----
-    const processToggleBtns = document.querySelectorAll('.process-title-btn');
-    const processTabContents = document.querySelectorAll('.card-grid');
+    // ★ 수직형 타이틀 탭 토글 + 언더라인 애니메이션 스크립트 ★
+    let isProjectActive = true; 
+    const processToggleContainer = document.getElementById('processToggleContainer');
+    const mainToggleTitle = document.getElementById('mainToggleTitle');
+    const subToggleTitle = document.getElementById('subToggleTitle');
+    const tabProject = document.getElementById('tab-project');
+    const tabWorkflow = document.getElementById('tab-workflow');
 
-    processToggleBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        // 모든 버튼 활성화 제거
-        processToggleBtns.forEach(b => b.classList.remove('active'));
-        // 클릭된 버튼 활성화
-        btn.classList.add('active');
-        
-        // 모든 탭 내용 숨기기
-        processTabContents.forEach(content => {
-          content.style.display = 'none';
-        });
-        
-        // 타겟 탭 내용 보여주기
-        const targetId = btn.getAttribute('data-target');
-        document.getElementById(targetId).style.display = 'grid';
-      });
+    processToggleContainer.addEventListener('click', () => {
+      isProjectActive = !isProjectActive;
+      
+      // 상태에 따라 텍스트 및 그리드 교체
+      if (isProjectActive) {
+        mainToggleTitle.textContent = 'PROJECT';
+        subToggleTitle.textContent = 'WORKFLOW';
+        tabProject.style.display = 'grid';
+        tabWorkflow.style.display = 'none';
+      } else {
+        mainToggleTitle.textContent = 'WORKFLOW';
+        subToggleTitle.textContent = 'PROJECT';
+        tabProject.style.display = 'none';
+        tabWorkflow.style.display = 'grid';
+      }
+
+      // ★ 클릭 시마다 애니메이션 재실행 로직 ★
+      mainToggleTitle.classList.remove('play-anim'); // 기존 클래스 제거
+      void mainToggleTitle.offsetWidth; // 브라우저 리플로우(Reflow) 강제 발생시켜 애니메이션 초기화
+      mainToggleTitle.classList.add('play-anim'); // 다시 클래스 추가하여 애니메이션 실행
     });
   </script>
 </body>
