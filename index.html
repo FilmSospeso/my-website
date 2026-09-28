@@ -70,13 +70,11 @@
     /* 슬라이딩 메뉴 라인 (마그네틱 인디케이터) */
     .nav-indicator {
       position: absolute;
-      /* 초기 위치값 삭제: JS에서 제어하여 날아오는 현상 방지 */
       height: 2px;
       background-color: var(--accent);
       box-shadow: 0 0 10px var(--accent);
       border-radius: 2px;
       pointer-events: none;
-      /* 트랜지션은 JS를 통해 동적으로 부여됨 */
     }
 
     /* ---------- Hero Section ---------- */
@@ -231,8 +229,25 @@
       user-select: none;
       transition: opacity 0.3s ease;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+      /* 카드 내 텍스트 유연 배치를 위한 flex 설정 */
+      display: flex;
+      flex-direction: column;
     }
     
+    /* ★ 수정된 부분: All 필터 클릭 시 두 줄 배치 (Grid 모드) ★ */
+    .scroll-container.two-rows {
+      display: grid;
+      grid-template-rows: repeat(2, auto); /* 1fr에서 auto로 변경하여 내용만큼만 공간 차지 */
+      grid-auto-flow: column; 
+      grid-auto-columns: clamp(320px, 60vw, 800px); 
+      gap: 2rem;
+      align-items: start; /* 세로로 꽉 차게 늘어나는 stretch 방지 */
+    }
+    .scroll-container.two-rows figure {
+      width: 100%; 
+      margin: 0;
+    }
+
     .video-wrapper {
       position: relative;
       display: block;
@@ -310,6 +325,7 @@
 
     .scroll-container figure figcaption {
       position: relative; 
+      /* padding: 위, 오른쪽, 아래, 왼쪽 */
       padding: 2.8rem 1.5rem 1.5rem 1.5rem; 
       background-color: #1a1a1a;
       border-top: 1px solid #333;
@@ -318,8 +334,8 @@
       flex-direction: column;
       gap: 0.5rem;
       text-align: left; 
-      height: 160px;
       box-sizing: border-box;
+      flex-grow: 1; /* 그리드 외 상황에서도 하단 여백이 일정하도록 추가 */
     }
     .scroll-container figure figcaption:active {
       cursor: grabbing;
@@ -558,6 +574,11 @@
       
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
 
+      /* 2줄 모바일 너비 대응 추가 */
+      .scroll-container.two-rows {
+        grid-auto-columns: clamp(280px, 85vw, 400px);
+      }
+
       .filter-buttons {
         flex-wrap: wrap;
         justify-content: center;
@@ -673,7 +694,7 @@
           <figcaption>
             <span class="badge">뮤직비디오</span>
             <p class="proj-title">I Wish I knew 퍼포먼스</p>
-            <p class="proj-desc">박찬종 콘트란베이시스트 퍼포먼스 뮤직비디오 연출, 촬영, 조명, 편집</p>
+            <p class="proj-desc">퍼포먼스 뮤직비디오 연출, 촬영, 조명, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
@@ -730,7 +751,7 @@
           <figcaption>
             <span class="badge">영화</span>
             <p class="proj-title">호프 HOPE</p>
-            <p class="proj-desc">XM2 특수촬영팀 지원</p>
+            <p class="proj-desc">XM2 특수촬영팀</p>
           </figcaption>
         </figure>
 
@@ -789,7 +810,7 @@
           <figcaption>
             <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #1</p>
-            <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
+            <p class="proj-desc">기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
@@ -800,7 +821,7 @@
           <figcaption>
             <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #2</p>
-            <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
+            <p class="proj-desc">기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
@@ -811,7 +832,7 @@
           <figcaption>
             <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #3</p>
-            <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
+            <p class="proj-desc">기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
@@ -822,7 +843,7 @@
           <figcaption>
             <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #4</p>
-            <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
+            <p class="proj-desc">기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
@@ -833,7 +854,7 @@
           <figcaption>
             <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #5</p>
-            <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
+            <p class="proj-desc">기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
 
@@ -846,7 +867,7 @@
           <figcaption>
             <span class="badge">VJ</span>
             <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 1</p>
-            <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담아낸 오리지널 콘텐츠입니다.</p>
+            <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담은 콘텐츠.</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="vj">
@@ -857,7 +878,7 @@
           <figcaption>
             <span class="badge">VJ</span>
             <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 2</p>
-            <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담아낸 오리지널 콘텐츠입니다.</p>
+            <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담은 콘텐츠.</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="vj">
@@ -868,7 +889,7 @@
           <figcaption>
             <span class="badge">VJ</span>
             <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 3</p>
-            <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담아낸 오리지널 콘텐츠입니다.</p>
+            <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담은 콘텐츠.</p>
           </figcaption>
         </figure>
 
@@ -881,7 +902,7 @@
           <figcaption>
             <span class="badge">행사</span>
             <p class="proj-title">풀파티 행사 스케치</p>
-            <p class="proj-desc">현장의 열기와 하이라이트 순간을 놓치지 않고 생동감 있게 기록합니다.</p>
+            <p class="proj-desc">현장의 열기와 분위기를 생동감있게 담은 콘텐츠.</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="event">
@@ -987,7 +1008,6 @@
 
   <!-- JavaScript -->
   <script>
-    // ----- 포트폴리오 슬라이더 및 카테고리 필터 -----
     const slider = document.getElementById('projectSlider');
     const dotsContainer = document.getElementById('sliderDots');
     const filterBtns = document.querySelectorAll('.filter-btn');
@@ -1009,10 +1029,18 @@
         }
       });
 
+      if (filterValue === 'all') {
+        slider.classList.add('two-rows');
+      } else {
+        slider.classList.remove('two-rows');
+      }
+
       slider.scrollLeft = 0;
       dotsContainer.innerHTML = '';
       
-      visibleSlides.forEach((_, i) => {
+      const numColumns = (filterValue === 'all') ? Math.ceil(visibleSlides.length / 2) : visibleSlides.length;
+
+      for (let i = 0; i < numColumns; i++) {
         const dot = document.createElement('div');
         dot.classList.add('dot');
         if (i === 0) dot.classList.add('active');
@@ -1025,7 +1053,7 @@
           });
         });
         dotsContainer.appendChild(dot);
-      });
+      }
     }
 
     renderSlider('all');
@@ -1101,7 +1129,6 @@
     }
     autoScroll();
 
-    // ----- 수직형 타이틀 탭 토글 + 언더라인 애니메이션 스크립트 -----
     let isProjectActive = true; 
     const processToggleContainer = document.getElementById('processToggleContainer');
     const mainToggleTitle = document.getElementById('mainToggleTitle');
@@ -1129,7 +1156,6 @@
       mainToggleTitle.classList.add('play-anim');
     });
 
-    // ★ 상단 메뉴(네비게이션) 스크롤 스파이 및 슬라이딩 인디케이터 ★
     const navLinksMenu = document.querySelectorAll('header nav a');
     const navIndicator = document.querySelector('.nav-indicator');
     const pageSections = document.querySelectorAll('section');
@@ -1142,29 +1168,17 @@
       navIndicator.style.top = `${link.offsetTop + link.offsetHeight}px`;
     }
 
-    // ★ 새로고침 시 바가 떨어지는 현상을 막고 글자 텍스트 중앙에서 부드럽게 펼쳐지도록 초기화 ★
     function initIndicator() {
       if (!currentActiveNav) return;
-      
-      // 1. 애니메이션(트랜지션)을 끕니다. (위에서 날아오는 현상 차단)
       navIndicator.style.transition = 'none';
-      
-      // 2. 길이를 0으로 만들고 현재 활성화된 글자의 완전한 중앙에 점(Point)처럼 배치합니다.
       navIndicator.style.width = '0px';
       navIndicator.style.left = `${currentActiveNav.offsetLeft + (currentActiveNav.offsetWidth / 2)}px`;
       navIndicator.style.top = `${currentActiveNav.offsetTop + currentActiveNav.offsetHeight}px`;
-      
-      // 3. 브라우저가 위 변경사항을 즉시 인식하도록 강제 새로고침(Reflow)을 유발합니다.
       void navIndicator.offsetWidth;
-      
-      // 4. 애니메이션 효과를 다시 켭니다.
       navIndicator.style.transition = 'left 0.3s ease-out, width 0.3s ease-out, top 0.3s ease-out';
-      
-      // 5. 원래 글자의 너비와 위치로 정상적으로 늘어나게(펼쳐지게) 합니다.
       moveIndicator(currentActiveNav);
     }
 
-    // 스크롤 감지 로직
     window.addEventListener('scroll', () => {
       let currentSectionId = 'home';
       
@@ -1175,7 +1189,6 @@
         }
       });
 
-      // 맨 아래 바닥 도달 시 예외 처리
       if (Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 10) {
         currentSectionId = pageSections[pageSections.length - 1].getAttribute('id');
       }
@@ -1200,7 +1213,6 @@
       });
     });
 
-    // 화면 로딩 및 리사이징 시 초기화 함수 실행
     window.addEventListener('load', initIndicator);
     window.addEventListener('resize', () => moveIndicator(currentActiveNav));
     
