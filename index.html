@@ -164,12 +164,12 @@
       font-size: clamp(2rem, 3.5vw, 3rem);
     }
 
-    /* ★ 태그(버튼) 사이 간격 조정 ★ */
+    /* 태그(버튼) 사이 간격 조정 */
     .filter-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 0.8rem 1.2rem; /* 상하 0.8rem, 좌우 1.2rem으로 밀도있게 축소 */
+      gap: 0.8rem 1.2rem; 
       margin-bottom: 3rem;
     }
     .filter-btn {
@@ -320,6 +320,9 @@
       flex-direction: column;
       gap: 0.5rem;
       text-align: left; 
+      /* ★ 설명글(텍스트 영역) 높이를 일정하게 고정하여 레이아웃 변형 방지 ★ */
+      height: 160px;
+      box-sizing: border-box;
     }
     .scroll-container figure figcaption:active {
       cursor: grabbing;
@@ -557,7 +560,7 @@
       
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
 
-      /* ★ 모바일에서도 태그 간격을 더 촘촘하게 적용 ★ */
+      /* 모바일에서도 태그 간격을 더 촘촘하게 적용 */
       .filter-buttons {
         flex-wrap: wrap;
         justify-content: center;
