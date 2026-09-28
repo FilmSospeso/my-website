@@ -267,24 +267,27 @@
       z-index: 1; 
     }
 
+    /* ★ 배지(태그) 좌측 상단 고정 및 30% 투명도 적용 ★ */
     .badge {
       position: absolute;
-      top: 1rem;
-      left: 1rem;
+      top: 0;
+      left: 0;
       background-color: var(--accent);
       color: #000;
       font-weight: 700;
-      font-size: 0.85rem;
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
+      font-size: 0.75rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 0; 
       text-transform: uppercase;
       letter-spacing: 0.05em;
       z-index: 5;
-      opacity: 0.7; 
+      opacity: 0.5; /* 30% 투명도 */
       transition: opacity 0.3s ease;
     }
-    .video-wrapper:hover .badge {
-      opacity: 1; 
+    
+    /* 카드에 마우스를 올렸을 때 태그가 선명해짐 */
+    .scroll-container figure:hover .badge {
+      opacity: 1;
     }
     
     .play-btn {
@@ -311,8 +314,10 @@
       background: var(--accent);
     }
 
+    /* 설명글 영역 */
     .scroll-container figure figcaption {
-      padding: 2rem 1.5rem; 
+      position: relative; 
+      padding: 2.8rem 1.5rem 1.5rem 1.5rem; 
       background-color: #1a1a1a;
       border-top: 1px solid #333;
       cursor: grab; 
@@ -320,7 +325,6 @@
       flex-direction: column;
       gap: 0.5rem;
       text-align: left; 
-      /* ★ 설명글(텍스트 영역) 높이를 일정하게 고정하여 레이아웃 변형 방지 ★ */
       height: 160px;
       box-sizing: border-box;
     }
@@ -560,7 +564,6 @@
       
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
 
-      /* 모바일에서도 태그 간격을 더 촘촘하게 적용 */
       .filter-buttons {
         flex-wrap: wrap;
         justify-content: center;
@@ -636,55 +639,55 @@
         <!-- [뮤직비디오] -->
         <figure class="portfolio-item" data-category="mv">
           <a href="https://www.youtube.com/watch?v=FCWUGhVX-D4" target="_blank" class="video-wrapper">
-            <span class="badge">뮤직비디오</span>
             <img src="https://img.youtube.com/vi/FCWUGhVX-D4/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">뮤직비디오</span>
             <p class="proj-title">달샤벳 Serri - LIKE</p>
             <p class="proj-desc">LIKE 뮤직비디오 기획, 연출, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
           <a href="https://www.youtube.com/watch?v=LUlyTXQG2Hk" target="_blank" class="video-wrapper">
-            <span class="badge">뮤직비디오</span>
             <img src="https://img.youtube.com/vi/LUlyTXQG2Hk/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">뮤직비디오</span>
             <p class="proj-title">달샤벳 Serri - Spotlight</p>
             <p class="proj-desc">Spotlight 뮤직비디오 기획, 연출, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
           <a href="https://www.youtube.com/watch?v=fLhuUJyFfeQ" target="_blank" class="video-wrapper">
-            <span class="badge">뮤직비디오</span>
             <img src="https://img.youtube.com/vi/fLhuUJyFfeQ/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">뮤직비디오</span>
             <p class="proj-title">익스펜더블4 x 넉살</p>
             <p class="proj-desc">영화 뮤직비디오 기획, 연출, 촬영, 조명</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
           <a href="https://www.youtube.com/watch?v=BHlT0ypEcWI" target="_blank" class="video-wrapper">
-            <span class="badge">뮤직비디오</span>
             <img src="https://img.youtube.com/vi/BHlT0ypEcWI/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">뮤직비디오</span>
             <p class="proj-title">I Wish I knew 퍼포먼스</p>
             <p class="proj-desc">박찬종 콘트란베이시스트 퍼포먼스 뮤직비디오 연출, 촬영, 조명, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
           <a href="https://www.youtube.com/watch?v=wUmlWvrNcTc" target="_blank" class="video-wrapper">
-            <span class="badge">뮤직비디오</span>
             <img src="https://img.youtube.com/vi/wUmlWvrNcTc/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">뮤직비디오</span>
             <p class="proj-title">1980 x 임을 위한 행진곡</p>
             <p class="proj-desc">영화 뮤직비디오 촬영</p>
           </figcaption>
@@ -693,44 +696,44 @@
         <!-- [영화] -->
         <figure class="portfolio-item" data-category="film">
           <a href="https://www.youtube.com/watch?v=yrsDCDcqLu8" target="_blank" class="video-wrapper">
-            <span class="badge">영화</span>
             <img src="https://img.youtube.com/vi/yrsDCDcqLu8/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">영화</span>
             <p class="proj-title">투헤븐 To Heaven</p>
             <p class="proj-desc">촬영 감독</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="film">
           <a href="https://www.youtube.com/watch?v=pDIuyAMA8Nk" target="_blank" class="video-wrapper">
-            <span class="badge">영화</span>
             <img src="https://img.youtube.com/vi/pDIuyAMA8Nk/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">영화</span>
             <p class="proj-title">사운드 오브 호프 : 포썸 트롯의 기적</p>
             <p class="proj-desc">자막 후반작업</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="film">
           <a href="https://www.youtube.com/watch?v=J-pmjGgqfpo" target="_blank" class="video-wrapper">
-            <span class="badge">영화</span>
             <img src="https://img.youtube.com/vi/J-pmjGgqfpo/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">영화</span>
             <p class="proj-title">본회퍼 : 목사. 스파이. 암살자</p>
             <p class="proj-desc">자막 후반작업</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="film">
           <a href="https://www.youtube.com/watch?v=DrNM5QhAr_M" target="_blank" class="video-wrapper">
-            <span class="badge">영화</span>
             <img src="https://img.youtube.com/vi/DrNM5QhAr_M/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">영화</span>
             <p class="proj-title">호프 HOPE</p>
             <p class="proj-desc">XM2 특수촬영팀 지원</p>
           </figcaption>
@@ -739,44 +742,44 @@
         <!-- [브랜드/광고] -->
         <figure class="portfolio-item" data-category="brand">
           <a href="https://www.youtube.com/watch?v=S8koo5hrLOE" target="_blank" class="video-wrapper">
-            <span class="badge">브랜드/광고</span>
             <img src="https://img.youtube.com/vi/S8koo5hrLOE/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">브랜드/광고</span>
             <p class="proj-title">IHHI 브랜드 영상</p>
             <p class="proj-desc">브랜드의 철학을 인터뷰형식으로 풀어낸 브랜드 필름</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="brand">
           <a href="https://www.youtube.com/watch?v=bc7jdEes0eM" target="_blank" class="video-wrapper">
-            <span class="badge">브랜드/광고</span>
             <img src="https://img.youtube.com/vi/bc7jdEes0eM/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">브랜드/광고</span>
             <p class="proj-title">수작카츠 홍보영상</p>
             <p class="proj-desc">브랜드 오픈에 맞춰 제작한 홍보영상</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="brand">
           <a href="https://www.youtube.com/watch?v=NjuMTw3MobQ" target="_blank" class="video-wrapper">
-            <span class="badge">브랜드/광고</span>
             <img src="https://img.youtube.com/vi/NjuMTw3MobQ/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">브랜드/광고</span>
             <p class="proj-title">yhel 제품 브랜드 필름</p>
             <p class="proj-desc">브랜드의 철학과 이미지를 위트 있게 연출한 브랜드 필름</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="brand">
           <a href="https://www.youtube.com/watch?v=PE_o2DZI8GU" target="_blank" class="video-wrapper">
-            <span class="badge">브랜드/광고</span>
             <img src="https://img.youtube.com/vi/PE_o2DZI8GU/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">브랜드/광고</span>
             <p class="proj-title">JART 은파 더 레이크 분양 홍보 영상</p>
             <p class="proj-desc">분양 홍보영상 대본, 연출, 촬영, 편집</p>
           </figcaption>
@@ -785,55 +788,55 @@
         <!-- [기업홍보영상] -->
         <figure class="portfolio-item" data-category="pr">
           <a href="https://www.youtube.com/watch?v=Ih2UpxsUHAQ" target="_blank" class="video-wrapper">
-            <span class="badge">기업홍보영상</span>
             <img src="https://img.youtube.com/vi/Ih2UpxsUHAQ/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #1</p>
             <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
           <a href="https://www.youtube.com/watch?v=y6ftaIf7RWg" target="_blank" class="video-wrapper">
-            <span class="badge">기업홍보영상</span>
             <img src="https://img.youtube.com/vi/y6ftaIf7RWg/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #2</p>
             <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
           <a href="https://www.youtube.com/watch?v=e91iszdiXqU" target="_blank" class="video-wrapper">
-            <span class="badge">기업홍보영상</span>
             <img src="https://img.youtube.com/vi/e91iszdiXqU/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #3</p>
             <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
           <a href="https://www.youtube.com/watch?v=W2lk9aiMfQI" target="_blank" class="video-wrapper">
-            <span class="badge">기업홍보영상</span>
             <img src="https://img.youtube.com/vi/W2lk9aiMfQI/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #4</p>
             <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
           <a href="https://www.youtube.com/watch?v=8SOej24g3QQ" target="_blank" class="video-wrapper">
-            <span class="badge">기업홍보영상</span>
             <img src="https://img.youtube.com/vi/8SOej24g3QQ/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #5</p>
             <p class="proj-desc">기업의 가치와 비전을 전달하는 기업 홍보영상 대본, 연출, 기획, 촬영, 편집</p>
           </figcaption>
@@ -842,33 +845,33 @@
         <!-- [VJ] -->
         <figure class="portfolio-item" data-category="vj">
           <a href="https://www.youtube.com/watch?v=c2GJCM3nfiU" target="_blank" class="video-wrapper">
-            <span class="badge">VJ</span>
             <img src="https://img.youtube.com/vi/c2GJCM3nfiU/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">VJ</span>
             <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 1</p>
             <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담아낸 오리지널 콘텐츠입니다.</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="vj">
           <a href="https://www.youtube.com/watch?v=s7p3lONBj5w" target="_blank" class="video-wrapper">
-            <span class="badge">VJ</span>
             <img src="https://img.youtube.com/vi/s7p3lONBj5w/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">VJ</span>
             <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 2</p>
             <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담아낸 오리지널 콘텐츠입니다.</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="vj">
           <a href="https://www.youtube.com/watch?v=jWxlofvzpYI" target="_blank" class="video-wrapper">
-            <span class="badge">VJ</span>
             <img src="https://img.youtube.com/vi/jWxlofvzpYI/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">VJ</span>
             <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 3</p>
             <p class="proj-desc">현장의 분위기와 아티스트의 생생한 인터뷰를 담아낸 오리지널 콘텐츠입니다.</p>
           </figcaption>
@@ -877,22 +880,22 @@
         <!-- [행사] -->
         <figure class="portfolio-item" data-category="event">
           <a href="https://www.youtube.com/watch?v=f9RdOgIAJCc" target="_blank" class="video-wrapper">
-            <span class="badge">행사</span>
             <img src="https://img.youtube.com/vi/f9RdOgIAJCc/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">행사</span>
             <p class="proj-title">풀파티 행사 스케치</p>
             <p class="proj-desc">현장의 열기와 하이라이트 순간을 놓치지 않고 생동감 있게 기록합니다.</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="event">
           <a href="https://www.youtube.com/watch?v=d2dkXeVkUTc" target="_blank" class="video-wrapper">
-            <span class="badge">행사</span>
             <img src="https://img.youtube.com/vi/d2dkXeVkUTc/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
           </a>
           <figcaption>
+            <span class="badge">행사</span>
             <p class="proj-title">첸웬링 전시 제이미컬렉션 갤러리</p>
             <p class="proj-desc">갤러리에서 진행한 오픈식 행사 촬영</p>
           </figcaption>
@@ -911,7 +914,7 @@
   <section id="process">
     <div class="section-inner">
       
-      <!-- ★ 클릭 시 위아래 글씨가 교체되는 수직형 토글 컨테이너 ★ -->
+      <!-- 수직 교체형(스택) 타이틀 토글 -->
       <div class="process-title-toggles" id="processToggleContainer">
         <!-- 현재 활성화 된 텍스트 (초기값 Project에 play-anim 클래스 추가) -->
         <div class="main-toggle-text play-anim" id="mainToggleTitle">PROJECT</div>
@@ -966,7 +969,7 @@
   <section id="about">
     <div class="about-inner">
       <div class="col">
-        <h3>Film Sospeso</h3>
+        <h3>Film Sospeso 철학</h3>
         <p>
           Filmsospeso(필름 소스페소)는 이탈리아 나폴리의 '카페 소스페소(Caffè Sospeso)' 문화에서 영감을 받아 탄생했습니다. 누군가를 위해 커피 한 잔의 값을 미리 지불해두는 그 따뜻한 전통처럼, <span class="highlight-text">'필요한 사람을 위해 나눈다'</span>는 철학을 영상에 담습니다.
           <br><br>
@@ -1131,9 +1134,9 @@
       }
 
       // ★ 클릭 시마다 애니메이션 재실행 로직 ★
-      mainToggleTitle.classList.remove('play-anim'); // 기존 클래스 제거
-      void mainToggleTitle.offsetWidth; // 브라우저 리플로우(Reflow) 강제 발생시켜 애니메이션 초기화
-      mainToggleTitle.classList.add('play-anim'); // 다시 클래스 추가하여 애니메이션 실행
+      mainToggleTitle.classList.remove('play-anim'); 
+      void mainToggleTitle.offsetWidth; // 브라우저 리플로우 강제 발생
+      mainToggleTitle.classList.add('play-anim');
     });
   </script>
 </body>
