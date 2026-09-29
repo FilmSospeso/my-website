@@ -245,7 +245,6 @@
       margin: 0;
     }
 
-    /* 오류 방지를 위해 a 태그 제거 후 div 로 구조 통일 */
     .video-wrapper {
       position: relative;
       display: block;
@@ -639,8 +638,6 @@
     <div class="slider-wrapper">
       <div class="scroll-container" id="projectSlider">
         
-        <!-- 충돌을 피하기 위해 <a>태그를 삭제하고 순수 <div>와 data-video-id 구조로 전면 수정 -->
-        
         <!-- [뮤직비디오] -->
         <figure class="portfolio-item" data-category="mv">
           <div class="video-wrapper" data-video-id="FCWUGhVX-D4">
@@ -1015,6 +1012,7 @@
     
     let dragStartX = 0;
     let isDragging = false; 
+    let isVideoPlaying = false;
 
     function renderSlider(filterValue) {
       visibleSlides = [];
@@ -1061,6 +1059,7 @@
         filterBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const filterValue = btn.getAttribute('data-filter');
+        isVideoPlaying = false; 
         renderSlider(filterValue);
       });
     });
@@ -1113,24 +1112,19 @@
       }
     });
 
-    /* =========================================
-       [핵심 수정] 완벽한 DOM 교체 스크립트 (오류 해결)
-       - 더미 스크립트, 무거운 API, a태그를 모두 걷어냈습니다.
-       - 클릭 시 썸네일을 날려버리고 그 자리에 iframe만 깔끔하게 남깁니다.
-       ========================================= */
     const videoWrappers = document.querySelectorAll('.video-wrapper');
 
     videoWrappers.forEach(wrapper => {
       wrapper.addEventListener('click', function(e) {
         e.preventDefault();
         
-        // 스와이프 드래그와 클릭을 정확히 분리 (오작동 방지)
         if (isDragging) return;
 
         const videoId = this.getAttribute('data-video-id');
         if (!videoId) return;
 
-        // 다른 영상이 켜져있다면, 메모리 점유 방지를 위해 원래 썸네일 상태로 되돌림
+        isVideoPlaying = true;
+
         document.querySelectorAll('.video-wrapper.is-playing').forEach(activeWrapper => {
           if (activeWrapper !== this) {
             const prevId = activeWrapper.getAttribute('data-video-id');
@@ -1142,7 +1136,6 @@
           }
         });
 
-        // 현재 클릭한 영역을 순수 iframe 태그로 100% 덮어씌움 (브라우저가 가장 쾌적하게 인식함)
         this.classList.add('is-playing');
         this.innerHTML = `
           <iframe 
@@ -1155,7 +1148,6 @@
         `;
       });
     });
-    /* ========================================= */
 
     const sliderWrapper = document.querySelector('.slider-wrapper');
     let autoScrollEnabled = true;
@@ -1166,7 +1158,7 @@
     sliderWrapper.addEventListener('touchend', () => autoScrollEnabled = true);
 
     function autoScroll() {
-      if (autoScrollEnabled && !isDown && visibleSlides.length > 0) {
+      if (!isVideoPlaying && autoScrollEnabled && !isDown && visibleSlides.length > 0) {
         if (slider.scrollWidth > slider.clientWidth) {
           slider.scrollLeft += 1; 
           if (slider.scrollLeft >= slider.scrollWidth - slider.clientWidth - 1) {
