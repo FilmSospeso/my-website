@@ -6,7 +6,7 @@
   <title>Film Sospeso – 영상 제작 스튜디오</title>
   <style>
     :root {
-      --accent: #ff8c00;          /* Amber */
+      --accent: #ff8c00;
       --accent-light: #ffa500;
       --bg-dark: #111;
       --bg-darker: #0a0a0a;
@@ -67,7 +67,6 @@
       color: var(--accent);
     }
     
-    /* 슬라이딩 메뉴 라인 (마그네틱 인디케이터) */
     .nav-indicator {
       position: absolute;
       height: 2px;
@@ -142,7 +141,7 @@
       font-size: clamp(1.8rem, 3vw, 2.5rem);
     }
 
-    /* ---------- Project (PORTFOLIO) Carousel ---------- */
+    /* ---------- Project Carousel ---------- */
     #project {
       background-color: var(--bg-dark);
       max-width: 100%;
@@ -246,6 +245,7 @@
       margin: 0;
     }
 
+    /* 오류 방지를 위해 a 태그 제거 후 div 로 구조 통일 */
     .video-wrapper {
       position: relative;
       display: block;
@@ -253,7 +253,7 @@
       padding-bottom: 56.25%; 
       background: #000;
       cursor: pointer;
-      text-decoration: none;
+      overflow: hidden; 
     }
     .video-wrapper img {
       position: absolute;
@@ -286,7 +286,6 @@
       font-weight: 700;
       font-size: 0.75rem;
       padding: 0.4rem 0.8rem;
-      border-radius: 0; 
       text-transform: uppercase;
       letter-spacing: 0.05em;
       z-index: 5;
@@ -368,8 +367,7 @@
       gap: 10px;
     }
     .dot {
-      width: 10px;
-      height: 10px;
+      width: 10px; height: 10px;
       background-color: #555;
       border-radius: 50%;
       cursor: pointer;
@@ -379,7 +377,7 @@
       background-color: var(--accent);
     }
 
-    /* ---------- Process (Project & Workflow) Section ---------- */
+    /* ---------- Process Section ---------- */
     #process {
       background-color: var(--bg-lighter);
       max-width: 100%;
@@ -390,7 +388,6 @@
       padding: 0 2rem;
     }
     
-    /* 타이틀 토글 영역 수정 */
     .process-title-toggles {
       display: flex;
       flex-direction: column;
@@ -435,7 +432,6 @@
       100% { width: 100%; }
     }
     
-    /* 서브 텍스트 및 스왑 아이콘 그룹 */
     .sub-toggle-group {
       display: flex;
       align-items: center;
@@ -469,7 +465,6 @@
       transform: scale(1.1);
     }
 
-    /* 클릭 힌트 마이크로 카피 */
     .click-hint {
       font-size: 0.75rem;
       color: #555;
@@ -540,10 +535,10 @@
       gap: 3rem;
     }
     #about .col {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      text-align: left;
     }
     #about .col:nth-child(2) {
       border-left: 2px solid var(--accent-light);
@@ -574,64 +569,23 @@
       text-decoration: none;
     }
 
-    /* ---------- 미디어 쿼리 (모바일 최적화) ---------- */
+    /* ---------- 미디어 쿼리 ---------- */
     @media (max-width: 768px) {
-      header { 
-        height: auto; 
-        padding: 12px 0; 
-      }
-      .header-inner { 
-        flex-direction: column; 
-        padding: 0 1rem; 
-        gap: 12px;
-      }
-      header nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-      }
-      header nav a { 
-        margin-left: 0; 
-        font-size: 0.95rem; 
-      }
-
-      #home { 
-        min-height: 60vh; 
-        padding-top: 80px; 
-      }
-      
+      header { height: auto; padding: 12px 0; }
+      .header-inner { flex-direction: column; padding: 0 1rem; gap: 12px; }
+      header nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+      header nav a { margin-left: 0; font-size: 0.95rem; }
+      #home { min-height: 60vh; padding-top: 80px; }
       #about .about-inner { grid-template-columns: 1fr; gap: 2rem; }
       #about .col { text-align: center; align-items: center; }
       #about .col:nth-child(2) { border-left: none; padding-left: 0; border-top: 2px solid var(--accent-light); padding-top: 2rem; }
-      
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
-
-      .scroll-container.two-rows {
-        grid-auto-columns: clamp(280px, 85vw, 400px);
-      }
-
-      .filter-buttons {
-        flex-wrap: wrap;
-        justify-content: center;
-        overflow-x: visible;
-        padding-bottom: 0;
-        gap: 0.6rem 0.8rem; 
-      }
-      .filter-btn {
-        flex: 0 0 auto;
-        white-space: nowrap;
-        font-size: 1rem;
-      }
-      
-      .process-title-toggles {
-        margin-bottom: 2.5rem;
-      }
+      .scroll-container.two-rows { grid-auto-columns: clamp(280px, 85vw, 400px); }
+      .filter-buttons { flex-wrap: wrap; justify-content: center; overflow-x: visible; padding-bottom: 0; gap: 0.6rem 0.8rem; }
+      .filter-btn { flex: 0 0 auto; white-space: nowrap; font-size: 1rem; }
+      .process-title-toggles { margin-bottom: 2.5rem; }
       .click-hint { margin-top: 0.8rem; font-size: 0.7rem; }
-
-      .card-grid {
-        grid-template-columns: 1fr;
-      }
+      .card-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -685,12 +639,14 @@
     <div class="slider-wrapper">
       <div class="scroll-container" id="projectSlider">
         
+        <!-- 충돌을 피하기 위해 <a>태그를 삭제하고 순수 <div>와 data-video-id 구조로 전면 수정 -->
+        
         <!-- [뮤직비디오] -->
         <figure class="portfolio-item" data-category="mv">
-          <a href="https://www.youtube.com/watch?v=FCWUGhVX-D4" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="FCWUGhVX-D4">
             <img src="https://img.youtube.com/vi/FCWUGhVX-D4/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">뮤직비디오</span>
             <p class="proj-title">달샤벳 Serri - LIKE</p>
@@ -698,10 +654,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
-          <a href="https://www.youtube.com/watch?v=LUlyTXQG2Hk" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="LUlyTXQG2Hk">
             <img src="https://img.youtube.com/vi/LUlyTXQG2Hk/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">뮤직비디오</span>
             <p class="proj-title">달샤벳 Serri - Spotlight</p>
@@ -709,10 +665,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
-          <a href="https://www.youtube.com/watch?v=fLhuUJyFfeQ" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="fLhuUJyFfeQ">
             <img src="https://img.youtube.com/vi/fLhuUJyFfeQ/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">뮤직비디오</span>
             <p class="proj-title">익스펜더블4 x 넉살</p>
@@ -720,10 +676,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
-          <a href="https://www.youtube.com/watch?v=BHlT0ypEcWI" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="BHlT0ypEcWI">
             <img src="https://img.youtube.com/vi/BHlT0ypEcWI/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">뮤직비디오</span>
             <p class="proj-title">I Wish I knew 퍼포먼스</p>
@@ -731,10 +687,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv">
-          <a href="https://www.youtube.com/watch?v=wUmlWvrNcTc" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="wUmlWvrNcTc">
             <img src="https://img.youtube.com/vi/wUmlWvrNcTc/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">뮤직비디오</span>
             <p class="proj-title">1980 x 임을 위한 행진곡</p>
@@ -744,10 +700,10 @@
 
         <!-- [영화] -->
         <figure class="portfolio-item" data-category="film">
-          <a href="https://www.youtube.com/watch?v=yrsDCDcqLu8" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="yrsDCDcqLu8">
             <img src="https://img.youtube.com/vi/yrsDCDcqLu8/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">영화</span>
             <p class="proj-title">투헤븐 To Heaven</p>
@@ -755,10 +711,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="film">
-          <a href="https://www.youtube.com/watch?v=pDIuyAMA8Nk" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="pDIuyAMA8Nk">
             <img src="https://img.youtube.com/vi/pDIuyAMA8Nk/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">영화</span>
             <p class="proj-title">사운드 오브 호프 : 포썸 트롯의 기적</p>
@@ -766,10 +722,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="film">
-          <a href="https://www.youtube.com/watch?v=J-pmjGgqfpo" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="J-pmjGgqfpo">
             <img src="https://img.youtube.com/vi/J-pmjGgqfpo/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">영화</span>
             <p class="proj-title">본회퍼 : 목사. 스파이. 암살자</p>
@@ -777,10 +733,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="film">
-          <a href="https://www.youtube.com/watch?v=DrNM5QhAr_M" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="DrNM5QhAr_M">
             <img src="https://img.youtube.com/vi/DrNM5QhAr_M/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">영화</span>
             <p class="proj-title">호프 HOPE</p>
@@ -790,10 +746,10 @@
 
         <!-- [브랜드/광고] -->
         <figure class="portfolio-item" data-category="brand">
-          <a href="https://www.youtube.com/watch?v=S8koo5hrLOE" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="S8koo5hrLOE">
             <img src="https://img.youtube.com/vi/S8koo5hrLOE/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">브랜드/광고</span>
             <p class="proj-title">IHHI 브랜드 영상</p>
@@ -801,10 +757,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="brand">
-          <a href="https://www.youtube.com/watch?v=bc7jdEes0eM" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="bc7jdEes0eM">
             <img src="https://img.youtube.com/vi/bc7jdEes0eM/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">브랜드/광고</span>
             <p class="proj-title">수작카츠 홍보영상</p>
@@ -812,10 +768,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="brand">
-          <a href="https://www.youtube.com/watch?v=NjuMTw3MobQ" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="NjuMTw3MobQ">
             <img src="https://img.youtube.com/vi/NjuMTw3MobQ/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">브랜드/광고</span>
             <p class="proj-title">yhel 제품 브랜드 필름</p>
@@ -823,10 +779,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="brand">
-          <a href="https://www.youtube.com/watch?v=PE_o2DZI8GU" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="PE_o2DZI8GU">
             <img src="https://img.youtube.com/vi/PE_o2DZI8GU/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">브랜드/광고</span>
             <p class="proj-title">JART 은파 더 레이크 분양 홍보 영상</p>
@@ -836,10 +792,10 @@
 
         <!-- [기업홍보영상] -->
         <figure class="portfolio-item" data-category="pr">
-          <a href="https://www.youtube.com/watch?v=Ih2UpxsUHAQ" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="Ih2UpxsUHAQ">
             <img src="https://img.youtube.com/vi/Ih2UpxsUHAQ/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #1</p>
@@ -847,10 +803,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
-          <a href="https://www.youtube.com/watch?v=y6ftaIf7RWg" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="y6ftaIf7RWg">
             <img src="https://img.youtube.com/vi/y6ftaIf7RWg/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #2</p>
@@ -858,10 +814,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
-          <a href="https://www.youtube.com/watch?v=e91iszdiXqU" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="e91iszdiXqU">
             <img src="https://img.youtube.com/vi/e91iszdiXqU/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #3</p>
@@ -869,10 +825,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
-          <a href="https://www.youtube.com/watch?v=W2lk9aiMfQI" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="W2lk9aiMfQI">
             <img src="https://img.youtube.com/vi/W2lk9aiMfQI/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #4</p>
@@ -880,10 +836,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="pr">
-          <a href="https://www.youtube.com/watch?v=8SOej24g3QQ" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="8SOej24g3QQ">
             <img src="https://img.youtube.com/vi/8SOej24g3QQ/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">기업홍보영상</span>
             <p class="proj-title">에코플러스바이오차 #5</p>
@@ -893,10 +849,10 @@
 
         <!-- [VJ] -->
         <figure class="portfolio-item" data-category="vj">
-          <a href="https://www.youtube.com/watch?v=c2GJCM3nfiU" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="c2GJCM3nfiU">
             <img src="https://img.youtube.com/vi/c2GJCM3nfiU/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">VJ</span>
             <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 1</p>
@@ -904,10 +860,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="vj">
-          <a href="https://www.youtube.com/watch?v=s7p3lONBj5w" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="s7p3lONBj5w">
             <img src="https://img.youtube.com/vi/s7p3lONBj5w/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">VJ</span>
             <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 2</p>
@@ -915,10 +871,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="vj">
-          <a href="https://www.youtube.com/watch?v=jWxlofvzpYI" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="jWxlofvzpYI">
             <img src="https://img.youtube.com/vi/jWxlofvzpYI/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">VJ</span>
             <p class="proj-title">왓챠 오리지널 '더블트러블' VJ 3</p>
@@ -928,10 +884,10 @@
 
         <!-- [행사] -->
         <figure class="portfolio-item" data-category="event">
-          <a href="https://www.youtube.com/watch?v=f9RdOgIAJCc" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="f9RdOgIAJCc">
             <img src="https://img.youtube.com/vi/f9RdOgIAJCc/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">행사</span>
             <p class="proj-title">풀파티 행사 스케치</p>
@@ -939,10 +895,10 @@
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="event">
-          <a href="https://www.youtube.com/watch?v=d2dkXeVkUTc" target="_blank" class="video-wrapper">
+          <div class="video-wrapper" data-video-id="d2dkXeVkUTc">
             <img src="https://img.youtube.com/vi/d2dkXeVkUTc/hqdefault.jpg" alt="thumbnail">
             <div class="play-btn"></div>
-          </a>
+          </div>
           <figcaption>
             <span class="badge">행사</span>
             <p class="proj-title">첸웬링 전시 제이미컬렉션 갤러리</p>
@@ -959,11 +915,10 @@
     </div>
   </section>
 
-  <!-- Process (Project & Workflow) Section -->
+  <!-- Process Section -->
   <section id="process">
     <div class="section-inner">
       
-      <!-- 수정된 토글 부분 -->
       <div class="process-title-toggles" id="processToggleContainer">
         <div class="main-toggle-text play-anim" id="mainToggleTitle">PROJECT</div>
         
@@ -977,7 +932,6 @@
         <div class="click-hint">Tap to switch</div>
       </div>
 
-      <!-- 프로젝트 탭 내용 -->
       <div id="tab-project" class="card-grid">
         <div class="card">
           <h4>01 발견 (Discovery)</h4>
@@ -997,7 +951,6 @@
         </div>
       </div>
 
-      <!-- 워크플로우 탭 내용 -->
       <div id="tab-workflow" class="card-grid" style="display: none;">
         <div class="card">
           <h4>01 미팅 (Meeting)</h4>
@@ -1059,6 +1012,9 @@
     let startX;
     let scrollLeft;
     let visibleSlides = [];
+    
+    let dragStartX = 0;
+    let isDragging = false; 
 
     function renderSlider(filterValue) {
       visibleSlides = [];
@@ -1126,10 +1082,13 @@
     });
 
     slider.addEventListener('mousedown', (e) => {
-      if (!e.target.closest('figcaption')) return; 
+      if (!e.target.closest('figure')) return; 
       isDown = true;
       startX = e.pageX - slider.offsetLeft;
       scrollLeft = slider.scrollLeft;
+      
+      dragStartX = e.pageX;
+      isDragging = false; 
     });
 
     slider.addEventListener('mouseleave', () => {
@@ -1148,7 +1107,55 @@
       const x = e.pageX - slider.offsetLeft;
       const walk = (x - startX); 
       slider.scrollLeft = scrollLeft - walk;
+      
+      if (Math.abs(e.pageX - dragStartX) > 5) {
+        isDragging = true;
+      }
     });
+
+    /* =========================================
+       [핵심 수정] 완벽한 DOM 교체 스크립트 (오류 해결)
+       - 더미 스크립트, 무거운 API, a태그를 모두 걷어냈습니다.
+       - 클릭 시 썸네일을 날려버리고 그 자리에 iframe만 깔끔하게 남깁니다.
+       ========================================= */
+    const videoWrappers = document.querySelectorAll('.video-wrapper');
+
+    videoWrappers.forEach(wrapper => {
+      wrapper.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // 스와이프 드래그와 클릭을 정확히 분리 (오작동 방지)
+        if (isDragging) return;
+
+        const videoId = this.getAttribute('data-video-id');
+        if (!videoId) return;
+
+        // 다른 영상이 켜져있다면, 메모리 점유 방지를 위해 원래 썸네일 상태로 되돌림
+        document.querySelectorAll('.video-wrapper.is-playing').forEach(activeWrapper => {
+          if (activeWrapper !== this) {
+            const prevId = activeWrapper.getAttribute('data-video-id');
+            activeWrapper.innerHTML = `
+              <img src="https://img.youtube.com/vi/${prevId}/hqdefault.jpg" alt="thumbnail">
+              <div class="play-btn"></div>
+            `;
+            activeWrapper.classList.remove('is-playing');
+          }
+        });
+
+        // 현재 클릭한 영역을 순수 iframe 태그로 100% 덮어씌움 (브라우저가 가장 쾌적하게 인식함)
+        this.classList.add('is-playing');
+        this.innerHTML = `
+          <iframe 
+            src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen 
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; border: none;">
+          </iframe>
+        `;
+      });
+    });
+    /* ========================================= */
 
     const sliderWrapper = document.querySelector('.slider-wrapper');
     let autoScrollEnabled = true;
