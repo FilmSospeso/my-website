@@ -234,7 +234,7 @@
       display: none; 
     }
     
-    /* 노트북/데스크탑 환경에서 적절한 크기로 반응형 적용 */
+    /* 노트북/데스크탑 환경 반응형 (과도하게 커지지 않음) */
     .scroll-container figure {
       flex: 0 0 auto;
       width: clamp(300px, 33vw, 480px); 
@@ -392,10 +392,11 @@
       background-color: var(--accent);
     }
 
-    /* ---------- Process (Project & Workflow) Section ---------- */
+    /* ---------- Process (Project & Workflow) Toggle Section ---------- */
     #process {
       background-color: var(--bg-lighter);
       max-width: 100%;
+      padding-bottom: 6rem;
     }
     .section-inner {
       max-width: 1200px;
@@ -494,23 +495,23 @@
       50% { opacity: 1; }
     }
 
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr); 
-      gap: 1.5rem;
-      animation: fadeIn 0.4s ease-out forwards;
+    /* 탭 콘텐츠 디졸브 효과 */
+    .tab-content {
+      animation: fadeIn 0.5s ease-out forwards;
+      display: block; 
     }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
-    @media (max-width: 1024px) {
-      .card-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
 
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 1.5rem;
+    }
+    
     .card-grid .card {
       background: var(--bg-dark);
       padding: 1.5rem 2rem;
@@ -534,6 +535,135 @@
       font-size: 0.95rem;
       line-height: 1.6;
       color: #ccc;
+    }
+
+    /* ---------- Project Tab 하위 : 생태계 확장 파이프라인 ---------- */
+    .expansion-divider {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 4rem 0 2rem 0;
+      opacity: 0.8;
+    }
+    .expansion-divider .line {
+      width: 2px;
+      height: 40px;
+      background: var(--accent);
+      margin-bottom: 15px;
+    }
+    .expansion-divider .text {
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .oof-pipeline {
+      background: #151515;
+      border-radius: 16px;
+      padding: 4rem 3rem;
+      border: 1px solid #333;
+    }
+    .oof-pipeline-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .oof-pipeline-header h3 {
+      font-size: clamp(1.8rem, 3vw, 2.2rem);
+      color: var(--text-light);
+      margin: 0 0 1rem 0;
+      letter-spacing: 0.05em;
+    }
+    .oof-pipeline-header h3 span {
+      color: var(--accent);
+    }
+    .oof-pipeline-header p {
+      color: #aaa;
+      font-size: 1.05rem;
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* 모바일용 탭 컨테이너 (기본적으로 숨김) */
+    .pipeline-tabs-container {
+      display: none;
+    }
+
+    .pipeline-flow {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    /* 데스크탑에서 파이프라인을 관통하는 얇은 선 */
+    .pipeline-flow::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      right: 5%;
+      height: 1px;
+      background: #444;
+      z-index: 1;
+      transform: translateY(-50%);
+    }
+
+    .pipe-step {
+      flex: 1;
+      background: var(--bg-dark);
+      padding: 2.5rem 2rem;
+      border-radius: 12px;
+      border-top: 3px solid #444;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .pipe-step:hover {
+      border-top-color: var(--accent);
+      transform: translateY(-5px);
+    }
+    
+    .pipe-step .step-badge {
+      display: inline-block;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      letter-spacing: 0.1em;
+      border: 1px solid var(--accent);
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+    }
+    .pipe-step .step-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--text-light);
+      line-height: 1.4;
+    }
+
+    .tag-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .tag-grid span {
+      background: #222;
+      color: #ccc;
+      padding: 0.8rem 1rem;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      border-left: 2px solid transparent;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .pipe-step:hover .tag-grid span {
+      border-left-color: var(--accent);
+      color: var(--text-light);
     }
 
     /* ---------- About Section ---------- */
@@ -584,7 +714,64 @@
       text-decoration: none;
     }
 
-    /* ---------- 미디어 쿼리 (모바일 최적화) ---------- */
+    /* ---------- 미디어 쿼리 (모바일/태블릿 최적화 및 탭 전환) ---------- */
+    @media (max-width: 1024px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      /* 파이프라인 모바일 탭 디자인 적용 */
+      .pipeline-tabs-container {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        overflow-x: auto;
+        padding-bottom: 5px; 
+        -ms-overflow-style: none; 
+        scrollbar-width: none;
+      }
+      .pipeline-tabs-container::-webkit-scrollbar {
+        display: none;
+      }
+      .pipe-tab-btn {
+        background: transparent;
+        border: 1px solid #444;
+        color: #888;
+        padding: 0.6rem 1.2rem;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+      }
+      .pipe-tab-btn.active {
+        background: rgba(255, 140, 0, 0.15);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .pipeline-flow {
+        display: block; /* Flex 해제 */
+      }
+      .pipeline-flow::before {
+        display: none; /* 가로 관통 선 숨김 */
+      }
+      
+      /* 기본적으로 모든 스텝 숨기고 active 상태만 표시 */
+      .pipe-step {
+        display: none;
+        margin-top: 0;
+        transform: translateY(0) !important; 
+      }
+      .pipe-step.active {
+        display: block;
+        animation: fadeIn 0.4s ease-out forwards;
+      }
+    }
+
     @media (max-width: 768px) {
       header { 
         height: auto; 
@@ -615,7 +802,6 @@
       #about .col { text-align: center; align-items: center; }
       #about .col:nth-child(2) { border-left: none; padding-left: 0; border-top: 2px solid var(--accent-light); padding-top: 2rem; }
       
-      /* 모바일 환경에서는 썸네일이 화면을 시원하게 채우도록 수정 */
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
 
       .scroll-container.two-rows {
@@ -643,6 +829,13 @@
       .card-grid {
         grid-template-columns: 1fr;
       }
+      
+      .oof-pipeline {
+        padding: 2rem 1.5rem;
+      }
+      .pipe-step {
+        padding: 2rem 1.5rem;
+      }
     }
   </style>
 </head>
@@ -655,7 +848,8 @@
         <div class="nav-indicator"></div>
         <a href="#home" class="active">Home</a>
         <a href="#project">Portfolio</a>
-        <a href="#process">Project</a>
+        <!-- 변경 대상 메뉴 버튼 id 지정 -->
+        <a href="#process" id="navProcessBtn">Project</a>
         <a href="#about">Filmsospeso</a>
       </nav>
     </div>
@@ -970,11 +1164,11 @@
     </div>
   </section>
 
-  <!-- Process (Project & Workflow) Section -->
+  <!-- Process (Project & Workflow) Toggle Section -->
   <section id="process">
     <div class="section-inner">
       
-      <!-- 수정된 토글 부분 -->
+      <!-- 부드러운 디졸브를 위한 토글 헤더 -->
       <div class="process-title-toggles" id="processToggleContainer">
         <div class="main-toggle-text play-anim" id="mainToggleTitle">PROJECT</div>
         
@@ -984,47 +1178,114 @@
             <path d="M7 16V4M7 4L3 8M7 4L11 8M17 8V20M17 20L21 16M17 20L13 16"/>
           </svg>
         </div>
-
         <div class="click-hint">Tap to switch</div>
       </div>
 
-      <!-- 프로젝트 탭 내용 -->
-      <div id="tab-project" class="card-grid">
-        <div class="card">
-          <h4>01 발견 (Discovery)</h4>
-          <p>인물과의 만남을 통해 서사를 수집하고 심층 인터뷰로 아티스트의 고유한 서사를 진단합니다.</p>
+      <!-- [1] 프로젝트 탭 콘텐츠 (자체 기획/IP개발) -->
+      <div id="tab-project" class="tab-content" style="display: block;">
+        
+        <!-- 기존 4단계 카드 -->
+        <div class="card-grid">
+          <div class="card">
+            <h4>01 발견 (Discovery)</h4>
+            <p>인물과의 만남을 통해 서사를 수집하고 심층 인터뷰로 아티스트의 고유한 서사를 진단합니다.</p>
+          </div>
+          <div class="card">
+            <h4>02 관심 (Interest)</h4>
+            <p>서사의 핵심 포인트와 가장 강한 감정을 포착하여 임팩트 있는 퍼포먼스 숏필름을 제작합니다.</p>
+          </div>
+          <div class="card">
+            <h4>03 이해 (Understanding)</h4>
+            <p>창작 세계와 변화의 시간을 영화적 언어로 풀어내어 시네마틱 다큐멘터리로 깊이 있게 기록합니다.</p>
+          </div>
+          <div class="card">
+            <h4>04 신뢰와 확장 (Expansion)</h4>
+            <p>구축된 아티스트의 정체성을 바탕으로 IP 확장, 공동 기획, 문화 프로젝트로 사업 영역을 넓힙니다.</p>
+          </div>
         </div>
-        <div class="card">
-          <h4>02 관심 (Interest)</h4>
-          <p>서사의 핵심 포인트와 가장 강한 감정을 포착하여 임팩트 있는 퍼포먼스 숏필름을 제작합니다.</p>
+
+        <!-- 연결 디자인 요소 -->
+        <div class="expansion-divider">
+          <div class="line"></div>
+          <div class="text">BEYOND PRODUCTION</div>
+          <div class="line"></div>
         </div>
-        <div class="card">
-          <h4>03 이해 (Understanding)</h4>
-          <p>창작 세계와 변화의 시간을 영화적 언어로 풀어내어 시네마틱 다큐멘터리로 깊이 있게 기록합니다.</p>
+
+        <!-- NEW: Out of Frame 생태계 파이프라인 (제안서 기반) -->
+        <div class="oof-pipeline">
+          <div class="oof-pipeline-header">
+            <h3><span>OUT OF FRAME</span> : 생태계 확장</h3>
+            <p>
+              영상 제작을 넘어, 발굴된 서사 자산을 다채로운 영상 포맷으로 파생시키고, 이를 온·오프라인 IP 생태계로 확장하는 검증된 시스템입니다.
+            </p>
+          </div>
+
+          <!-- 모바일 전용 탭 버튼 (1024px 이하에서만 노출) -->
+          <div class="pipeline-tabs-container">
+            <button class="pipe-tab-btn active" data-target="phase-1">PHASE 1</button>
+            <button class="pipe-tab-btn" data-target="phase-2">PHASE 2</button>
+            <button class="pipe-tab-btn" data-target="phase-3">PHASE 3</button>
+          </div>
+
+          <div class="pipeline-flow">
+            <!-- Phase 1 -->
+            <div class="pipe-step active" id="phase-1">
+              <span class="step-badge">PHASE 1</span>
+              <div class="step-title">서사 라이브러리</div>
+              <div class="tag-grid">
+                <span>심층 인터뷰</span>
+                <span>리서치 & 아카이브</span>
+                <span>집중 기획</span>
+              </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="pipe-step" id="phase-2">
+              <span class="step-badge">PHASE 2</span>
+              <div class="step-title">다채로운 영상 포맷</div>
+              <div class="tag-grid">
+                <span>Documentary</span>
+                <span>Music Video</span>
+                <span>Performance</span>
+                <span>Short Film</span>
+              </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="pipe-step" id="phase-3">
+              <span class="step-badge">PHASE 3</span>
+              <div class="step-title">IP 확장 및 외부 협업</div>
+              <div class="tag-grid">
+                <span>OTT · 영화 배급</span>
+                <span>전시 · 문화 행사</span>
+                <span>브랜드 캠페인 공연</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="card">
-          <h4>04 신뢰와 확장 (Expansion)</h4>
-          <p>구축된 아티스트의 정체성을 바탕으로 IP 확장, 공동 기획, 문화 프로젝트로 사업 영역을 넓힙니다.</p>
-        </div>
+        <!-- // Out of Frame 끝 -->
+
       </div>
 
-      <!-- 워크플로우 탭 내용 -->
-      <div id="tab-workflow" class="card-grid" style="display: none;">
-        <div class="card">
-          <h4>01 미팅 (Meeting)</h4>
-          <p>클라이언트와의 소통을 통해 프로젝트의 목적, 타겟, 그리고 기획 의도와 방향성을 수립합니다.</p>
-        </div>
-        <div class="card">
-          <h4>02 프리프로덕션 (Pre-Production)</h4>
-          <p>대본 및 스토리보드 작성, 로케이션 헌팅, 캐스팅 등 원활한 촬영을 위한 모든 준비를 철저히 마칩니다.</p>
-        </div>
-        <div class="card">
-          <h4>03 메인프로덕션 (Main Production)</h4>
-          <p>기획을 바탕으로 최적의 장비와 전문 인력을 투입하여 고품질의 본 촬영을 진행합니다.</p>
-        </div>
-        <div class="card">
-          <h4>04 포스트프로덕션 (Post-Production)</h4>
-          <p>컷 편집, 색보정(DI), 사운드 믹싱 및 모션 그래픽 등 후반 작업을 통해 영상의 완성도를 극대화합니다.</p>
+      <!-- [2] 워크플로우 탭 콘텐츠 (직접 영상제작 의뢰) -->
+      <div id="tab-workflow" class="tab-content" style="display: none;">
+        <div class="card-grid">
+          <div class="card">
+            <h4>01 미팅 (Meeting)</h4>
+            <p>클라이언트와의 소통을 통해 프로젝트의 목적, 타겟, 그리고 기획 의도와 방향성을 수립합니다.</p>
+          </div>
+          <div class="card">
+            <h4>02 프리프로덕션 (Pre-Production)</h4>
+            <p>대본 및 스토리보드 작성, 로케이션 헌팅, 캐스팅 등 원활한 촬영을 위한 모든 준비를 철저히 마칩니다.</p>
+          </div>
+          <div class="card">
+            <h4>03 메인프로덕션 (Main Production)</h4>
+            <p>기획을 바탕으로 최적의 장비와 전문 인력을 투입하여 고품질의 본 촬영을 진행합니다.</p>
+          </div>
+          <div class="card">
+            <h4>04 포스트프로덕션 (Post-Production)</h4>
+            <p>컷 편집, 색보정(DI), 사운드 믹싱 및 모션 그래픽 등 후반 작업을 통해 영상의 완성도를 극대화합니다.</p>
+          </div>
         </div>
       </div>
       
@@ -1067,7 +1328,7 @@
     const portfolioItems = document.querySelectorAll('.portfolio-item');
     
     let isDown = false;
-    let isDragging = false; // 드래그 중인지 판단하는 변수 추가
+    let isDragging = false; 
     let startX;
     let scrollLeft;
     let visibleSlides = [];
@@ -1137,7 +1398,6 @@
       });
     });
 
-    // 드래그 및 클릭 분리 로직 개선
     slider.addEventListener('mousedown', (e) => {
       isDown = true;
       isDragging = false;
@@ -1156,13 +1416,12 @@
     slider.addEventListener('mousemove', (e) => {
       if (!isDown) return;
       e.preventDefault();
-      isDragging = true; // 이동이 발생하면 드래그 중으로 인식
+      isDragging = true; 
       const x = e.pageX - slider.offsetLeft;
       const walk = (x - startX); 
       slider.scrollLeft = scrollLeft - walk;
     });
 
-    // 만약 드래그(끌기)를 했다면 클릭 이벤트를 막아줌 (영상 클릭 방해 해결)
     slider.addEventListener('click', (e) => {
       if (isDragging) {
         e.preventDefault();
@@ -1191,12 +1450,16 @@
     }
     autoScroll();
 
+    // 토글 자바스크립트 로직 (디졸브 및 상단 메뉴 연동)
     let isProjectActive = true; 
     const processToggleContainer = document.getElementById('processToggleContainer');
     const mainToggleTitle = document.getElementById('mainToggleTitle');
     const subToggleTitle = document.getElementById('subToggleTitle');
     const tabProject = document.getElementById('tab-project');
     const tabWorkflow = document.getElementById('tab-workflow');
+    
+    // 네비게이션 탑 버튼 요소를 가져옵니다.
+    const navProcessBtn = document.getElementById('navProcessBtn');
 
     processToggleContainer.addEventListener('click', () => {
       isProjectActive = !isProjectActive;
@@ -1204,20 +1467,44 @@
       if (isProjectActive) {
         mainToggleTitle.textContent = 'PROJECT';
         subToggleTitle.textContent = 'WORKFLOW';
-        tabProject.style.display = 'grid';
+        navProcessBtn.textContent = 'Project'; // 탑 메뉴 이름 변경
+        tabProject.style.display = 'block';
         tabWorkflow.style.display = 'none';
       } else {
         mainToggleTitle.textContent = 'WORKFLOW';
         subToggleTitle.textContent = 'PROJECT';
+        navProcessBtn.textContent = 'Workflow'; // 탑 메뉴 이름 변경
         tabProject.style.display = 'none';
-        tabWorkflow.style.display = 'grid';
+        tabWorkflow.style.display = 'block';
       }
 
       mainToggleTitle.classList.remove('play-anim'); 
       void mainToggleTitle.offsetWidth; 
       mainToggleTitle.classList.add('play-anim');
+      
+      // 상단 메뉴 글자가 바뀌어 너비가 변했을 수 있으므로 인디케이터 위치 재계산
+      if (currentActiveNav === navProcessBtn) {
+        moveIndicator(navProcessBtn);
+      }
     });
 
+    // 모바일 환경 파이프라인 탭 스위칭 스크립트
+    const pipeTabBtns = document.querySelectorAll('.pipe-tab-btn');
+    const pipeSteps = document.querySelectorAll('.pipe-step');
+
+    pipeTabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        pipeTabBtns.forEach(b => b.classList.remove('active'));
+        pipeSteps.forEach(s => s.classList.remove('active'));
+
+        btn.classList.add('active');
+        
+        const targetId = btn.getAttribute('data-target');
+        document.getElementById(targetId).classList.add('active');
+      });
+    });
+
+    // 네비게이션 인디케이터 스크립트
     const navLinksMenu = document.querySelectorAll('header nav a');
     const navIndicator = document.querySelector('.nav-indicator');
     const pageSections = document.querySelectorAll('section');
