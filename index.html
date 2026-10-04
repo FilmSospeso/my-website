@@ -16,7 +16,7 @@
   <style>
     /* 기존 스타일 코드 유지 */
     :root {
-      --accent: #ff8c00;          /* Amber */
+      --accent: #ff8c00;         /* Amber */
       --accent-light: #ffa500;
       --bg-dark: #111;
       --bg-darker: #0a0a0a;
@@ -56,7 +56,7 @@
       font-weight: 700;
       font-size: 1.4rem;
     }
-    
+
     header nav {
       display: flex;
       align-items: center;
@@ -76,7 +76,7 @@
     header nav a.active {
       color: var(--accent);
     }
-    
+
     /* 슬라이딩 메뉴 라인 (마그네틱 인디케이터) */
     .nav-indicator {
       position: absolute;
@@ -212,7 +212,7 @@
     .filter-btn.active::after {
       width: 100%;
     }
-    
+
     .slider-wrapper {
       position: relative;
       width: 100%; 
@@ -229,9 +229,11 @@
     .scroll-container::-webkit-scrollbar {
       display: none; 
     }
+    
+    /* ----- 여기서부터 수정된 부분 (노트북 사이즈 맞춤) ----- */
     .scroll-container figure {
       flex: 0 0 auto;
-      width: clamp(320px, 60vw, 800px); 
+      width: clamp(300px, 35vw, 500px); /* 800px에서 500px로 줄이고, 60vw를 35vw로 수정 */
       margin: 0;
       background: #222;
       border-radius: 8px;
@@ -242,15 +244,17 @@
       display: flex;
       flex-direction: column;
     }
-    
+
     .scroll-container.two-rows {
       display: grid;
       grid-template-rows: repeat(2, auto);
       grid-auto-flow: column; 
-      grid-auto-columns: clamp(320px, 60vw, 800px); 
+      grid-auto-columns: clamp(300px, 35vw, 500px); /* 위와 동일하게 수정 */
       gap: 2rem;
       align-items: start;
     }
+    /* ----- 여기까지 수정된 부분 ----- */
+
     .scroll-container.two-rows figure {
       width: 100%; 
       margin: 0;
@@ -306,7 +310,7 @@
     .scroll-container figure:hover .badge {
       opacity: 1;
     }
-    
+
     .play-btn {
       position: absolute;
       top: 50%; left: 50%;
@@ -399,7 +403,7 @@
       margin: 0 auto;
       padding: 0 2rem;
     }
-    
+
     /* 타이틀 토글 영역 수정 */
     .process-title-toggles {
       display: flex;
@@ -410,7 +414,7 @@
       user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
-    
+
     .main-toggle-text {
       position: relative;
       color: var(--accent); 
@@ -422,7 +426,7 @@
       padding-bottom: 0.5rem;
       transition: opacity 0.3s ease;
     }
-    
+
     .main-toggle-text::after {
       content: '';
       position: absolute;
@@ -444,7 +448,7 @@
       0% { width: 0; }
       100% { width: 100%; }
     }
-    
+
     /* 서브 텍스트 및 스왑 아이콘 그룹 */
     .sub-toggle-group {
       display: flex;
@@ -504,7 +508,7 @@
       from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
+
     @media (max-width: 1024px) {
       .card-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -610,11 +614,11 @@
         min-height: 60vh; 
         padding-top: 80px; 
       }
-      
+
       #about .about-inner { grid-template-columns: 1fr; gap: 2rem; }
       #about .col { text-align: center; align-items: center; }
       #about .col:nth-child(2) { border-left: none; padding-left: 0; border-top: 2px solid var(--accent-light); padding-top: 2rem; }
-      
+
       .scroll-container figure { width: clamp(280px, 85vw, 400px); }
 
       .scroll-container.two-rows {
@@ -633,7 +637,7 @@
         white-space: nowrap;
         font-size: 1rem;
       }
-      
+
       .process-title-toggles {
         margin-bottom: 2.5rem;
       }
@@ -679,7 +683,7 @@
   <section id="project">
     <div class="featured">
       <h3>PORTFOLIO</h3>
-      
+
       <!-- 카테고리 필터 버튼 -->
       <div class="filter-buttons">
         <button class="filter-btn active" data-filter="all">All</button>
@@ -691,10 +695,10 @@
         <button class="filter-btn" data-filter="event">행사</button>
       </div>
     </div>
-    
+
     <div class="slider-wrapper">
       <div class="scroll-container" id="projectSlider">
-        
+
         <!-- [뮤직비디오] -->
         <figure class="portfolio-item" data-category="mv">
           <a href="https://www.youtube.com/watch?v=FCWUGhVX-D4" target="_blank" class="video-wrapper">
@@ -961,7 +965,7 @@
         </figure>
 
       </div>
-      
+
       <div class="slider-controls">
         <p class="drag-hint">Drag to explore ↔</p>
         <div class="slider-dots" id="sliderDots"></div>
@@ -972,11 +976,11 @@
   <!-- Process (Project & Workflow) Section -->
   <section id="process">
     <div class="section-inner">
-      
+
       <!-- 수정된 토글 부분 -->
       <div class="process-title-toggles" id="processToggleContainer">
         <div class="main-toggle-text play-anim" id="mainToggleTitle">PROJECT</div>
-        
+
         <div class="sub-toggle-group">
           <div class="sub-toggle-text" id="subToggleTitle">WORKFLOW</div>
           <svg class="swap-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1026,248 +1030,7 @@
           <p>컷 편집, 색보정(DI), 사운드 믹싱 및 모션 그래픽 등 후반 작업을 통해 영상의 완성도를 극대화합니다.</p>
         </div>
       </div>
-      
     </div>
   </section>
-
-  <!-- About Section -->
-  <section id="about">
-    <div class="about-inner">
-      <div class="col">
-        <h3>Film Sospeso</h3>
-        <p>
-          Filmsospeso(필름 소스페소)는 이탈리아 나폴리의 '카페 소스페소(Caffè Sospeso)' 문화에서 영감을 받아 탄생했습니다. 누군가를 위해 커피 한 잔의 값을 미리 지불해두는 그 따뜻한 전통처럼, <span class="highlight-text">'필요한 사람을 위해 나눈다'</span>는 철학을 영상에 담습니다.
-          <br><br>
-          우리는 단순히 영상을 제작하는 회사를 넘어 기획부터 유통, 홍보, IP 확장까지 설계하며, 누군가 삶의 원동력이 필요할 때 언제든 꺼내어 볼 수 있는 변치 않는 서사 기록(Archive)을 만듭니다.
-        </p>
-      </div>
-      <div class="col">
-        <h3>Equipment Setup</h3>
-        <p>
-         시네마틱 퀄리티를 구현하기위한 셋업<br><br>
-          • Camera : RED Komodo 6k<br>
-          • Lens   : Canon K35 Cine, FD 빈티지 렌즈군<br>
-          • Audio  : Zoom F3, Sennheiser 8060, Sony UWP D27<br>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <p>© 2026 Film Sospeso – A story in motion. <a href="mailto:contact@filmsospeso.com">contact@filmsospeso.com</a></p>
-  </footer>
-
-  <!-- JavaScript -->
-  <script>
-    const slider = document.getElementById('projectSlider');
-    const dotsContainer = document.getElementById('sliderDots');
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
-    
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-    let visibleSlides = [];
-
-    function renderSlider(filterValue) {
-      visibleSlides = [];
-      portfolioItems.forEach(item => {
-        if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
-          item.style.display = 'block';
-          visibleSlides.push(item);
-        } else {
-          item.style.display = 'none';
-        }
-      });
-
-      if (filterValue === 'all') {
-        slider.classList.add('two-rows');
-      } else {
-        slider.classList.remove('two-rows');
-      }
-
-      slider.scrollLeft = 0;
-      dotsContainer.innerHTML = '';
-      
-      const numColumns = (filterValue === 'all') ? Math.ceil(visibleSlides.length / 2) : visibleSlides.length;
-
-      for (let i = 0; i < numColumns; i++) {
-        const dot = document.createElement('div');
-        dot.classList.add('dot');
-        if (i === 0) dot.classList.add('active');
-        
-        dot.addEventListener('click', () => {
-          const slideWidth = visibleSlides[0].offsetWidth + parseInt(window.getComputedStyle(slider).gap || 32);
-          slider.scrollTo({
-            left: slideWidth * i,
-            behavior: 'smooth'
-          });
-        });
-        dotsContainer.appendChild(dot);
-      }
-    }
-
-    renderSlider('all');
-
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filterValue = btn.getAttribute('data-filter');
-        renderSlider(filterValue);
-      });
-    });
-
-    slider.addEventListener('scroll', () => {
-      if (visibleSlides.length === 0) return;
-      const dots = Array.from(dotsContainer.children);
-      const slideWidth = visibleSlides[0].offsetWidth + parseInt(window.getComputedStyle(slider).gap || 32);
-      const scrollPosition = slider.scrollLeft;
-      const index = Math.round(scrollPosition / slideWidth); 
-
-      dots.forEach((dot, i) => {
-        if (i === index) {
-          dot.classList.add('active');
-        } else {
-          dot.classList.remove('active');
-        }
-      });
-    });
-
-    slider.addEventListener('mousedown', (e) => {
-      if (!e.target.closest('figcaption')) return; 
-      isDown = true;
-      startX = e.pageX - slider.offsetLeft;
-      scrollLeft = slider.scrollLeft;
-    });
-
-    slider.addEventListener('mouseleave', () => {
-      if(!isDown) return;
-      isDown = false;
-    });
-
-    slider.addEventListener('mouseup', () => {
-      if(!isDown) return;
-      isDown = false;
-    });
-
-    slider.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startX); 
-      slider.scrollLeft = scrollLeft - walk;
-    });
-
-    const sliderWrapper = document.querySelector('.slider-wrapper');
-    let autoScrollEnabled = true;
-
-    sliderWrapper.addEventListener('mouseenter', () => autoScrollEnabled = false);
-    sliderWrapper.addEventListener('mouseleave', () => autoScrollEnabled = true);
-    sliderWrapper.addEventListener('touchstart', () => autoScrollEnabled = false);
-    sliderWrapper.addEventListener('touchend', () => autoScrollEnabled = true);
-
-    function autoScroll() {
-      if (autoScrollEnabled && !isDown && visibleSlides.length > 0) {
-        if (slider.scrollWidth > slider.clientWidth) {
-          slider.scrollLeft += 1; 
-          if (slider.scrollLeft >= slider.scrollWidth - slider.clientWidth - 1) {
-            slider.scrollLeft = 0;
-          }
-        }
-      }
-      requestAnimationFrame(autoScroll);
-    }
-    autoScroll();
-
-    let isProjectActive = true; 
-    const processToggleContainer = document.getElementById('processToggleContainer');
-    const mainToggleTitle = document.getElementById('mainToggleTitle');
-    const subToggleTitle = document.getElementById('subToggleTitle');
-    const tabProject = document.getElementById('tab-project');
-    const tabWorkflow = document.getElementById('tab-workflow');
-
-    processToggleContainer.addEventListener('click', () => {
-      isProjectActive = !isProjectActive;
-      
-      if (isProjectActive) {
-        mainToggleTitle.textContent = 'PROJECT';
-        subToggleTitle.textContent = 'WORKFLOW';
-        tabProject.style.display = 'grid';
-        tabWorkflow.style.display = 'none';
-      } else {
-        mainToggleTitle.textContent = 'WORKFLOW';
-        subToggleTitle.textContent = 'PROJECT';
-        tabProject.style.display = 'none';
-        tabWorkflow.style.display = 'grid';
-      }
-
-      mainToggleTitle.classList.remove('play-anim'); 
-      void mainToggleTitle.offsetWidth; 
-      mainToggleTitle.classList.add('play-anim');
-    });
-
-    const navLinksMenu = document.querySelectorAll('header nav a');
-    const navIndicator = document.querySelector('.nav-indicator');
-    const pageSections = document.querySelectorAll('section');
-    let currentActiveNav = document.querySelector('header nav a.active') || navLinksMenu[0];
-
-    function moveIndicator(link) {
-      if (!link) return;
-      navIndicator.style.width = `${link.offsetWidth}px`;
-      navIndicator.style.left = `${link.offsetLeft}px`;
-      navIndicator.style.top = `${link.offsetTop + link.offsetHeight}px`;
-    }
-
-    function initIndicator() {
-      if (!currentActiveNav) return;
-      navIndicator.style.transition = 'none';
-      navIndicator.style.width = '0px';
-      navIndicator.style.left = `${currentActiveNav.offsetLeft + (currentActiveNav.offsetWidth / 2)}px`;
-      navIndicator.style.top = `${currentActiveNav.offsetTop + currentActiveNav.offsetHeight}px`;
-      void navIndicator.offsetWidth;
-      navIndicator.style.transition = 'left 0.3s ease-out, width 0.3s ease-out, top 0.3s ease-out';
-      moveIndicator(currentActiveNav);
-    }
-
-    window.addEventListener('scroll', () => {
-      let currentSectionId = 'home';
-      
-      pageSections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        if (scrollY >= (sectionTop - window.innerHeight / 3)) {
-          currentSectionId = section.getAttribute('id');
-        }
-      });
-
-      if (Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 10) {
-        currentSectionId = pageSections[pageSections.length - 1].getAttribute('id');
-      }
-
-      navLinksMenu.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${currentSectionId}`) {
-          link.classList.add('active');
-          currentActiveNav = link;
-          moveIndicator(currentActiveNav);
-        }
-      });
-    });
-
-    navLinksMenu.forEach(link => {
-      link.addEventListener('mouseenter', () => moveIndicator(link));
-      link.addEventListener('mouseleave', () => moveIndicator(currentActiveNav));
-      
-      link.addEventListener('click', function() {
-         currentActiveNav = this;
-         moveIndicator(this);
-      });
-    });
-
-    window.addEventListener('load', initIndicator);
-    window.addEventListener('resize', () => moveIndicator(currentActiveNav));
-    
-  </script>
 </body>
 </html>
