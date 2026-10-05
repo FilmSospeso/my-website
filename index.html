@@ -151,13 +151,23 @@
       100% { left: 100%; opacity: 1; }
     }
 
-    /* ---------- 공통 그래픽 모티프 (선과 점) ---------- */
+    /* ---------- 타이틀 그룹 및 공통 그래픽 모티프 ---------- */
+    .title-group {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: max-content;
+      max-width: 100%;
+    }
+    .featured .title-group {
+      margin: 0 auto;
+    }
     .motif-line {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0.5rem auto 2.5rem;
-      width: 80px;
+      margin: 0.5rem 0 2.5rem 0;
+      width: 100%;
     }
     .motif-line::before {
       content: '';
@@ -257,7 +267,7 @@
     #project .featured h3 {
       margin-bottom: 0.5rem; 
       font-size: clamp(2rem, 3.5vw, 3rem);
-      color: var(--accent); /* 요청 사항: PORTFOLIO 타이틀 오렌지색 적용 */
+      color: var(--accent); 
     }
 
     .filter-buttons {
@@ -525,7 +535,6 @@
       -webkit-tap-highlight-color: transparent;
     }
     
-    /* 요청 사항: Project & Workflow 메인 타이틀 폰트 맨 처음 소스(Noto Sans)로 복구 */
     .main-toggle-text {
       position: relative;
       color: var(--accent); 
@@ -538,7 +547,6 @@
       font-family: var(--font-base); /* 원래 소스의 Noto Sans 폰트 */
     }
     
-    /* 토글 텍스트 선과 점 애니메이션 */
     .main-toggle-text::after {
       content: '';
       position: absolute;
@@ -647,13 +655,12 @@
       transform: translateY(-5px);
       border-color: var(--accent);
     }
-    /* 요청 사항: 카드 타이틀 폰트 원래 폰트(Noto Sans)로 복구 */
     .card-grid .card h4 {
       margin: 0 0 0.8rem 0;
       color: var(--accent);
       font-size: 1.25rem;
       line-height: 1.4;
-      font-family: var(--font-base); /* 원래 소스의 Noto Sans 폰트 */
+      font-family: var(--font-base); 
     }
     .card-grid .card p {
       margin: 0;
@@ -852,6 +859,36 @@
       color: var(--accent);
       font-weight: 700;
     }
+    
+    /* 장비 셋업 좌측 정렬 박스 */
+    .equipment-box {
+      text-align: left;
+      width: 100%;
+    }
+    .eq-list {
+      margin-top: 1.5rem;
+    }
+    /* Flexbox를 적용하여 라벨, 콜론, 값을 각기 독립된 열로 분리 */
+    .eq-item {
+      display: flex;
+      align-items: flex-start;
+      font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+      line-height: 1.8;
+      margin-bottom: 0.4rem;
+    }
+    .eq-label {
+      flex: 0 0 90px; /* 라벨 너비를 90px로 넉넉하게 늘림 */
+      white-space: nowrap; /* 어떠한 경우에도 라벨 내에서 줄바꿈 발생을 방지함 */
+    }
+    .eq-colon {
+      flex: 0 0 15px; /* 콜론 영역 분리 및 고정 */
+      text-align: center;
+      margin-right: 8px;
+    }
+    .eq-value {
+      flex: 1; /* 남은 여백 모두 차지 */
+      word-break: keep-all; /* 단어 단위로 줄바꿈 유지 */
+    }
 
     /* ---------- Footer ---------- */
     footer {
@@ -984,11 +1021,11 @@
   <!-- Project (PORTFOLIO) Section -->
   <section id="project">
     <div class="featured">
-      <h3>PORTFOLIO</h3>
-      <!-- 브랜드 그래픽 모티프 (선과 점) -->
-      <div class="motif-line"></div>
+      <div class="title-group">
+        <h3>PORTFOLIO</h3>
+        <div class="motif-line"></div>
+      </div>
       
-      <!-- 카테고리 필터 버튼 -->
       <div class="filter-buttons">
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="mv">뮤직비디오</button>
@@ -1412,9 +1449,11 @@
   <section id="about">
     <div class="about-inner">
       <div class="col">
-        <h3>Film Sospeso</h3>
-        <!-- 브랜드 그래픽 모티프 (선과 점) -->
-        <div class="motif-line"></div>
+        <!-- 텍스트 길이에 맞춰 선이 딱 떨어지도록 그룹화 -->
+        <div class="title-group">
+          <h3>Film Sospeso</h3>
+          <div class="motif-line"></div>
+        </div>
         <p>
           Filmsospeso(필름 소스페소)는 이탈리아 나폴리의 '카페 소스페소(Caffè Sospeso)' 문화에서 영감을 받아 탄생했습니다. 누군가를 위해 커피 한 잔의 값을 미리 지불해두는 그 따뜻한 전통처럼, <span class="highlight-text">'필요한 사람을 위해 나눈다'</span>는 철학을 영상에 담습니다.
           <br><br>
@@ -1422,15 +1461,35 @@
         </p>
       </div>
       <div class="col">
-        <h3>Equipment Setup</h3>
-        <!-- 브랜드 그래픽 모티프 (선과 점) -->
-        <div class="motif-line"></div>
-        <p>
-         시네마틱 퀄리티를 구현하기위한 셋업<br><br>
-          • Camera : RED Komodo 6k<br>
-          • Lens   : Canon K35 Cine, FD 빈티지 렌즈군<br>
-          • Audio  : Zoom F3, Sennheiser 8060, Sony UWP D27<br>
-        </p>
+        <!-- 텍스트 길이에 맞춰 선이 딱 떨어지도록 그룹화 -->
+        <div class="title-group">
+          <h3>Equipment Setup</h3>
+          <div class="motif-line"></div>
+        </div>
+        
+        <!-- 장비 셋업 좌측 정렬 및 깔끔한 정리 박스 -->
+        <div class="equipment-box">
+          <p>시네마틱 퀄리티를 구현하기위한 셋업</p>
+          <div class="eq-list">
+            <!-- 각 항목을 라벨, 콜론, 텍스트 세 구역으로 분리 -->
+            <div class="eq-item">
+              <span class="eq-label">• Camera</span>
+              <span class="eq-colon">:</span>
+              <span class="eq-value">RED Komodo 6k</span>
+            </div>
+            <div class="eq-item">
+              <span class="eq-label">• Lens</span>
+              <span class="eq-colon">:</span>
+              <span class="eq-value">Canon K35 Cine, FD 빈티지 렌즈군</span>
+            </div>
+            <div class="eq-item">
+              <span class="eq-label">• Audio</span>
+              <span class="eq-colon">:</span>
+              <span class="eq-value">Zoom F3, Sennheiser 8060, Sony UWP D27</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -1663,6 +1722,9 @@
 
       navLinksMenu.forEach(link => {
         link.classList.remove('active');
+        // --- 수정된 부분: 스크롤 시 애니메이션 클래스도 함께 초기화 ---
+        link.classList.remove('play-anim'); 
+        
         if (link.getAttribute('href') === `#${currentSectionId}`) {
           link.classList.add('active');
           currentActiveNav = link;
@@ -1672,7 +1734,11 @@
 
     navLinksMenu.forEach(link => {
       link.addEventListener('click', function() {
-         navLinksMenu.forEach(l => l.classList.remove('active'));
+         navLinksMenu.forEach(l => {
+             l.classList.remove('active');
+             // --- 수정된 부분: 클릭 시 애니메이션 클래스도 함께 초기화 ---
+             l.classList.remove('play-anim'); 
+         });
          this.classList.add('active');
          currentActiveNav = this;
       });
