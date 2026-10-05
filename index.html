@@ -23,6 +23,10 @@
       --font-base: 'Noto Sans KR', sans-serif;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     html, body {
       margin: 0; padding: 0;
       font-family: var(--font-base);
@@ -30,6 +34,11 @@
       background-color: var(--bg-dark);
       word-break: keep-all; 
       overflow-wrap: break-word;
+    }
+
+    /* 전역 박스 사이징 */
+    *, *::before, *::after {
+      box-sizing: border-box;
     }
 
     /* ---------- 헤더 ---------- */
@@ -75,14 +84,31 @@
       color: var(--accent);
     }
     
-    /* 슬라이딩 메뉴 라인 (마그네틱 인디케이터) */
-    .nav-indicator {
+    /* 중앙에서 양옆으로 펼쳐지는 통일된 밑줄 애니메이션 */
+    header nav a::after {
+      content: '';
       position: absolute;
+      left: 50%;
+      bottom: 0px;
+      width: 0;
       height: 2px;
       background-color: var(--accent);
+      transform: translateX(-50%);
+      transition: width 0.3s ease-out;
       box-shadow: 0 0 10px var(--accent);
       border-radius: 2px;
-      pointer-events: none;
+    }
+    header nav a:hover::after,
+    header nav a.active::after {
+      width: 100%;
+    }
+    header nav a.play-anim::after {
+      animation: expandLine 0.4s ease-out forwards;
+    }
+
+    @keyframes expandLine {
+      0% { width: 0; }
+      100% { width: 100%; }
     }
 
     /* ---------- Hero Section ---------- */
@@ -93,7 +119,6 @@
       min-height: 100vh;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
       overflow: hidden;
       background-color: #000;
       display: flex;
@@ -234,7 +259,6 @@
       display: none; 
     }
     
-    /* 노트북/데스크탑 환경 반응형 (과도하게 커지지 않음) */
     .scroll-container figure {
       flex: 0 0 auto;
       width: clamp(300px, 33vw, 480px); 
@@ -442,11 +466,6 @@
     .main-toggle-text.play-anim::after {
       animation: expandLine 0.4s ease-out forwards;
     }
-
-    @keyframes expandLine {
-      0% { width: 0; }
-      100% { width: 100%; }
-    }
     
     .sub-toggle-group {
       display: flex;
@@ -542,28 +561,53 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin: 4rem 0 2rem 0;
-      opacity: 0.8;
+      margin: 3rem 0 0 0;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      -webkit-tap-highlight-color: transparent;
     }
-    .expansion-divider .line {
-      width: 2px;
-      height: 40px;
-      background: var(--accent);
-      margin-bottom: 15px;
+    .expansion-divider:hover {
+      transform: translateY(-3px);
+    }
+    .expansion-divider .btn-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.7rem 1.8rem;
+      border: 1px solid rgba(255, 140, 0, 0.4);
+      border-radius: 30px;
+      background: rgba(255, 140, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    .expansion-divider:hover .btn-content {
+      border-color: var(--accent);
+      background: rgba(255, 140, 0, 0.15);
+      box-shadow: 0 4px 15px rgba(255, 140, 0, 0.2);
     }
     .expansion-divider .text {
       font-size: 0.85rem;
       color: var(--accent);
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 700;
+    }
+    .expansion-divider .icon {
+      color: var(--accent);
+      transition: transform 0.3s ease;
+    }
+    .expansion-divider.active .icon {
+      transform: rotate(180deg);
     }
 
     .oof-pipeline {
-      background: #151515;
-      border-radius: 16px;
-      padding: 4rem 3rem;
-      border: 1px solid #333;
+      background: transparent; 
+      padding: 2rem 0 4rem 0;
+      width: 100%;
+      display: none; /* 초기 상태 숨김 */
+    }
+    .oof-pipeline.active {
+      display: block; /* 토글 클래스가 추가되면 보이게 변경 */
+      animation: fadeIn 0.5s ease-out forwards;
     }
     .oof-pipeline-header {
       text-align: center;
@@ -612,19 +656,21 @@
       transform: translateY(-50%);
     }
 
+    /* 개별 카드(PHASE 1~3) */
     .pipe-step {
       flex: 1;
       background: var(--bg-dark);
       padding: 2.5rem 2rem;
-      border-radius: 12px;
-      border-top: 3px solid #444;
+      border-radius: 16px;
+      border: 1px solid #333;
+      border-top: 3px solid var(--accent); 
       transition: border-color 0.3s, transform 0.3s;
       position: relative;
       z-index: 2;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
     .pipe-step:hover {
-      border-top-color: var(--accent);
+      border-color: var(--accent);
       transform: translateY(-5px);
     }
     
@@ -720,32 +766,29 @@
         grid-template-columns: repeat(2, 1fr);
       }
       
-      /* 파이프라인 모바일 탭 디자인 적용 */
+      /* 모바일 환경: PHASE 버튼 영역 너비를 꽉 차고 잘리지 않게 조정 */
       .pipeline-tabs-container {
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         gap: 0.5rem;
         margin-bottom: 2rem;
-        overflow-x: auto;
-        padding-bottom: 5px; 
-        -ms-overflow-style: none; 
-        scrollbar-width: none;
-      }
-      .pipeline-tabs-container::-webkit-scrollbar {
-        display: none;
+        width: 100%;
       }
       .pipe-tab-btn {
+        flex: 1; 
         background: transparent;
         border: 1px solid #444;
         color: #888;
-        padding: 0.6rem 1.2rem;
+        padding: 0.6rem 0; 
         border-radius: 30px;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 700;
         letter-spacing: 0.05em;
+        text-align: center;
         cursor: pointer;
         transition: all 0.3s ease;
         white-space: nowrap;
+        min-width: 0; 
       }
       .pipe-tab-btn.active {
         background: rgba(255, 140, 0, 0.15);
@@ -754,13 +797,12 @@
       }
 
       .pipeline-flow {
-        display: block; /* Flex 해제 */
+        display: block; 
       }
       .pipeline-flow::before {
-        display: none; /* 가로 관통 선 숨김 */
+        display: none; 
       }
       
-      /* 기본적으로 모든 스텝 숨기고 active 상태만 표시 */
       .pipe-step {
         display: none;
         margin-top: 0;
@@ -826,15 +868,26 @@
       }
       .click-hint { margin-top: 0.8rem; font-size: 0.7rem; }
 
+      .section-inner {
+        padding: 0 1.2rem;
+      }
       .card-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .card-grid .card {
+        padding: 1.5rem 1.2rem;
       }
       
       .oof-pipeline {
-        padding: 2rem 1.5rem;
+        padding: 1rem 0;
       }
       .pipe-step {
         padding: 2rem 1.5rem;
+      }
+      .tag-grid span {
+        padding: 0.8rem;
+        font-size: 0.9rem;
       }
     }
   </style>
@@ -845,10 +898,8 @@
     <div class="header-inner">
       <div class="logo">Film Sospeso</div>
       <nav>
-        <div class="nav-indicator"></div>
         <a href="#home" class="active">Home</a>
         <a href="#project">Portfolio</a>
-        <!-- 변경 대상 메뉴 버튼 id 지정 -->
         <a href="#process" id="navProcessBtn">Project</a>
         <a href="#about">Filmsospeso</a>
       </nav>
@@ -1204,19 +1255,22 @@
           </div>
         </div>
 
-        <!-- 연결 디자인 요소 -->
-        <div class="expansion-divider">
-          <div class="line"></div>
-          <div class="text">BEYOND PRODUCTION</div>
-          <div class="line"></div>
+        <!-- 연결 디자인 요소 (클릭 버튼화 & 하단 세로 라인 삭제) -->
+        <div class="expansion-divider" id="beyondBtn">
+          <div class="btn-content">
+            <span class="text">BEYOND PRODUCTION</span>
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
         </div>
 
-        <!-- NEW: Out of Frame 생태계 파이프라인 (제안서 기반) -->
-        <div class="oof-pipeline">
+        <!-- NEW: Out of Frame 생태계 파이프라인 (클릭 시 토글되도록 수정) -->
+        <div class="oof-pipeline" id="oofPipeline">
           <div class="oof-pipeline-header">
             <h3><span>OUT OF FRAME</span> : 생태계 확장</h3>
             <p>
-              영상 제작을 넘어, 발굴된 서사 자산을 다채로운 영상 포맷으로 파생시키고, 이를 온·오프라인 IP 생태계로 확장하는 검증된 시스템입니다.
+              단편적인 영상 제작을 넘어, 발굴된 서사 자산을 다채로운 영상 포맷으로 파생시키고, 이를 온·오프라인 IP 생태계로 확장하는 검증된 시스템입니다.
             </p>
           </div>
 
@@ -1235,7 +1289,7 @@
               <div class="tag-grid">
                 <span>심층 인터뷰</span>
                 <span>리서치 & 아카이브</span>
-                <span>집중 기획</span>
+                <span>스토리 기획</span>
               </div>
             </div>
 
@@ -1458,7 +1512,7 @@
     const tabProject = document.getElementById('tab-project');
     const tabWorkflow = document.getElementById('tab-workflow');
     
-    // 네비게이션 탑 버튼 요소를 가져옵니다.
+    // 네비게이션 탑 버튼 요소
     const navProcessBtn = document.getElementById('navProcessBtn');
 
     processToggleContainer.addEventListener('click', () => {
@@ -1482,9 +1536,27 @@
       void mainToggleTitle.offsetWidth; 
       mainToggleTitle.classList.add('play-anim');
       
-      // 상단 메뉴 글자가 바뀌어 너비가 변했을 수 있으므로 인디케이터 위치 재계산
+      // 상단 메뉴 글자가 바뀌었을 때 중앙에서 밑줄이 다시 펼쳐지는 애니메이션 적용
       if (currentActiveNav === navProcessBtn) {
-        moveIndicator(navProcessBtn);
+        navProcessBtn.classList.remove('play-anim');
+        void navProcessBtn.offsetWidth;
+        navProcessBtn.classList.add('play-anim');
+      }
+    });
+
+    // Beyond Production 클릭 시 Out of Frame 토글 (아이콘 애니메이션 추가)
+    const beyondBtn = document.getElementById('beyondBtn');
+    const oofPipeline = document.getElementById('oofPipeline');
+
+    beyondBtn.addEventListener('click', () => {
+      oofPipeline.classList.toggle('active');
+      beyondBtn.classList.toggle('active'); // 화살표 아이콘 회전을 위한 클래스 토글
+      
+      // 내용이 펼쳐질 때 부드럽게 화면을 올려주는 스크롤 이동 적용
+      if (oofPipeline.classList.contains('active')) {
+        setTimeout(() => {
+          oofPipeline.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 300);
       }
     });
 
@@ -1504,29 +1576,10 @@
       });
     });
 
-    // 네비게이션 인디케이터 스크립트
+    // 스크롤 연동 스크립트
     const navLinksMenu = document.querySelectorAll('header nav a');
-    const navIndicator = document.querySelector('.nav-indicator');
     const pageSections = document.querySelectorAll('section');
     let currentActiveNav = document.querySelector('header nav a.active') || navLinksMenu[0];
-
-    function moveIndicator(link) {
-      if (!link) return;
-      navIndicator.style.width = `${link.offsetWidth}px`;
-      navIndicator.style.left = `${link.offsetLeft}px`;
-      navIndicator.style.top = `${link.offsetTop + link.offsetHeight}px`;
-    }
-
-    function initIndicator() {
-      if (!currentActiveNav) return;
-      navIndicator.style.transition = 'none';
-      navIndicator.style.width = '0px';
-      navIndicator.style.left = `${currentActiveNav.offsetLeft + (currentActiveNav.offsetWidth / 2)}px`;
-      navIndicator.style.top = `${currentActiveNav.offsetTop + currentActiveNav.offsetHeight}px`;
-      void navIndicator.offsetWidth;
-      navIndicator.style.transition = 'left 0.3s ease-out, width 0.3s ease-out, top 0.3s ease-out';
-      moveIndicator(currentActiveNav);
-    }
 
     window.addEventListener('scroll', () => {
       let currentSectionId = 'home';
@@ -1547,24 +1600,18 @@
         if (link.getAttribute('href') === `#${currentSectionId}`) {
           link.classList.add('active');
           currentActiveNav = link;
-          moveIndicator(currentActiveNav);
         }
       });
     });
 
     navLinksMenu.forEach(link => {
-      link.addEventListener('mouseenter', () => moveIndicator(link));
-      link.addEventListener('mouseleave', () => moveIndicator(currentActiveNav));
-      
       link.addEventListener('click', function() {
+         navLinksMenu.forEach(l => l.classList.remove('active'));
+         this.classList.add('active');
          currentActiveNav = this;
-         moveIndicator(this);
       });
     });
-
-    window.addEventListener('load', initIndicator);
-    window.addEventListener('resize', () => moveIndicator(currentActiveNav));
     
   </script>
 </body>
-</html>
+</html
