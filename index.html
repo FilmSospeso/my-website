@@ -1245,7 +1245,36 @@
          currentActiveNav = this;
       });
     });
+    // ---------------- 문의 폼 구글 시트 연동 ----------------
+    const contactForm = document.getElementById('contactForm');
     
+    // 아래 따옴표 안에 아까 복사한 '웹 앱 URL'을 붙여넣으세요.
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxKY1JJDeCL7nl2mGSyxqFZRK1_-8jzdu6YbSElprQcRHGqserRr0yJvfj7i-X02R5eAw/exec';
+
+    contactForm.addEventListener('submit', e => {
+      e.preventDefault(); // 기본 새로고침 방지
+      
+      const submitBtn = contactForm.querySelector('.submit-btn');
+      const originalBtnText = submitBtn.textContent;
+      
+      // 전송 중 버튼 상태 변경
+      submitBtn.textContent = '전송 중...';
+      submitBtn.disabled = true;
+
+      fetch(scriptURL, { method: 'POST', body: new FormData(contactForm)})
+        .then(response => {
+          alert('문의가 성공적으로 접수되었습니다. 곧 연락드리겠습니다!');
+          contactForm.reset(); // 폼 내용 비우기
+          submitBtn.textContent = originalBtnText;
+          submitBtn.disabled = false;
+        })
+        .catch(error => {
+          console.error('Error!', error.message);
+          alert('일시적인 오류가 발생했습니다. 다시 시도해주세요.');
+          submitBtn.textContent = originalBtnText;
+          submitBtn.disabled = false;
+        });
+    });
   </script>
 </body>
 </html>
