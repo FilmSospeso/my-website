@@ -334,6 +334,9 @@
       outline: none; 
       transition: border-color 0.3s ease;
       border-radius: 0;
+      /* 아래 두 줄 추가: 폼 요소가 카드 배경을 벗어나지 않도록 고정 */
+      width: 100%; 
+      box-sizing: border-box; 
     }
     .input-group input:focus, .input-group textarea:focus { 
       border-bottom-color: var(--accent); 
@@ -346,9 +349,10 @@
     }
     .input-group textarea::placeholder { color: #666; font-size: 0.95rem; line-height: 1.6; }
 
-    .submit-area { display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; width: 100%; margin-top: 1rem;}
-    .agree-label { font-size: 0.9rem; color: #aaa; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .agree-label input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+    .submit-area { display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; width: 100%; margin-top: 1rem; box-sizing: border-box;}
+    .agree-label { font-size: 0.9rem; color: #aaa; display: flex; align-items: flex-start; gap: 10px; cursor: pointer; line-height: 1.4; word-break: keep-all; }
+    .agree-label input[type="checkbox"] { flex-shrink: 0; width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; margin-top: 2px; }
+    
     .submit-btn {
       background-color: var(--accent); color: #000; border: none; padding: 1rem 3rem;
       font-size: 1.05rem; font-weight: 700; cursor: pointer; font-family: var(--font-base);
@@ -401,8 +405,10 @@
       .pipe-step { padding: 2rem 1.5rem; }
       .tag-grid span { padding: 0.8rem; font-size: 0.9rem; }
 
-      .contact-card { padding: 2.5rem 1.5rem; }
-      .input-grid { grid-template-columns: 1fr; gap: 1.8rem; margin-bottom: 2rem;}
+      /* 모바일 여백 재설정 추가 */
+      .contact-inner { padding: 0 1rem; } 
+      .contact-card { padding: 2.5rem 1.2rem; width: 100%; box-sizing: border-box; }
+      .input-grid { grid-template-columns: 1fr; gap: 1.8rem; margin-bottom: 2rem; width: 100%; }
     }
   </style>
 </head>
