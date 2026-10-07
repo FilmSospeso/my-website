@@ -334,7 +334,6 @@
       outline: none; 
       transition: border-color 0.3s ease;
       border-radius: 0;
-      /* 아래 두 줄 추가: 폼 요소가 카드 배경을 벗어나지 않도록 고정 */
       width: 100%; 
       box-sizing: border-box; 
     }
@@ -359,6 +358,31 @@
       transition: opacity 0.3s ease; align-self: flex-start; border-radius: 4px;
     }
     .submit-btn:hover { opacity: 0.8; }
+
+    /* --- 수정된 토스트 메시지 스타일 (배경 없는 투명 글씨) --- */
+    .submit-action-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      width: 100%;
+    }
+    .toast-message {
+      opacity: 0;
+      visibility: hidden;
+      background-color: transparent; 
+      color: rgba(255, 255, 255, 0.7); 
+      padding: 0; 
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: opacity 0.3s ease, visibility 0.3s;
+    }
+    .toast-message.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .toast-message.error {
+      color: rgba(255, 68, 68, 0.8); 
+    }
 
     /* ---------- Footer ---------- */
     footer { background: #000; padding: 3rem 2rem; text-align: center; font-size: clamp(0.8rem, 1.5vw, 1rem); }
@@ -405,10 +429,17 @@
       .pipe-step { padding: 2rem 1.5rem; }
       .tag-grid span { padding: 0.8rem; font-size: 0.9rem; }
 
-      /* 모바일 여백 재설정 추가 */
+      /* 모바일 여백 재설정 */
       .contact-inner { padding: 0 1rem; } 
       .contact-card { padding: 2.5rem 1.2rem; width: 100%; box-sizing: border-box; }
       .input-grid { grid-template-columns: 1fr; gap: 1.8rem; margin-bottom: 2rem; width: 100%; }
+
+      /* 모바일에서는 버튼 아래로 메시지가 내려가도록 설정 */
+      .submit-action-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
     }
   </style>
 </head>
@@ -989,7 +1020,13 @@
                 <input type="checkbox" name="privacy_agree" required>
                 문의 답변을 위한 개인정보 수집 및 이용에 동의합니다.
               </label>
-              <button type="submit" class="submit-btn">문의 보내기</button>
+              
+              <!-- 새롭게 수정된 버튼 및 토스트 팝업 래퍼 -->
+              <div class="submit-action-wrapper">
+                <button type="submit" class="submit-btn">문의 보내기</button>
+                <span id="toastMessage" class="toast-message"></span>
+              </div>
+              
             </div>
           </form>
         </div>
@@ -1271,11 +1308,42 @@
       });
     });
 
-    // ---------------- 문의 폼 구글 시트 연동 ----------------
+    // ---------------- 문의 폼 구글 시트 연동, 보안 검사 및 토스트 알림 ----------------
     const contactForm = document.getElementById('contactForm');
+    const toastMessage = document.getElementById('toastMessage');
     
-    // 아래 따옴표 안에 아까 복사한 '웹 앱 URL'을 붙여넣으세요.
+    // 아래 따옴표 안에 복사한 '웹 앱 URL'을 붙여넣으세요.
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzqw6GuB11m9qbgxY21zcHfzLKkxI0-pXO2J7gAsVeOxoqhbcdXVVAhzpz8kPY2ePf5Cw/exec';
+
+    // 토스트 메시지를 띄우는 함수
+    function showToast(message, isError = false) {
+      toastMessage.textContent = message;
+      if (isError) {
+        toastMessage.classList.add('error');
+      } else {
+        toastMessage.classList.remove('error');
+      }
+      
+      toastMessage.classList.add('show');
+      
+      // 3초(3000ms) 뒤에 사라짐
+      setTimeout(() => {
+        toastMessage.classList.remove('show');
+      }, 3000);
+    }
+
+    // 🛡️ [보안 추가] 악성 코드 및 스프레드시트 수식 무력화 함수 (XSS & Injection 방지)
+    function sanitizeInput(str) {
+      if (!str) return '';
+      // 1. HTML 태그 무력화 (<, > 기호를 문자로 변환하여 스크립트 실행 방지)
+      let sanitized = str.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      
+      // 2. 구글 시트 수식 실행 방지 (첫 글자가 =, +, -, @ 이면 앞에 작은따옴표(') 추가)
+      if (/^[=+\-@]/.test(sanitized)) {
+        sanitized = "'" + sanitized;
+      }
+      return sanitized;
+    }
 
     contactForm.addEventListener('submit', e => {
       e.preventDefault(); // 기본 새로고침 방지
@@ -1287,16 +1355,24 @@
       submitBtn.textContent = '전송 중...';
       submitBtn.disabled = true;
 
-      fetch(scriptURL, { method: 'POST', body: new FormData(contactForm)})
+      // 폼 데이터를 가져와서 보안 검사(Sanitize) 실행
+      const formData = new FormData(contactForm);
+      for (let [key, value] of formData.entries()) {
+        if (typeof value === 'string') {
+          formData.set(key, sanitizeInput(value)); // 정화된 데이터로 덮어쓰기
+        }
+      }
+
+      fetch(scriptURL, { method: 'POST', body: formData}) // 검사 완료된 formData 전송
         .then(response => {
-          alert('문의가 성공적으로 접수되었습니다. 곧 연락드리겠습니다!');
+          showToast('문의가 성공적으로 접수되었습니다. 곧 연락드리겠습니다!');
           contactForm.reset(); // 폼 내용 비우기
           submitBtn.textContent = originalBtnText;
           submitBtn.disabled = false;
         })
         .catch(error => {
           console.error('Error!', error.message);
-          alert('일시적인 오류가 발생했습니다. 다시 시도해주세요.');
+          showToast('일시적인 오류가 발생했습니다. 다시 시도해주세요.', true);
           submitBtn.textContent = originalBtnText;
           submitBtn.disabled = false;
         });
