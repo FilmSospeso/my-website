@@ -1345,7 +1345,7 @@
       return sanitized;
     }
 
-    contactForm.addEventListener('submit', e => {
+contactForm.addEventListener('submit', e => {
       e.preventDefault(); // 기본 새로고침 방지
       
       const submitBtn = contactForm.querySelector('.submit-btn');
@@ -1357,6 +1357,11 @@
 
       // 폼 데이터를 가져와서 보안 검사(Sanitize) 실행
       const formData = new FormData(contactForm);
+      
+      // 👉 [추가된 코드] 구글 시트로 보낼 기본 상태값 강제 추가
+      // 구글 시트의 해당 열 헤더 이름과 정확히 일치해야 합니다.
+      formData.append('진행사항', '접수대기');
+
       for (let [key, value] of formData.entries()) {
         if (typeof value === 'string') {
           formData.set(key, sanitizeInput(value)); // 정화된 데이터로 덮어쓰기
