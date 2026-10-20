@@ -6,7 +6,9 @@
  * (새 배포를 만들면 URL 이 바뀌니 index.html 의 scriptURL 도 바꿔야 합니다.)
  */
 
-const SHEET_NAME   = '시트1';                    // 응답이 쌓이는 탭 이름
+const SHEET_NAME   = '문의';                     // 응답이 쌓이는 탭 이름
+const STATUS_NEW   = '접수대기';                 // H열(진행상태) 드롭다운에 있는 값과 정확히 같아야 함
+const PRIORITY_NEW = '';                         // I열(우선순위) 기본값. 비워두면 직접 지정
 const NOTIFY_EMAIL = 'filmsospeso@gmail.com';    // 알림 받을 주소
 const MAX_LEN = { user_name: 50, user_email: 100, user_company: 100, user_link: 300, user_message: 3000, video_type: 20 };
 const VIDEO_TYPES = ['뮤비', '다큐', '영화', '홍보', '광고', '시리즈', '기타'];
@@ -38,12 +40,19 @@ function doPost(e) {
     // 4) 시트 저장 — 수식 실행 방지 처리 후 기록
     lock.waitLock(10000);
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-    sheet.appendRow([
+    // A열(접수일시) 기준 첫 빈 행에 기록 — 아래쪽에 미리 깔아둔 드롭다운 서식을 건드리지 않음
+    const colA = sheet.getRange('A:A').getValues();
+    let row = colA.length;
+    while (row > 1 && colA[row - 1][0] === '') row--;
+    row += 1;
+    // A 접수일시 | B 영상종류 | C 이름 | D 이메일 | E 소속/회사 | F 웹사이트/링크 | G 메시지 | H 진행상태 | I 우선순위
+    sheet.getRange(row, 1, 1, 9).setValues([[
       new Date(),
       safeCell_(d.video_type), safeCell_(d.user_name), safeCell_(d.user_email),
       safeCell_(d.user_company), safeCell_(d.user_link), safeCell_(d.user_message),
-      '접수대기'
-    ]);
+      STATUS_NEW, PRIORITY_NEW
+    ]]);
+    // J~O열(견적, 최종연락일, 관리메모, 관련 고객사, 메인 담당자, 프로젝트)은 관리용이라 비워둠
 
     // 5) 알림 메일 — 반드시 일반 텍스트(body)로. htmlBody 에 사용자 입력을 넣으면 메일 안에 가짜 링크/피싱 삽입 가능
     MailApp.sendEmail({
