@@ -954,6 +954,9 @@
         <!-- 카드 프레임 래퍼 -->
         <div class="contact-card">
           <form id="contactForm" action="#" method="POST">
+            <!-- 스팸봇 차단용 허니팟 (사람에게는 보이지 않음) -->
+            <input type="text" name="website_hp" tabindex="-1" autocomplete="off" aria-hidden="true"
+                   style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
             
             <!-- 옵션 칩 UI -->
             <div class="option-grid">
@@ -1038,7 +1041,7 @@
 
   <!-- Footer -->
   <footer>
-    <p>© 2026 Film Sospeso – A story in motion. <a href="mailto:contact@filmsospeso.com">filmsospeso@gmail.com</a></p>
+    <p>© 2026 Film Sospeso – A story in motion. <a href="mailto:filmsospeso@gmail.com">filmsospeso@gmail.com</a></p>
   </footer>
 
   <!-- JavaScript -->
@@ -1369,7 +1372,9 @@ contactForm.addEventListener('submit', e => {
       }
 
       fetch(scriptURL, { method: 'POST', body: formData}) // 검사 완료된 formData 전송
-        .then(response => {
+        .then(response => response.json())
+        .then(data => {
+          if (!data || data.result !== 'success') throw new Error(data && data.reason || 'failed');
           showToast('문의가 성공적으로 접수되었습니다. 곧 연락드리겠습니다!');
           contactForm.reset(); // 폼 내용 비우기
           submitBtn.textContent = originalBtnText;
