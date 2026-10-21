@@ -1,66 +1,91 @@
 /**
- * Film Sospeso 관리 웹앱 — 문의함 · 고객사/담당자 · 일정(구글 캘린더) · 대시보드/입금
+ * Film Sospeso 관리 웹앱 (v2) — 문의 → 검토 → 미팅 → 견적 → 계약 → 제작·일정 → 정산
  *
- * 홈페이지 문의 폼용 스크립트(apps-script/Code.gs)와는 "별도 프로젝트"로 만듭니다.
- *   - 문의 폼 스크립트: 누구나 호출 가능(익명) → 시트에 한 줄 쓰고 메일 보내는 일만 함
- *   - 이 관리 웹앱:     구글 로그인 + 허용 목록에 있는 팀원만 → 시트 전체 읽기/수정, 캘린더
- * 둘을 분리해야 공개 주소로 관리 기능이 노출되지 않습니다.
+ * 홈페이지 문의 폼 스크립트(apps-script/)와는 별도 프로젝트입니다.
+ *   - 문의 폼:   누구나 호출 → '문의' 탭에 한 줄 + 알림 메일
+ *   - 관리 웹앱: 구글 로그인 + 허용 목록(ALLOWED_EMAILS) + 시트 편집 권한이 있는 팀원만
  *
- * 설정값은 코드가 아니라 [프로젝트 설정 > 스크립트 속성]에 넣습니다(공개 저장소에 올라가지 않도록).
- *   SPREADSHEET_ID  : 'Film Sospeso 홈페이지' 시트 주소의 /d/ 와 /edit 사이 문자열
- *   ALLOWED_EMAILS  : 접근을 허용할 구글 계정, 쉼표로 구분 (예: filmsospeso@gmail.com, a@gmail.com)
- *   CALENDAR_ID     : (선택) 팀 공용 캘린더 ID. 비우면 각자의 기본 캘린더에 등록
+ * 스크립트 속성: SPREADSHEET_ID (필수), ALLOWED_EMAILS (필수), CALENDAR_ID (선택: 팀 공용 캘린더)
  */
 
-// 시트의 탭 이름. 실제 탭 이름과 다르면 여기만 고치면 됩니다.
-const TABS = {
-  inquiry: { name: '문의',          label: '문의함' },
-  client:  { name: '고객사',        label: '고객사' },
-  contact: { name: '담당자',        label: '담당자' },
-  project: { name: '프로젝트',      label: '프로젝트' },
-  task:    { name: '할일 및 미팅',  label: '일정·할일' },
-  payment: { name: '입금현황',      label: '입금' }
-};
+/* ───────────────────────── 시트 스키마 (실제 머리글 기준) ───────────────────────── */
 
-// 기능별로 필요한 열을 "머리글 이름 후보"로 찾습니다. 첫 번째로 일치하는 열을 씁니다.
-const FIELDS = {
+const ENT = {
   inquiry: {
-    date: ['접수일시'], type: ['영상종류'], name: ['이름'], email: ['이메일'],
-    company: ['소속/회사', '소속', '회사'], link: ['웹사이트/링크'], message: ['메시지'],
-    status: ['진행상태'], priority: ['우선순위'], quote: ['견적'], lastContact: ['최종연락일'],
-    memo: ['관리메모'], client: ['관련 고객사', '고객사'], owner: ['메인 담당자', '담당자'], project: ['프로젝트']
+    sheet: '문의', id: { h: '문의ID', prefix: 'INQ_' },
+    f: { date: '접수일시', type: '영상종류', name: '이름', email: '이메일', company: '소속/회사',
+         link: '웹사이트/링크', message: '메시지', status: '진행상태', priority: '우선순위', quote: '견적',
+         lastContact: '최종연락일', memo: '관리메모', client: '관련 고객사', contact: '메인 담당자', project: '프로젝트' }
   },
-  client:  { name: ['고객사명', '회사명', '고객사', '회사', '이름'] },
-  contact: { name: ['이름', '담당자명', '담당자'], email: ['이메일', '메일'],
-             phone: ['연락처', '전화번호', '전화'], company: ['고객사', '소속/회사', '소속', '회사'] },
-  task:    { title: ['제목', '일정명', '할일', '내용', '항목'], date: ['날짜', '일자', '일시', '마감일', '일정'],
-             time: ['시간', '시작시간'], type: ['구분', '유형', '종류'], status: ['상태', '진행상태', '완료여부'],
-             owner: ['담당자', '메인 담당자'], eventId: ['캘린더ID'] },
-  payment: { amount: ['입금액', '금액', '입금 금액'], status: ['상태', '입금상태', '입금여부'],
-             date: ['입금일', '날짜', '일자'] }
+  client: {
+    sheet: '고객사', id: { h: '고유ID', prefix: 'COMP_' },
+    f: { name: '회사명', bizNo: '사업자등록번호', address: '대표 주소', category: '고객 분류', note: '비고', inquiry: '관련 문의' }
+  },
+  contact: {
+    sheet: '담당자', id: { h: '고유ID', prefix: 'CONT_' },
+    f: { company: '소속회사', name: '담당자 이름', role: '직급 / 부서', phone: '연락처', email: '이메일', memo: '담당자 메모', inquiry: '관련 문의' }
+  },
+  project: {
+    sheet: '프로젝트', id: { h: '프로젝트ID', prefix: 'PRJ_' },
+    f: { name: '프로젝트명', type: '프로젝트 종류', inquiry: '관련문의', client: '관련고객사', pm: '메인담당자',
+         stage: '제작단계', start: '작업시작일', due: '마감일자', total: '총견적액', note: '비고' }
+  },
+  payment: {
+    sheet: '입금현황', id: null,
+    f: { project: '프로젝트ID', client: '관련고객사', d1: '선입금 날짜', a1: '선금', d2: '중간입금 날짜', a2: '중간입금',
+         d3: '후금 날짜', a3: '후금', balance: '잔금', status: '정산상태', done: '완료날짜' }
+  },
+  task: {
+    sheet: '할일 및 미팅', id: { h: '작업ID', prefix: 'TASK_' },
+    f: { inquiry: '관련문의', category: '작업분류', detail: '상세내용', due: '마감일시', status: '작업상태',
+         project: '관련프로젝트', eventId: '캘린더ID' }
+  }
 };
 
-// 대시보드에서 "끝난 문의"로 볼 진행상태 (나머지는 진행 중으로 집계)
-const CLOSED_STATUSES = ['계약완료', '완료', '보류', '취소', '종료', '거절', '실패'];
-const WON_STATUSES    = ['계약완료', '완료'];
+// 시트에 없으면 맨 끝에 추가하는 열 (기존 열 위치는 건드리지 않음)
+const ADD_COLUMNS = { inquiry: ['문의ID'], task: ['관련프로젝트', '캘린더ID'] };
+
+// 드롭다운이 없을 때 쓰는 기본 선택지 (데이터정의서 기준)
+const ENUMS = {
+  'inquiry.status':   ['접수대기', '검토중', '미팅예정', '견적발송', '계약완료', '보류/종료'],
+  'inquiry.priority': ['High', 'Medium', 'Low'],
+  'client.category':  ['엔터사', '기업', '관공서', '개인', '에이전시'],
+  'project.stage':    ['기획/프리', '촬영', '편집/포스트', '시사', '완료'],
+  'payment.status':   ['미정산', '부분입금', '완납', '계산서발행완료'],
+  'task.category':    ['미팅', '기획', '견적발송', '촬영', '피드백', '정산'],
+  'task.status':      ['대기', '진행중', '완료', '취소']
+};
+
+// 워크플로우가 상태를 바꿀 때, 시트 드롭다운에서 아래 패턴으로 값을 찾음 (드롭다운 이름이 조금 달라도 동작)
+const STAGE = {
+  review:  /검토|상담/,      meet: /미팅/,          quote: /견적/,
+  won:     /계약/,           closed: /보류|종료|취소|거절/,
+  taskTodo: /대기|예정/,     taskDone: /완료/,
+  payNone: /미정산|미입금/,  payPart: /부분/,       payFull: [/완납/, /입금완료/, /^입금$/],
+  stageFirst: /기획|프리/
+};
+
+const SCHEMA_VERSION = '2';
 
 /* ───────────────────────── 진입점 · 권한 ───────────────────────── */
 
-function doGet() {
+function doGet(e) {
   try {
     requireUser_();
-  } catch (e) {
+  } catch (err) {
     return HtmlService.createHtmlOutput(
       '<div style="font-family:sans-serif;padding:48px;color:#333">' +
       '<h2>접근 권한이 없습니다</h2><p>관리자에게 이 구글 계정의 등록을 요청하세요.</p></div>'
     ).setTitle('접근 불가');
   }
-  return HtmlService.createHtmlOutputFromFile('Index')
+  const t = HtmlService.createTemplateFromFile('Index');
+  const p = (e && e.parameter) || {};
+  t.boot = JSON.stringify({ inq: String(p.inq || ''), prj: String(p.prj || '') }).replace(/</g, '\\u003c');
+  return t.evaluate()
     .setTitle('Film Sospeso 관리')
-    .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1, viewport-fit=cover');
 }
 
-// 모든 서버 함수 첫 줄에서 호출. 로그인 안 됐거나 허용 목록에 없으면 차단.
 function requireUser_() {
   const email = String(Session.getActiveUser().getEmail() || '').toLowerCase();
   const allowed = String(props_().getProperty('ALLOWED_EMAILS') || '')
@@ -77,334 +102,502 @@ function ss_() {
   return SpreadsheetApp.openById(id);
 }
 
-/* ───────────────────────── 시트 읽기 공통 ───────────────────────── */
+function tz_() { return Session.getScriptTimeZone() || 'Asia/Seoul'; }
+function today_() { return Utilities.formatDate(new Date(), tz_(), 'yyyy-MM-dd'); }
 
-function sheet_(key) {
-  const t = TABS[key];
-  if (!t) throw new Error('알 수 없는 탭입니다.');
-  const sh = ss_().getSheetByName(t.name);
-  if (!sh) throw new Error("'" + t.name + "' 탭을 찾을 수 없습니다. Code.gs 의 TABS 를 확인하세요.");
-  return sh;
+/* ───────────────────────── 시트 읽기 ───────────────────────── */
+
+function headers_(sh) {
+  const lastCol = sh.getLastColumn();
+  if (!lastCol) return [];
+  const hs = sh.getRange(1, 1, 1, lastCol).getDisplayValues()[0].map(function (h) { return String(h).trim(); });
+  while (hs.length && !hs[hs.length - 1]) hs.pop();
+  return hs;
 }
 
-// 체크박스(FALSE)나 드롭다운만 깔린 행은 빈 행으로 취급
 function isBlankRow_(cells) {
   return cells.every(function (v) { return v === '' || v === 'FALSE'; });
 }
 
-function readTable_(key) {
-  const sh = sheet_(key);
-  const lastRow = sh.getLastRow();
-  const lastCol = sh.getLastColumn();
-  if (lastCol === 0) return { sh: sh, headers: [], rows: [], lastDataRow: 1 };
+function serial_(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, tz_(), "yyyy-MM-dd'T'HH:mm");
+  return v;
+}
 
-  const headers = sh.getRange(1, 1, 1, lastCol).getDisplayValues()[0].map(function (h) { return String(h).trim(); });
+function readEntity_(key, ss) {
+  const E = ENT[key];
+  const sh = (ss || ss_()).getSheetByName(E.sheet);
+  if (!sh) return null;
+  const headers = headers_(sh);
+  const width = headers.length;
+  const fields = {};
+  Object.keys(E.f).forEach(function (f) { fields[f] = headers.indexOf(E.f[f]); });
+  fields.id = E.id ? headers.indexOf(E.id.h) : -1;
+
   const rows = [];
+  const formulaCols = {};
   let lastDataRow = 1;
-  if (lastRow >= 2) {
-    const range = sh.getRange(2, 1, lastRow - 1, lastCol);
+  const lastRow = sh.getLastRow();
+  if (width && lastRow >= 2) {
+    const range = sh.getRange(2, 1, lastRow - 1, width);
     const display = range.getDisplayValues();
     const raw = range.getValues();
+    const formulas = range.getFormulas();
     display.forEach(function (cells, i) {
+      formulas[i].forEach(function (fx, c) { if (fx) formulaCols[c] = true; });
       if (isBlankRow_(cells)) return;
-      rows.push({ row: i + 2, cells: cells, raw: raw[i] });
+      rows.push({ row: i + 2, cells: cells, raw: raw[i].map(serial_) });
       lastDataRow = i + 2;
     });
   }
-  return { sh: sh, headers: headers, rows: rows, lastDataRow: lastDataRow };
+  return { key: key, sh: sh, headers: headers, fields: fields, rows: rows, lastDataRow: lastDataRow,
+           formulaCols: Object.keys(formulaCols).map(Number) };
 }
 
-function col_(headers, candidates) {
-  for (let i = 0; i < candidates.length; i++) {
-    const idx = headers.indexOf(candidates[i]);
-    if (idx !== -1) return idx;
-  }
-  return -1;
-}
-
-function fieldMap_(key, headers) {
-  const map = {};
-  const spec = FIELDS[key] || {};
-  Object.keys(spec).forEach(function (f) { map[f] = col_(headers, spec[f]); });
-  return map;
-}
-
-// 2행에 걸린 드롭다운(데이터 확인) 목록을 읽어 화면의 선택 상자로 사용
-function options_(sh, headers) {
+function options_(T) {
   const out = {};
-  if (!headers.length || sh.getMaxRows() < 2) return out;
-  const rules = sh.getRange(2, 1, 1, headers.length).getDataValidations()[0];
+  const sh = T.sh;
+  const width = T.headers.length;
+  if (!width) return out;
   const C = SpreadsheetApp.DataValidationCriteria;
-  rules.forEach(function (dv, i) {
-    if (!dv || !headers[i]) return;
-    const type = dv.getCriteriaType();
-    const vals = dv.getCriteriaValues();
-    if (type === C.VALUE_IN_LIST) {
-      out[headers[i]] = vals[0].map(String);
-    } else if (type === C.VALUE_IN_RANGE) {
-      out[headers[i]] = [].concat.apply([], vals[0].getDisplayValues()).filter(String);
-    } else if (type === C.CHECKBOX) {
-      out[headers[i]] = ['TRUE', 'FALSE'];
-    }
+  const probe = Math.min(Math.max(T.lastDataRow + 1, 2), sh.getMaxRows());
+  const rowsToCheck = [2, probe].filter(function (r, i, a) { return r <= sh.getMaxRows() && a.indexOf(r) === i; });
+  rowsToCheck.forEach(function (r) {
+    sh.getRange(r, 1, 1, width).getDataValidations()[0].forEach(function (dv, i) {
+      if (!dv || out[i]) return;
+      const type = dv.getCriteriaType();
+      const vals = dv.getCriteriaValues();
+      if (type === C.VALUE_IN_LIST) out[i] = vals[0].map(String);
+      else if (type === C.VALUE_IN_RANGE) out[i] = [].concat.apply([], vals[0].getDisplayValues()).filter(String);
+    });
+  });
+  // 드롭다운이 없는 열은 데이터정의서 기본값
+  Object.keys(ENT[T.key].f).forEach(function (f) {
+    const i = T.fields[f];
+    const fallback = ENUMS[T.key + '.' + f];
+    if (i > -1 && !out[i] && fallback) out[i] = fallback.slice();
   });
   return out;
 }
 
-/* ───────────────────────── 화면에서 부르는 함수 ───────────────────────── */
+function pick_(T, field, pattern, fallback) {
+  const i = T.fields[field];
+  const opts = (i > -1 && T.options && T.options[i]) || ENUMS[T.key + '.' + field] || [];
+  const pats = [].concat(pattern);             // 여러 패턴이면 앞의 것부터 우선
+  for (let p = 0; p < pats.length; p++) {
+    for (let k = 0; k < opts.length; k++) if (pats[p].test(opts[k])) return opts[k];
+  }
+  return fallback || '';
+}
 
-function getBootstrap() {
-  const email = requireUser_();
-  const ss = ss_();
-  const tabs = Object.keys(TABS).map(function (k) {
-    return { key: k, label: TABS[k].label, sheet: TABS[k].name, exists: !!ss.getSheetByName(TABS[k].name) };
+/* ───────────────────────── 시트 쓰기 ───────────────────────── */
+
+function cleanValue_(v, header) {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'number' || typeof v === 'boolean') return v;
+  v = String(v).slice(0, 5000);
+  let m = v.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})$/);
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]);
+  m = v.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3]);
+  if (/견적|액|선금|후금|중간입금|잔금/.test(header || '') && /^₩?\s*-?[\d,]+$/.test(v.trim())) {
+    return Number(v.replace(/[₩,\s]/g, ''));
+  }
+  if (/^[=+\-@\t\r]/.test(v) && !/^-?[\d,.]+$/.test(v)) return "'" + v;
+  return v;
+}
+
+function version_(cells) { return JSON.stringify(cells); }
+
+function checkVersion_(T, row, v) {
+  const r = T.rows.filter(function (x) { return x.row === Number(row); })[0];
+  if (!r) throw new Error('행을 찾을 수 없습니다. 새로고침 해주세요.');
+  if (v && version_(r.cells) !== v) throw new Error('그 사이 다른 사람이 수정했습니다. 새로고침 후 다시 시도해주세요.');
+  return r;
+}
+
+// values: { field 또는 머리글: 값 } — 수식 열과 바뀌지 않은 칸은 건너뜀
+function writeRow_(T, rowNum, values, currentCells) {
+  let n = 0;
+  Object.keys(values).forEach(function (k) {
+    let i = T.fields[k];
+    if (i === undefined) i = T.headers.indexOf(k);
+    if (i === undefined || i < 0 || T.formulaCols.indexOf(i) > -1) return;
+    const next = values[k];
+    if (currentCells && String(next) === currentCells[i]) return;
+    T.sh.getRange(rowNum, i + 1).setValue(cleanValue_(next, T.headers[i]));
+    n++;
   });
-  return { email: email, tabs: tabs, sheetUrl: ss.getUrl(), timezone: Session.getScriptTimeZone() };
+  return n;
 }
 
-function getTable(key) {
-  requireUser_();
-  const t = readTable_(key);
-  return {
-    key: key,
-    label: TABS[key].label,
-    headers: t.headers,
-    rows: t.rows.map(function (r) { return { row: r.row, cells: r.cells }; }),
-    options: options_(t.sh, t.headers),
-    fields: fieldMap_(key, t.headers)
-  };
-}
-
-/**
- * 행 저장. row 가 있으면 수정, 없으면 새 행 추가.
- * original: 화면이 불러왔던 그 행의 값 — 그 사이 다른 사람이 고쳤으면 덮어쓰지 않고 알려줌.
- * values:   { 머리글: 새 값 } — 바뀐 칸만 씀(수식·체크박스·서식 보존)
- */
-function saveRow(key, row, original, values) {
-  requireUser_();
-  const lock = LockService.getScriptLock();
-  lock.waitLock(15000);
-  try {
-    const t = readTable_(key);
-    const sh = t.sh;
-    const width = t.headers.length;
-    let targetRow, current, currentRaw;
-
-    if (row) {
-      targetRow = Number(row);
-      if (targetRow < 2 || targetRow > sh.getLastRow()) throw new Error('행을 찾을 수 없습니다. 새로고침 해주세요.');
-      current = sh.getRange(targetRow, 1, 1, width).getDisplayValues()[0];
-      currentRaw = sh.getRange(targetRow, 1, 1, width).getValues()[0];
-      if (JSON.stringify(current) !== JSON.stringify(original)) {
-        throw new Error('그 사이 다른 사람이 이 행을 수정했습니다. 새로고침 후 다시 시도해주세요.');
-      }
-    } else {
-      targetRow = t.lastDataRow + 1;
-      if (targetRow > sh.getMaxRows()) sh.insertRowsAfter(sh.getMaxRows(), 1);
-      current = sh.getRange(targetRow, 1, 1, width).getDisplayValues()[0];
-      currentRaw = sh.getRange(targetRow, 1, 1, width).getValues()[0];
-    }
-
-    let changed = 0;
-    Object.keys(values || {}).forEach(function (h) {
-      const i = t.headers.indexOf(h);
-      if (i === -1 || !h) return;
-      const next = values[h] == null ? '' : String(values[h]);
-      if (next === current[i]) return;
-      sh.getRange(targetRow, i + 1).setValue(cleanValue_(next, currentRaw[i]));
-      changed++;
-    });
-    return { row: targetRow, changed: changed };
-  } finally {
-    lock.releaseLock();
-  }
-}
-
-// 문의 → 고객사/담당자 탭에 등록(이미 있으면 건너뜀)하고 문의의 '관련 고객사' 칸을 채움
-function convertInquiry(row, original) {
-  requireUser_();
-  const inq = readTable_('inquiry');
-  const f = fieldMap_('inquiry', inq.headers);
-  const r = inq.rows.filter(function (x) { return x.row === Number(row); })[0];
-  if (!r) throw new Error('문의를 찾을 수 없습니다.');
-  if (JSON.stringify(r.cells) !== JSON.stringify(original)) throw new Error('문의가 변경되었습니다. 새로고침 해주세요.');
-
-  const name = f.name > -1 ? r.cells[f.name] : '';
-  const email = f.email > -1 ? r.cells[f.email] : '';
-  const company = (f.company > -1 ? r.cells[f.company] : '') || name;
-  const done = [];
-
-  if (TABS.client && ss_().getSheetByName(TABS.client.name)) {
-    const c = readTable_('client');
-    const ci = col_(c.headers, FIELDS.client.name);
-    if (ci > -1) {
-      const exists = c.rows.some(function (x) { return x.cells[ci].trim() === company.trim(); });
-      if (!exists) {
-        const v = {}; v[c.headers[ci]] = company;
-        saveRow('client', null, null, v);
-        done.push("고객사 '" + company + "' 추가");
-      } else done.push("고객사 '" + company + "' 이미 있음");
-    }
-  }
-
-  if (TABS.contact && ss_().getSheetByName(TABS.contact.name)) {
-    const p = readTable_('contact');
-    const pf = fieldMap_('contact', p.headers);
-    const exists = pf.email > -1 && email && p.rows.some(function (x) {
-      return x.cells[pf.email].trim().toLowerCase() === email.trim().toLowerCase();
-    });
-    if (!exists && pf.name > -1) {
-      const v = {};
-      v[p.headers[pf.name]] = name;
-      if (pf.email > -1) v[p.headers[pf.email]] = email;
-      if (pf.company > -1) v[p.headers[pf.company]] = company;
-      saveRow('contact', null, null, v);
-      done.push("담당자 '" + name + "' 추가");
-    } else if (exists) done.push("담당자 '" + name + "' 이미 있음");
-  }
-
-  if (f.client > -1 && !r.cells[f.client]) {
-    const v = {}; v[inq.headers[f.client]] = company;
-    saveRow('inquiry', r.row, r.cells, v);
-  }
-  return done.join(' · ') || '등록할 탭/열을 찾지 못했습니다.';
-}
-
-/**
- * 구글 캘린더에 일정 등록 (+ 선택 시 '할일 및 미팅' 탭에도 기록)
- * p = { title, date:'yyyy-MM-dd', start:'HH:mm', end:'HH:mm', description, location, guests, sendInvites, addTask, type, owner }
- */
-function createEvent(p) {
-  requireUser_();
-  if (!p || !p.title || !p.date) throw new Error('제목과 날짜는 필수입니다.');
-  const cal = calendar_();
-  const d = p.date.split('-').map(Number);
-  let ev;
-  const opts = { description: String(p.description || '').slice(0, 4000), location: p.location || '' };
-  if (p.guests) { opts.guests = String(p.guests).replace(/\s/g, ''); opts.sendInvites = !!p.sendInvites; }
-
-  if (p.start) {
-    const s = p.start.split(':').map(Number);
-    const start = new Date(d[0], d[1] - 1, d[2], s[0], s[1]);
-    let end;
-    if (p.end) { const e = p.end.split(':').map(Number); end = new Date(d[0], d[1] - 1, d[2], e[0], e[1]); }
-    if (!end || end <= start) end = new Date(start.getTime() + 60 * 60 * 1000);
-    ev = cal.createEvent(p.title, start, end, opts);
-  } else {
-    ev = cal.createAllDayEvent(p.title, new Date(d[0], d[1] - 1, d[2]), opts);
-  }
-
-  if (p.addTask && ss_().getSheetByName(TABS.task.name)) {
-    const t = readTable_('task');
-    let tf = fieldMap_('task', t.headers);
-    if (tf.eventId === -1) { // 일정 ↔ 캘린더 연결용 열이 없으면 맨 끝에 추가
-      t.sh.getRange(1, t.headers.length + 1).setValue('캘린더ID');
-      t.headers.push('캘린더ID');
-      tf = fieldMap_('task', t.headers);
-    }
-    const v = {};
-    if (tf.title > -1) v[t.headers[tf.title]] = p.title;
-    if (tf.date > -1) v[t.headers[tf.date]] = p.date;
-    if (tf.time > -1 && p.start) {
-      const tz = Session.getScriptTimeZone();
-      v[t.headers[tf.time]] = Utilities.formatDate(ev.getStartTime(), tz, 'HH:mm') + '~' + Utilities.formatDate(ev.getEndTime(), tz, 'HH:mm');
-    }
-    if (tf.type > -1 && p.type) v[t.headers[tf.type]] = p.type;
-    if (tf.owner > -1 && p.owner) v[t.headers[tf.owner]] = p.owner;
-    v['캘린더ID'] = ev.getId();
-    saveRow('task', null, null, v);
-  }
-  return { id: ev.getId(), title: ev.getTitle() };
-}
-
-function calendar_() {
-  const id = props_().getProperty('CALENDAR_ID');
-  const cal = id ? CalendarApp.getCalendarById(id) : CalendarApp.getDefaultCalendar();
-  if (!cal) throw new Error('캘린더에 접근할 수 없습니다. CALENDAR_ID 와 캘린더 공유 설정을 확인하세요.');
-  return cal;
-}
-
-function getDashboard() {
-  requireUser_();
-  const ss = ss_();
-  const now = new Date();
-  const out = { inquiry: null, payment: null, upcoming: [] };
-
-  // 문의 현황
-  const inq = readTable_('inquiry');
-  const f = fieldMap_('inquiry', inq.headers);
-  const byStatus = {};
-  let recent = 0, open = 0, wonQuote = 0, openQuote = 0;
-  inq.rows.forEach(function (r) {
-    const st = (f.status > -1 ? r.cells[f.status] : '') || '미지정';
-    byStatus[st] = (byStatus[st] || 0) + 1;
-    const dt = f.date > -1 ? r.raw[f.date] : null;
-    if (dt instanceof Date && now - dt < 30 * 86400000) recent++;
-    const q = f.quote > -1 ? num_(r.raw[f.quote]) : 0;
-    if (WON_STATUSES.indexOf(st) > -1) wonQuote += q;
-    else if (CLOSED_STATUSES.indexOf(st) === -1) { open++; openQuote += q; }
+function nextId_(T) {
+  const E = ENT[T.key];
+  const ic = T.fields.id;
+  let max = 0;
+  T.rows.forEach(function (r) {
+    const m = String(r.cells[ic] || '').match(/(\d+)\s*$/);
+    if (m && String(r.cells[ic]).indexOf(E.id.prefix) === 0) max = Math.max(max, Number(m[1]));
   });
-  out.inquiry = { total: inq.rows.length, recent: recent, open: open, wonQuote: wonQuote, openQuote: openQuote, byStatus: byStatus };
-
-  // 입금 현황
-  if (ss.getSheetByName(TABS.payment.name)) {
-    const pay = readTable_('payment');
-    const pf = fieldMap_('payment', pay.headers);
-    const pb = {};
-    let total = 0;
-    pay.rows.forEach(function (r) {
-      const a = pf.amount > -1 ? num_(r.raw[pf.amount]) : 0;
-      const st = (pf.status > -1 ? r.cells[pf.status] : '') || '미지정';
-      pb[st] = (pb[st] || 0) + a;
-      total += a;
-    });
-    out.payment = { total: total, byStatus: pb, hasAmount: pf.amount > -1 };
-  }
-
-  // 앞으로 14일 일정 (캘린더 + 캘린더에 없는 할일)
-  const until = new Date(now.getTime() + 14 * 86400000);
-  const tz = Session.getScriptTimeZone();
-  try {
-    calendar_().getEvents(now, until).slice(0, 30).forEach(function (e) {
-      out.upcoming.push({
-        when: e.getStartTime().getTime(),
-        label: Utilities.formatDate(e.getStartTime(), tz, e.isAllDayEvent() ? 'M/d (E)' : 'M/d (E) HH:mm'),
-        title: e.getTitle(), source: '캘린더'
-      });
-    });
-  } catch (err) { out.calendarError = err.message; }
-
-  if (ss.getSheetByName(TABS.task.name)) {
-    const t = readTable_('task');
-    const tf = fieldMap_('task', t.headers);
-    t.rows.forEach(function (r) {
-      if (tf.eventId > -1 && r.cells[tf.eventId]) return; // 캘린더에 이미 있음
-      const dt = tf.date > -1 ? r.raw[tf.date] : null;
-      if (!(dt instanceof Date)) return;
-      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      if (dt < startOfToday || dt > until) return;
-      out.upcoming.push({
-        when: dt.getTime(),
-        label: Utilities.formatDate(dt, tz, 'M/d (E)'),
-        title: tf.title > -1 ? r.cells[tf.title] : '(제목 없음)', source: '할일'
-      });
-    });
-  }
-  out.upcoming.sort(function (a, b) { return a.when - b.when; });
-  return out;
+  return E.id.prefix + ('00' + (max + 1)).slice(-3);
 }
 
-/* ───────────────────────── 값 정리 ───────────────────────── */
+function appendRow_(T, values) {
+  const rowNum = T.lastDataRow + 1;
+  if (rowNum > T.sh.getMaxRows()) T.sh.insertRowsAfter(T.sh.getMaxRows(), 5);
+  if (T.fields.id > -1 && !values.id) values.id = nextId_(T);
+  // 수식 열(예: 잔금)은 위 행의 수식을 그대로 복사
+  T.formulaCols.forEach(function (c) {
+    const src = rowNum > 2 ? rowNum - 1 : 2;
+    const fx = T.sh.getRange(src, c + 1).getFormulaR1C1();
+    if (fx) T.sh.getRange(rowNum, c + 1).setFormulaR1C1(fx);
+  });
+  writeRow_(T, rowNum, values, null);
+  // 같은 요청 안에서 이어서 추가할 때 ID·검색이 맞도록 메모리에도 반영
+  const cells = T.headers.map(function () { return ''; });
+  Object.keys(values).forEach(function (k) {
+    const i = T.fields[k] !== undefined ? T.fields[k] : T.headers.indexOf(k);
+    if (i > -1) cells[i] = String(values[k]);
+  });
+  T.rows.push({ row: rowNum, cells: cells, raw: cells.slice() });
+  T.lastDataRow = rowNum;
+  return { row: rowNum, id: values.id || '' };
+}
 
+function cell_(T, r, f) { const i = T.fields[f]; return i > -1 ? r.cells[i] : ''; }
+function rawCell_(T, r, f) { const i = T.fields[f]; return i > -1 ? r.raw[i] : ''; }
+function findBy_(T, f, value) {
+  if (!value) return null;
+  const v = String(value).trim().toLowerCase();
+  return T.rows.filter(function (r) { return String(cell_(T, r, f)).trim().toLowerCase() === v; })[0] || null;
+}
 function num_(v) {
   if (typeof v === 'number') return v;
   const n = Number(String(v || '').replace(/[^\d.-]/g, ''));
   return isNaN(n) ? 0 : n;
 }
 
-// 사용자 입력을 시트에 쓰기 전에 정리: 체크박스는 참/거짓, 수식으로 해석될 문자열은 텍스트로 고정
-function cleanValue_(v, currentRaw) {
-  if (typeof currentRaw === 'boolean') return v === 'TRUE' || v === 'true';
-  v = String(v).slice(0, 5000);
-  if (/^[=+\-@\t\r]/.test(v) && !/^-?[\d,.]+$/.test(v)) return "'" + v;
-  return v;
+/* ───────────────────────── 스키마 점검 · 이전 데이터 연결 정리 (최초 1회) ───────────────────────── */
+
+function ensureSchema_(ss) {
+  if (props_().getProperty('SCHEMA_V') === SCHEMA_VERSION) return;
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    if (props_().getProperty('SCHEMA_V') === SCHEMA_VERSION) return;
+
+    Object.keys(ADD_COLUMNS).forEach(function (k) {
+      const sh = ss.getSheetByName(ENT[k].sheet);
+      if (!sh) return;
+      const hs = headers_(sh);
+      ADD_COLUMNS[k].forEach(function (h) {
+        if (hs.indexOf(h) > -1) return;
+        const col = hs.length + 1;
+        if (col > sh.getMaxColumns()) sh.insertColumnsAfter(sh.getMaxColumns(), 1);
+        sh.getRange(1, 1).copyFormatToRange(sh, col, col, 1, 1);
+        sh.getRange(1, col).setValue(h);
+        hs.push(h);
+      });
+    });
+
+    // 비어 있는 고유ID 채우기
+    Object.keys(ENT).forEach(function (k) {
+      if (!ENT[k].id) return;
+      const T = readEntity_(k, ss);
+      if (!T || T.fields.id < 0) return;
+      T.rows.forEach(function (r) {
+        if (r.cells[T.fields.id]) return;
+        const id = nextId_(T);
+        T.sh.getRange(r.row, T.fields.id + 1).setValue(id);
+        r.cells[T.fields.id] = id;
+      });
+    });
+
+    // '관련 문의'에 메모 문장이 들어간 기존 연결 → 문의ID 로 교체, 문의 쪽 연결 칸도 채움
+    const inq = readEntity_('inquiry', ss);
+    if (inq && inq.fields.id > -1) {
+      const byMemo = {};
+      inq.rows.forEach(function (r) { const m = cell_(inq, r, 'memo').trim(); if (m) byMemo[m] = r; });
+      const ids = inq.rows.map(function (r) { return cell_(inq, r, 'id'); });
+      ['client', 'contact', 'project', 'task'].forEach(function (k) {
+        const T = readEntity_(k, ss);
+        if (!T || T.fields.inquiry < 0) return;
+        T.rows.forEach(function (r) {
+          const ref = cell_(T, r, 'inquiry').trim();
+          if (!ref || ids.indexOf(ref) > -1) return;
+          const target = byMemo[ref];
+          if (!target) return;
+          T.sh.getRange(r.row, T.fields.inquiry + 1).setValue(cell_(inq, target, 'id'));
+          const link = {};
+          if (k === 'client' && !cell_(inq, target, 'client')) link.client = cell_(T, r, 'name');
+          if (k === 'contact' && !cell_(inq, target, 'contact')) link.contact = cell_(T, r, 'name');
+          if (k === 'project' && !cell_(inq, target, 'project')) link.project = cell_(T, r, 'id');
+          if (Object.keys(link).length) writeRow_(inq, target.row, link, null);
+        });
+      });
+    }
+    props_().setProperty('SCHEMA_V', SCHEMA_VERSION);
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/* ───────────────────────── 화면 데이터 ───────────────────────── */
+
+function getAll() {
+  const email = requireUser_();
+  const ss = ss_();
+  ensureSchema_(ss);
+  const out = { email: email, sheetUrl: ss.getUrl(), today: today_(), t: {}, events: [], missing: [] };
+  Object.keys(ENT).forEach(function (k) {
+    const T = readEntity_(k, ss);
+    if (!T) { out.missing.push(ENT[k].sheet); return; }
+    out.t[k] = { headers: T.headers, fields: T.fields, formulaCols: T.formulaCols, options: options_(T),
+                 rows: T.rows.map(function (r) { return { row: r.row, cells: r.cells, raw: r.raw, v: version_(r.cells) }; }) };
+  });
+  try {
+    const now = new Date();
+    const from = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+    const until = new Date(now.getTime() + 45 * 86400000);
+    calendar_().getEvents(from, until).slice(0, 80).forEach(function (e) {
+      out.events.push({ id: e.getId(), title: e.getTitle(), start: serial_(e.getStartTime()), end: serial_(e.getEndTime()),
+                        allDay: e.isAllDayEvent(), location: e.getLocation() });
+    });
+  } catch (err) { out.calendarError = err.message; }
+  return out;
+}
+
+/* ───────────────────────── 저장 · 워크플로우 액션 ───────────────────────── */
+
+// 어떤 탭이든 한 행 수정 (전체 편집 화면)
+function saveRecord(key, row, v, changes) {
+  requireUser_();
+  return withLock_(function (ss) {
+    const T = load_(key, ss);
+    if (row) {
+      const r = checkVersion_(T, row, v);
+      writeRow_(T, r.row, changes || {}, r.cells);
+    } else {
+      appendRow_(T, changes || {});
+    }
+    return '저장했습니다';
+  });
+}
+
+function act(name, p) {
+  requireUser_();
+  const fn = ACTIONS[name];
+  if (!fn) throw new Error('알 수 없는 작업입니다.');
+  return withLock_(function (ss) { return fn(ss, p || {}); });
+}
+
+function withLock_(fn) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  let msg;
+  try { msg = fn(ss_()); } finally { lock.releaseLock(); }
+  const data = getAll();
+  data.message = msg;
+  return data;
+}
+
+function load_(key, ss) {
+  const T = readEntity_(key, ss);
+  if (!T) throw new Error("'" + ENT[key].sheet + "' 탭을 찾을 수 없습니다.");
+  T.options = options_(T);
+  return T;
+}
+
+const ACTIONS = {
+  // 문의 진행상태 변경 (+ 최종연락일)
+  inqStatus: function (ss, p) {
+    const T = load_('inquiry', ss);
+    const r = checkVersion_(T, p.row, p.v);
+    const ch = { status: p.status };
+    if (p.touch) ch.lastContact = today_();
+    writeRow_(T, r.row, ch, r.cells);
+    return "'" + p.status + "' 으로 변경했습니다";
+  },
+
+  // 자동 분석 결과 적용 (메모 · 견적 · 우선순위)
+  inqApply: function (ss, p) {
+    const T = load_('inquiry', ss);
+    const r = checkVersion_(T, p.row, p.v);
+    writeRow_(T, r.row, p.changes || {}, r.cells);
+    return '분석 내용을 정리했습니다';
+  },
+
+  // 미팅/할일 등록 (+ 캘린더) — 문의 단계에서 미팅이면 진행상태를 '미팅예정'으로
+  task: function (ss, p) {
+    if (!p.detail) throw new Error('내용을 입력하세요.');
+    let I = null, ir = null;
+    if (p.inqRow) { I = load_('inquiry', ss); ir = checkVersion_(I, p.inqRow, p.inqV); } // 먼저 확인 → 충돌 시 아무것도 만들지 않음
+    const T = load_('task', ss);
+    let eventId = '';
+    if (p.calendar && p.date) eventId = createEvent_(p);
+    const due = p.date ? (p.date + (p.start && !p.allDay ? ' ' + p.start : '')) : '';
+    const res = appendRow_(T, {
+      inquiry: p.inquiry || '', project: p.project || '', category: p.category || '',
+      detail: p.detail, due: due, status: p.status || pick_(T, 'status', STAGE.taskTodo, '대기'), eventId: eventId
+    });
+    if (ir) {
+      const ch = { lastContact: today_() };
+      if (/미팅/.test(p.category || '') && /접수|신규|검토|상담/.test(cell_(I, ir, 'status') || '접수')) ch.status = pick_(I, 'status', STAGE.meet, '미팅예정');
+      writeRow_(I, ir.row, ch, ir.cells);
+    }
+    return res.id + (eventId ? ' 등록 · 캘린더 추가' : ' 등록');
+  },
+
+  taskStatus: function (ss, p) {
+    const T = load_('task', ss);
+    const r = checkVersion_(T, p.row, p.v);
+    const status = p.done ? pick_(T, 'status', STAGE.taskDone, '완료') : pick_(T, 'status', STAGE.taskTodo, '대기');
+    writeRow_(T, r.row, { status: status }, r.cells);
+    return p.done ? '완료 처리했습니다' : '다시 열었습니다';
+  },
+
+  // 견적 발송 기록
+  quote: function (ss, p) {
+    const amount = num_(p.amount);
+    if (!amount) throw new Error('견적 금액을 입력하세요.');
+    const I = load_('inquiry', ss);
+    const r = checkVersion_(I, p.row, p.v);
+    writeRow_(I, r.row, { quote: amount, status: pick_(I, 'status', STAGE.quote, '견적발송'), lastContact: today_() }, r.cells);
+    const T = load_('task', ss);
+    appendRow_(T, {
+      inquiry: cell_(I, r, 'id'), category: pick_(T, 'category', /견적/, '견적발송'),
+      detail: '견적 발송 ₩' + amount.toLocaleString('ko-KR') + (p.note ? ' — ' + p.note : ''),
+      due: today_(), status: pick_(T, 'status', STAGE.taskDone, '완료')
+    });
+    if (p.followUp) {
+      appendRow_(T, {
+        inquiry: cell_(I, r, 'id'), category: pick_(T, 'category', /견적/, '견적발송'),
+        detail: '견적 회신 확인', due: p.followUp, status: pick_(T, 'status', STAGE.taskTodo, '대기')
+      });
+    }
+    return '견적 발송을 기록했습니다';
+  },
+
+  // 계약 전환: 고객사 · 담당자 · 프로젝트 · 정산 행을 한 번에 만들고 문의에 연결
+  contract: function (ss, p) {
+    const I = load_('inquiry', ss);
+    const r = checkVersion_(I, p.row, p.v);
+    const inqId = cell_(I, r, 'id');
+    const c = p.client || {}, k = p.contact || {}, j = p.project || {};
+    if (!c.name) throw new Error('고객사(회사명)를 입력하세요.');
+    if (!j.name) throw new Error('프로젝트명을 입력하세요.');
+    const log = [];
+
+    const C = load_('client', ss);
+    let cRow = findBy_(C, 'name', c.name);
+    if (!cRow) {
+      appendRow_(C, { name: c.name, category: c.category || '', inquiry: inqId });
+      log.push('고객사 추가');
+    } else log.push('기존 고객사 연결');
+
+    if (k.name) {
+      const K = load_('contact', ss);
+      let kRow = findBy_(K, 'email', k.email) || null;
+      if (!kRow) {
+        appendRow_(K, { company: c.name, name: k.name, role: k.role || '', phone: k.phone || '', email: k.email || '', inquiry: inqId });
+        log.push('담당자 추가');
+      } else log.push('기존 담당자 연결');
+    }
+
+    const P = load_('project', ss);
+    const total = num_(j.total);
+    const prj = appendRow_(P, {
+      name: j.name, type: j.type || '', inquiry: inqId, client: c.name, pm: j.pm || '',
+      stage: pick_(P, 'stage', STAGE.stageFirst, ''), start: j.start || '', due: j.due || '', total: total || ''
+    });
+    log.push(prj.id + ' 생성');
+
+    const M = load_('payment', ss);
+    if (!findBy_(M, 'project', prj.id)) {
+      appendRow_(M, { project: prj.id, client: c.name, status: pick_(M, 'status', STAGE.payNone, '') });
+      log.push('정산 행 생성');
+    }
+
+    writeRow_(I, r.row, {
+      status: pick_(I, 'status', STAGE.won, '계약완료'), client: c.name, contact: k.name || '',
+      project: prj.id, quote: total || cell_(I, r, 'quote'), lastContact: today_()
+    }, r.cells);
+
+    if (j.shoot) {
+      const T = load_('task', ss);
+      appendRow_(T, { inquiry: inqId, project: prj.id, category: pick_(T, 'category', /촬영/, '촬영'),
+                      detail: j.name + ' 촬영', due: j.shoot, status: pick_(T, 'status', STAGE.taskTodo, '대기') });
+      log.push('촬영 일정 추가');
+    }
+    return '계약 전환 완료 · ' + log.join(' · ');
+  },
+
+  // 입금 기록: stage 1=선금 2=중간 3=후금 → 정산상태 자동 계산
+  payment: function (ss, p) {
+    const amount = num_(p.amount);
+    if (!p.project) throw new Error('프로젝트를 선택하세요.');
+    if (!amount) throw new Error('입금액을 입력하세요.');
+    let M = load_('payment', ss);
+    let r = findBy_(M, 'project', p.project);
+    if (!r) {
+      const P0 = load_('project', ss);
+      const pr0 = findBy_(P0, 'id', p.project);
+      appendRow_(M, { project: p.project, client: pr0 ? cell_(P0, pr0, 'client') : '' });
+      M = load_('payment', ss);
+      r = findBy_(M, 'project', p.project);
+    }
+    const s = String(p.stage || '1');
+    const ch = {}; ch['a' + s] = amount; ch['d' + s] = p.date || today_();
+
+    const P = load_('project', ss);
+    const pr = findBy_(P, 'id', p.project);
+    const total = pr ? num_(rawCell_(P, pr, 'total')) : 0;
+    let received = 0;
+    ['1', '2', '3'].forEach(function (n) { received += n === s ? amount : num_(rawCell_(M, r, 'a' + n)); });
+    const cur = cell_(M, r, 'status');
+    if (!/계산서/.test(cur)) {
+      if (total && received >= total) {
+        ch.status = pick_(M, 'status', STAGE.payFull, '완납');
+        if (!cell_(M, r, 'done')) ch.done = p.date || today_();
+      } else if (received > 0) ch.status = pick_(M, 'status', STAGE.payPart, '부분입금');
+    }
+    writeRow_(M, r.row, ch, r.cells);
+    return '₩' + amount.toLocaleString('ko-KR') + ' 입금 기록' + (total ? ' · 잔금 ₩' + Math.max(total - received, 0).toLocaleString('ko-KR') : '');
+  },
+
+  // 프로젝트 제작단계 변경
+  stage: function (ss, p) {
+    const P = load_('project', ss);
+    const r = checkVersion_(P, p.row, p.v);
+    writeRow_(P, r.row, { stage: p.stage }, r.cells);
+    return "제작단계 '" + p.stage + "'";
+  }
+};
+
+/* ───────────────────────── 구글 캘린더 ───────────────────────── */
+
+function calendar_() {
+  const id = props_().getProperty('CALENDAR_ID');
+  const cal = id ? CalendarApp.getCalendarById(id) : CalendarApp.getDefaultCalendar();
+  if (!cal) throw new Error('캘린더에 접근할 수 없습니다. CALENDAR_ID 와 공유 설정을 확인하세요.');
+  return cal;
+}
+
+function createEvent_(p) {
+  const cal = calendar_();
+  const d = p.date.split('-').map(Number);
+  const opts = { description: String(p.note || '').slice(0, 4000), location: p.location || '' };
+  if (p.guests) { opts.guests = String(p.guests).replace(/\s/g, ''); opts.sendInvites = !!p.sendInvites; }
+  let ev;
+  if (p.start && !p.allDay) {
+    const s = p.start.split(':').map(Number);
+    const start = new Date(d[0], d[1] - 1, d[2], s[0], s[1]);
+    let end;
+    if (p.end) { const e = p.end.split(':').map(Number); end = new Date(d[0], d[1] - 1, d[2], e[0], e[1]); }
+    if (!end || end <= start) end = new Date(start.getTime() + 60 * 60 * 1000);
+    ev = cal.createEvent(p.detail, start, end, opts);
+  } else {
+    ev = cal.createAllDayEvent(p.detail, new Date(d[0], d[1] - 1, d[2]), opts);
+  }
+  return ev.getId();
 }
