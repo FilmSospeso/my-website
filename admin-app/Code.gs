@@ -31,7 +31,7 @@ const ENT = {
          stage: '제작단계', start: '작업시작일', due: '마감일자', total: '총견적액', note: '비고' }
   },
   payment: {
-    sheet: '입금현황', id: null,
+    sheet: '입금현황', id: null, formula: ['balance'],   // 수식으로 두는 열 (그 외 열에 있는 수식은 값으로 덮어씀)
     f: { project: '프로젝트ID', client: '관련고객사', d1: '선입금 날짜', a1: '선금', d2: '중간입금 날짜', a2: '중간입금',
          d3: '후금 날짜', a3: '후금', balance: '잔금', status: '정산상태', done: '완료날짜' }
   },
@@ -150,8 +150,9 @@ function readEntity_(key, ss) {
       lastDataRow = i + 2;
     });
   }
+  const allowed = (E.formula || []).map(function (f) { return fields[f]; });
   return { key: key, sh: sh, headers: headers, fields: fields, rows: rows, lastDataRow: lastDataRow,
-           formulaCols: Object.keys(formulaCols).map(Number) };
+           formulaCols: Object.keys(formulaCols).map(Number).filter(function (c) { return allowed.indexOf(c) > -1; }) };
 }
 
 function options_(T) {
