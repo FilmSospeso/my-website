@@ -202,6 +202,95 @@ function onEdit(e) {
   }
 }
 
+/* ───────────────────────── 2-1. 개인정보 자동 파기 (매월 1일 새벽) ───────────────────────── */
+/*
+ * 홈페이지 안내문: "문의 접수일로부터 1년 보관 후 파기 / 계약 체결 시 5년 보관"
+ *  - 계약 안 된 문의: 접수 1년 경과 → 개인정보 칸을 비움 (익명화)
+ *  - 계약된 문의(진행상태 '계약완료' 또는 '프로젝트' 칸 연결): 접수 5년 경과 → 비움
+ *  - 같은 문의ID로 연결된 '담당자' 행의 이름·연락처·이메일·메모도 함께 비움
+ *  - 행 자체는 남김 → 문의ID 번호가 겹치지 않고, 대시보드 건수 통계도 유지
+ *  - 처리 후 결과(건수·문의ID만, 개인정보 없음)를 알림 메일로 보냄
+ *
+ * 처음 한 번: 편집기에서 setupAutoPurge 실행 → 매월 1일 04시 자동 실행 예약
+ * 미리 보기: previewAutoPurge 실행 → 지울 대상만 실행 로그에 표시 (아무것도 안 바뀜)
+ */
+var PURGE = {
+  keepMonths: 12, contractKeepMonths: 60,
+  inquiryFields: ['이름', '이메일', '소속/회사', '웹사이트/링크', '메시지', '관리메모', '메인 담당자'],
+  contactFields: ['담당자 이름', '직급 / 부서', '연락처', '이메일', '담당자 메모'],
+  mark: '[개인정보 파기 '
+};
+
+function setupAutoPurge() {
+  ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'autoPurge') ScriptApp.deleteTrigger(t); });
+  ScriptApp.newTrigger('autoPurge').timeBased().onMonthDay(1).atHour(4).inTimezone('Asia/Seoul').create();
+  console.log('예약 완료: 매월 1일 04시 autoPurge 실행');
+  previewAutoPurge();
+}
+function previewAutoPurge() { return autoPurge({ dryRun: true }); }
+
+function autoPurge(opt) {
+  var dry = !!(opt && opt.dryRun === true);
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var I = tab_(ss, '문의');
+  if (!I || I.col(H.inquiry.date) < 0) throw new Error("'문의' 탭 또는 '접수일시' 열을 찾을 수 없습니다.");
+  var now = new Date();
+  var cut = function (months) { var d = new Date(now); d.setMonth(d.getMonth() - months); return d; };
+  var cutNormal = cut(PURGE.keepMonths), cutContract = cut(PURGE.contractKeepMonths);
+  var dateCol = I.col(H.inquiry.date);
+  var dates = I.data.length ? I.sh.getRange(2, dateCol + 1, I.data.length, 1).getValues() : [];
+  var g = function (r, h) { var c = I.col(h); return c > -1 ? String(I.data[r][c] || '').trim() : ''; };
+
+  var targets = [];   // { row, id, contract }
+  I.data.forEach(function (r, i) {
+    var d = dates[i] && dates[i][0];
+    if (!(d instanceof Date) || isNaN(d)) return;                       // 날짜 없는 행은 건드리지 않음
+    if (g(i, H.inquiry.memo).indexOf(PURGE.mark) === 0) return;          // 이미 파기됨
+    var hasPersonal = PURGE.inquiryFields.some(function (h) { return h !== '관리메모' && g(i, h); });
+    if (!hasPersonal) return;
+    var contract = g(i, H.inquiry.status) === '계약완료' || !!g(i, H.inquiry.project);
+    if (d < (contract ? cutContract : cutNormal)) targets.push({ row: i + 2, id: g(i, H.inquiry.id), contract: contract });
+  });
+
+  var ids = targets.map(function (t) { return t.id; }).filter(String);
+  var K = tab_(ss, '담당자'), contactRows = [];
+  if (K && K.col('관련 문의') > -1 && ids.length) {
+    K.data.forEach(function (r, i) {
+      var links = String(r[K.col('관련 문의')] || '').split(/[,\s]+/).filter(String);
+      // 담당자가 파기 대상 문의에만 연결돼 있을 때만 비움 (다른 진행 중 문의에도 연결돼 있으면 유지)
+      if (links.length && links.every(function (x) { return ids.indexOf(x) > -1; })) contactRows.push(i + 2);
+    });
+  }
+
+  var summary = '파기 대상 ' + targets.length + '건 (일반 ' + targets.filter(function (t) { return !t.contract; }).length +
+    ' · 계약 ' + targets.filter(function (t) { return t.contract; }).length + '), 담당자 ' + contactRows.length + '건' +
+    (ids.length ? ' : ' + ids.join(', ') : '');
+  console.log((dry ? '[미리 보기] ' : '') + summary);
+  if (dry || !targets.length) return summary;
+
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    var stamp = PURGE.mark + Utilities.formatDate(now, 'Asia/Seoul', 'yyyy-MM-dd') + ']';
+    var blank = function (T, row, fields, markHeader) {
+      fields.forEach(function (h) {
+        var c = T.col(h); if (c < 0) return;
+        T.sh.getRange(row, c + 1).setValue(h === markHeader ? stamp : '');
+      });
+    };
+    targets.forEach(function (t) { blank(I, t.row, PURGE.inquiryFields, '관리메모'); });
+    contactRows.forEach(function (row) { blank(K, row, PURGE.contactFields, '담당자 이름'); });
+    SpreadsheetApp.flush();
+  } finally { lock.releaseLock(); }
+
+  try {
+    MailApp.sendEmail(NOTIFY_EMAIL, '[개인정보 자동 파기] ' + targets.length + '건 처리',
+      '보관 기간(일반 1년 · 계약 5년)이 지난 문의의 개인정보를 비웠습니다.\n\n' + summary +
+      '\n\n※ 문의ID·접수일시·영상종류·진행상태는 통계용으로 남아 있습니다.');
+  } catch (err) { console.error(err); }
+  return summary;
+}
+
 /* ───────────────────────── 시트 도우미 ───────────────────────── */
 
 // 탭을 머리글 기준으로 다루는 작은 래퍼
