@@ -201,6 +201,18 @@
     .episodes a:hover { border-color: var(--accent); color: var(--accent); }
     .work-label { font-size: 0.8rem; letter-spacing: 0.2em; color: #888; text-transform: uppercase; margin: 0 0 1.2rem; }
     .more-wrap { text-align: center; margin-top: 2.5rem; }
+    .collapse-fab {
+      position: fixed; left: 50%; bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)); z-index: 95;
+      transform: translate(-50%, 160%); transition: transform 0.3s ease; display: inline-flex; align-items: center; gap: 0.4rem;
+      min-height: 46px; padding: 0 1.4rem; border-radius: 999px; border: 1px solid rgba(255,140,0,0.6);
+      background: rgba(10,10,10,0.92); color: var(--accent); font-family: var(--font-base); font-weight: 700; font-size: 0.95rem;
+      cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .collapse-fab.show { transform: translate(-50%, 0); }
+    .collapse-fab:hover { background: rgba(255,140,0,0.15); }
+    @media (max-width: 768px) {
+      .collapse-fab { bottom: calc(5.2rem + env(safe-area-inset-bottom, 0px)); }   /* 모바일 문의 버튼 위에 */
+    }
 
     /* ---------- Process (Project & Workflow) Toggle Section ---------- */
     #process { background-color: var(--bg-lighter); max-width: 100%; padding-bottom: 6rem; }
@@ -540,15 +552,15 @@
       <p class="work-label">Featured</p>
       <div class="featured-grid">
         <figure class="portfolio-item" data-category="mv" data-featured>
-          <a href="https://www.youtube.com/watch?v=FCWUGhVX-D4" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="달샤벳 Serri - LIKE 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/FCWUGhVX-D4/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/FCWUGhVX-D4/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/FCWUGhVX-D4/hqdefault.jpg'" alt="달샤벳 Serri - LIKE 썸네일" loading="lazy" width="1280" height="720">
+          <a href="https://www.youtube.com/watch?v=LUlyTXQG2Hk" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="달샤벳 Serri - Spotlight 영상 보기 (유튜브)">
+            <img src="https://img.youtube.com/vi/LUlyTXQG2Hk/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/LUlyTXQG2Hk/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/LUlyTXQG2Hk/hqdefault.jpg'" alt="달샤벳 Serri - Spotlight 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">뮤직비디오</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
           <figcaption>
-            <p class="proj-title">달샤벳 Serri - LIKE</p>
+            <p class="proj-title">달샤벳 Serri - Spotlight</p>
             <p class="proj-role">기획 · 연출 · 촬영 · 편집</p>
-            <p class="proj-desc">LIKE 뮤직비디오</p>
+            <p class="proj-desc">Spotlight 뮤직비디오</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="mv" data-featured>
@@ -563,16 +575,16 @@
             <p class="proj-desc">영화 「익스펜더블4」 뮤직비디오</p>
           </figcaption>
         </figure>
-        <figure class="portfolio-item" data-category="brand" data-featured>
-          <a href="https://www.youtube.com/watch?v=S8koo5hrLOE" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="IHHI 브랜드 필름 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/S8koo5hrLOE/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/S8koo5hrLOE/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/S8koo5hrLOE/hqdefault.jpg'" alt="IHHI 브랜드 필름 썸네일" loading="lazy" width="1280" height="720">
-            <span class="badge">브랜드/광고</span>
+        <figure class="portfolio-item" data-category="film" data-featured>
+          <a href="https://www.youtube.com/watch?v=yrsDCDcqLu8" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="투헤븐 To Heaven 영상 보기 (유튜브)">
+            <img src="https://img.youtube.com/vi/yrsDCDcqLu8/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/yrsDCDcqLu8/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/yrsDCDcqLu8/hqdefault.jpg'" alt="투헤븐 To Heaven 썸네일" loading="lazy" width="1280" height="720">
+            <span class="badge">영화</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
           <figcaption>
-            <p class="proj-title">IHHI 브랜드 필름</p>
-            <p class="proj-role">기획 · 연출 · 촬영 · 편집</p>
-            <p class="proj-desc">브랜드의 철학을 인터뷰 형식으로 풀어낸 브랜드 필름</p>
+            <p class="proj-title">투헤븐 To Heaven</p>
+            <p class="proj-role">촬영 감독</p>
+            <p class="proj-desc">영화</p>
           </figcaption>
         </figure>
       </div>
@@ -589,27 +601,27 @@
       </div>
       <div class="work-grid" id="workGrid">
         <figure class="portfolio-item" data-category="mv">
-          <a href="https://www.youtube.com/watch?v=LUlyTXQG2Hk" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="달샤벳 Serri - Spotlight 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/LUlyTXQG2Hk/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/LUlyTXQG2Hk/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/LUlyTXQG2Hk/hqdefault.jpg'" alt="달샤벳 Serri - Spotlight 썸네일" loading="lazy" width="1280" height="720">
+          <a href="https://www.youtube.com/watch?v=FCWUGhVX-D4" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="달샤벳 Serri - LIKE 영상 보기 (유튜브)">
+            <img src="https://img.youtube.com/vi/FCWUGhVX-D4/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/FCWUGhVX-D4/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/FCWUGhVX-D4/hqdefault.jpg'" alt="달샤벳 Serri - LIKE 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">뮤직비디오</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
           <figcaption>
-            <p class="proj-title">달샤벳 Serri - Spotlight</p>
+            <p class="proj-title">달샤벳 Serri - LIKE</p>
             <p class="proj-role">기획 · 연출 · 촬영 · 편집</p>
-            <p class="proj-desc">Spotlight 뮤직비디오</p>
+            <p class="proj-desc">LIKE 뮤직비디오</p>
           </figcaption>
         </figure>
-        <figure class="portfolio-item" data-category="film">
-          <a href="https://www.youtube.com/watch?v=yrsDCDcqLu8" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="투헤븐 To Heaven 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/yrsDCDcqLu8/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/yrsDCDcqLu8/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/yrsDCDcqLu8/hqdefault.jpg'" alt="투헤븐 To Heaven 썸네일" loading="lazy" width="1280" height="720">
-            <span class="badge">영화</span>
+        <figure class="portfolio-item" data-category="brand">
+          <a href="https://www.youtube.com/watch?v=S8koo5hrLOE" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="IHHI 브랜드 필름 영상 보기 (유튜브)">
+            <img src="https://img.youtube.com/vi/S8koo5hrLOE/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/S8koo5hrLOE/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/S8koo5hrLOE/hqdefault.jpg'" alt="IHHI 브랜드 필름 썸네일" loading="lazy" width="1280" height="720">
+            <span class="badge">브랜드/광고</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
           <figcaption>
-            <p class="proj-title">투헤븐 To Heaven</p>
-            <p class="proj-role">촬영 감독</p>
-            <p class="proj-desc">영화</p>
+            <p class="proj-title">IHHI 브랜드 필름</p>
+            <p class="proj-role">기획 · 연출 · 촬영 · 편집</p>
+            <p class="proj-desc">브랜드의 철학을 인터뷰 형식으로 풀어낸 브랜드 필름</p>
           </figcaption>
         </figure>
         <figure class="portfolio-item" data-category="vj">
@@ -759,7 +771,8 @@
           </figcaption>
         </figure>
       </div>
-      <div class="more-wrap"><button type="button" class="btn btn-ghost" id="moreBtn">더 많은 작품 보기</button></div>
+      <div class="more-wrap"><button type="button" class="btn btn-ghost" id="moreBtn" aria-expanded="false" aria-controls="workGrid">더 많은 작품 보기</button></div>
+      <button type="button" class="collapse-fab" id="collapseFab" aria-controls="workGrid" tabindex="-1">작품 목록 접기 ▲</button>
     </div>
   </section>
 
@@ -940,7 +953,7 @@
             <div class="motif-line"></div>
           </div>
         </div>
-        <p class="contact-lead">어떤 영상이 필요하신가요? 일정과 용도, 레퍼런스를 남겨주시면 검토 후 연락드립니다.<br>
+        <p class="contact-lead">어떤 영상이 필요하신가요? 일정과 용도, 레퍼런스를 남겨주시면 24시간 안으로 연락드립니다.<br>
           메일로 직접 보내셔도 됩니다 · <a href="mailto:filmsospeso@gmail.com">filmsospeso@gmail.com</a></p>
 
         <!-- 카드 프레임 래퍼 -->
@@ -1076,8 +1089,27 @@
         item.hidden = currentFilter === 'all' && !expanded && shown >= INITIAL;
         if (!item.hidden) shown++;
       });
-      moreBtn.parentNode.hidden = !(currentFilter === 'all' && !expanded && total > INITIAL);
-      moreBtn.textContent = '더 많은 작품 보기 (+' + (total - shown) + ')';
+      // 전체 보기에서만 '더 보기 / 접기' 버튼 사용
+      moreBtn.parentNode.hidden = !(currentFilter === 'all' && total > INITIAL);
+      moreBtn.textContent = expanded ? '작품 목록 접기 ▲' : '더 많은 작품 보기 (+' + (total - shown) + ')';
+      moreBtn.setAttribute('aria-expanded', expanded);
+      updateFab();
+    }
+
+    // 펼친 상태에서 그리드를 보는 동안 화면 아래에 따라다니는 '접기' 버튼
+    const collapseFab = document.getElementById('collapseFab');
+    const filterBar = document.querySelector('.filter-buttons');
+    let gridInView = false, moreInView = false;
+    function updateFab() {
+      if (!collapseFab) return;
+      const on = expanded && currentFilter === 'all' && gridInView && !moreInView;
+      collapseFab.classList.toggle('show', on);
+      collapseFab.tabIndex = on ? 0 : -1;
+    }
+    function collapseWork() {
+      expanded = false; renderWork();
+      const y = filterBar.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top: y, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     }
     filterBtns.forEach(btn => btn.addEventListener('click', () => {
       filterBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
@@ -1085,7 +1117,10 @@
       currentFilter = btn.dataset.filter;
       renderWork();
     }));
-    moreBtn.addEventListener('click', () => { expanded = true; renderWork(); });
+    moreBtn.addEventListener('click', () => { if (expanded) collapseWork(); else { expanded = true; renderWork(); } });
+    collapseFab.addEventListener('click', collapseWork);
+    new IntersectionObserver(([e]) => { gridInView = e.isIntersecting; updateFab(); }, { rootMargin: '-80px 0px -40% 0px' }).observe(grid);
+    new IntersectionObserver(([e]) => { moreInView = e.isIntersecting; updateFab(); }).observe(moreBtn);
     renderWork();
 
     // ---------------- 모바일 고정 문의 버튼 (히어로 지나면 보이고, 문의 영역에서는 숨김) ----------------
@@ -1276,7 +1311,7 @@ contactForm.addEventListener('submit', e => {
         .then(response => response.json())
         .then(data => {
           if (!data || data.result !== 'success') throw new Error(data && data.reason || 'failed');
-          showToast('문의가 성공적으로 접수되었습니다. 곧 연락드리겠습니다!');
+          showToast('문의가 접수되었습니다. 24시간 안으로 연락드리겠습니다!');
           contactForm.reset(); // 폼 내용 비우기
           submitBtn.textContent = originalBtnText;
           submitBtn.disabled = false;
