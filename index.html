@@ -393,6 +393,19 @@
 
     .submit-area { display: flex; flex-direction: column; align-items: flex-start; gap: 1.5rem; width: 100%; margin-top: 1rem; box-sizing: border-box;}
     .agree-label { font-size: 0.9rem; color: #aaa; display: flex; align-items: flex-start; gap: 10px; cursor: pointer; line-height: 1.4; word-break: keep-all; }
+    .agree-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0.4rem 1rem; width: 100%; }
+    .privacy-toggle {
+      background: none; border: 0; padding: 0.15rem 0; color: #aaa; font: inherit; font-size: 0.85rem;
+      text-decoration: underline; text-underline-offset: 3px; cursor: pointer; min-height: 32px;
+    }
+    .privacy-toggle:hover, .privacy-toggle[aria-expanded="true"] { color: var(--accent); }
+    .privacy-detail { width: 100%; box-sizing: border-box; margin-top: -0.6rem; padding: 1rem 1.1rem; border: 1px solid #2c2c2c; border-radius: 6px; background: rgba(255,255,255,0.02); }
+    .privacy-detail dl { display: grid; grid-template-columns: 7.5em 1fr; gap: 0.55rem 1rem; margin: 0; font-size: 0.85rem; line-height: 1.55; color: #aaa; word-break: keep-all; }
+    .privacy-detail dt { color: var(--text-light); font-weight: 600; }
+    .privacy-detail dd { margin: 0; }
+    .privacy-detail strong { color: var(--text-light); }
+    .privacy-detail a { color: var(--accent); }
+    @media (max-width: 560px) { .privacy-detail dl { grid-template-columns: 1fr; gap: 0.15rem; } .privacy-detail dd { margin-bottom: 0.6rem; } }
     .agree-label input[type="checkbox"] { flex-shrink: 0; width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; margin-top: 2px; }
     
     .submit-btn {
@@ -1179,10 +1192,23 @@
             </div>
 
             <div class="submit-area">
-              <label class="agree-label">
-                <input type="checkbox" name="privacy_agree" required>
-                문의 답변을 위한 개인정보 수집 및 이용에 동의합니다.
-              </label>
+              <div class="agree-row">
+                <label class="agree-label">
+                  <input type="checkbox" name="privacy_agree" required>
+                  <span>[필수] 문의 답변을 위한 개인정보 수집 및 이용에 동의합니다.</span>
+                </label>
+                <button type="button" class="privacy-toggle" aria-expanded="false" aria-controls="privacyDetail">자세히 보기</button>
+              </div>
+              <div class="privacy-detail" id="privacyDetail" hidden>
+                <dl>
+                  <dt>수집 목적</dt><dd>프로젝트 문의 확인 및 답변, 견적·상담 진행</dd>
+                  <dt>수집 항목</dt><dd>필수: 이름, 이메일, 메시지<br>선택: 소속/회사, 웹사이트/소셜 링크, 영상 종류</dd>
+                  <dt>보유 기간</dt><dd>문의 접수일로부터 <strong>1년</strong> 보관 후 파기합니다.<br>계약이 체결된 경우 관련 법령(국세기본법 등)에 따라 거래 기록을 <strong>5년</strong> 보관합니다.</dd>
+                  <dt>보관 방식</dt><dd>Google 서비스(스프레드시트·Gmail)에 저장되며, 접근은 Film Sospeso 담당자로 제한됩니다.</dd>
+                  <dt>동의 거부</dt><dd>동의하지 않으실 수 있으나, 이 경우 문의 접수가 어렵습니다. 이메일로 직접 문의하셔도 됩니다.</dd>
+                  <dt>열람·삭제 요청</dt><dd><a href="mailto:filmsospeso@gmail.com">filmsospeso@gmail.com</a>으로 요청하시면 지체 없이 처리합니다.</dd>
+                </dl>
+              </div>
               
               <!-- 새롭게 수정된 버튼 및 토스트 팝업 래퍼 -->
               <div class="submit-action-wrapper">
@@ -1445,6 +1471,16 @@
       }
       return sanitized;
     }
+
+    // 개인정보 안내 펼치기
+    const privacyToggle = document.querySelector('.privacy-toggle');
+    const privacyDetail = document.getElementById('privacyDetail');
+    privacyToggle.addEventListener('click', () => {
+      const open = privacyToggle.getAttribute('aria-expanded') !== 'true';
+      privacyToggle.setAttribute('aria-expanded', String(open));
+      privacyToggle.textContent = open ? '접기' : '자세히 보기';
+      privacyDetail.hidden = !open;
+    });
 
     // ⚡ 예열: 문의 영역이 보이거나 폼을 만지면 서버를 미리 깨워 둠 (전송 대기 시간 단축)
     let lastWarm = 0;
