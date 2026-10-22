@@ -27,6 +27,10 @@
    "email":"filmsospeso@gmail.com","description":"뮤직비디오 · 브랜드 필름 · 기업 홍보 영상 · 영화 제작 스튜디오"}
   </script>
 
+  <script type="application/ld+json">
+  {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "견적은 어떻게 정해지나요?", "acceptedAnswer": {"@type": "Answer", "text": "영상 길이, 촬영 회차와 장소, 출연, 후반 작업 범위에 따라 달라집니다. 문의를 남겨주시면 내용을 검토해 프로젝트에 맞는 견적을 안내드립니다."}}, {"@type": "Question", "name": "기획만, 촬영만, 편집만 맡길 수도 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "네, 가능합니다. 필요한 단계만 골라 의뢰하실 수 있습니다."}}, {"@type": "Question", "name": "수정은 몇 번까지 가능한가요?", "acceptedAnswer": {"@type": "Answer", "text": "프로젝트 규모와 일정에 맞춰 계약 시 협의해 정합니다."}}, {"@type": "Question", "name": "지방이나 해외 촬영도 가능한가요?", "acceptedAnswer": {"@type": "Answer", "text": "가능합니다. 이동·숙박 등 출장비는 별도로 산정됩니다."}}, {"@type": "Question", "name": "원본 촬영본도 받을 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "원본 제공 여부와 범위는 별도로 협의합니다."}}, {"@type": "Question", "name": "세금계산서 발행이 되나요?", "acceptedAnswer": {"@type": "Answer", "text": "네, 세금계산서 발행 가능합니다."}}, {"@type": "Question", "name": "문의하면 언제 연락을 받을 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "문의를 남겨주시면 24시간 안으로 연락드립니다."}}]}
+  </script>
+
   <!-- 구글 웹 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,7 +73,8 @@
       display: flex; align-items: center; justify-content: space-between;
       width: 100%; max-width: 1200px; padding: 0 2rem;
     }
-    header .logo { font-weight: 700; font-size: 1.4rem; color: var(--text-light); text-decoration: none; }
+    header .logo { font-weight: 700; font-size: 1.4rem; color: var(--text-light); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+    .logo-mark { display: none; border-radius: 4px; }
     
     header nav { display: flex; align-items: center; position: relative; }
     header nav a {
@@ -203,12 +208,12 @@
     .more-wrap { text-align: center; margin-top: 2.5rem; }
     .collapse-fab {
       position: fixed; left: 50%; bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)); z-index: 95;
-      transform: translate(-50%, 160%); transition: transform 0.3s ease; display: inline-flex; align-items: center; gap: 0.4rem;
+      transform: translate(-50%, 160%); opacity: 0; visibility: hidden; pointer-events: none; transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s; display: inline-flex; align-items: center; gap: 0.4rem;
       min-height: 46px; padding: 0 1.4rem; border-radius: 999px; border: 1px solid rgba(255,140,0,0.6);
       background: rgba(10,10,10,0.92); color: var(--accent); font-family: var(--font-base); font-weight: 700; font-size: 0.95rem;
       cursor: pointer; box-shadow: 0 8px 24px rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     }
-    .collapse-fab.show { transform: translate(-50%, 0); }
+    .collapse-fab.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; pointer-events: auto; }
     .collapse-fab:hover { background: rgba(255,140,0,0.15); }
     @media (max-width: 768px) {
       .collapse-fab { bottom: calc(5.2rem + env(safe-area-inset-bottom, 0px)); }   /* 모바일 문의 버튼 위에 */
@@ -422,6 +427,36 @@
       color: rgba(255, 68, 68, 0.8); 
     }
 
+    /* ---------- Services ---------- */
+    #services { background: var(--bg-darker); max-width: 100%; padding: 6rem 0; }
+    .svc-inner, .faq-inner { max-width: 1200px; margin: 0 auto; padding: 0 2rem; text-align: center; }
+    .section-title { margin: 0 0 0.5rem; font-size: clamp(2rem, 3.5vw, 3rem); color: var(--accent); text-transform: none; }
+    .section-lead { color: #aaa; max-width: 640px; margin: 0 auto 3rem; line-height: 1.7; }
+    .svc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; text-align: left; }
+    .svc-card { background: var(--bg-dark); border: 1px solid #2a2a2a; border-top: 3px solid transparent; border-radius: 12px; padding: 2rem 1.8rem; display: flex; flex-direction: column; transition: border-color 0.3s, transform 0.3s; }
+    .svc-card:hover { border-top-color: var(--accent); transform: translateY(-4px); }
+    .svc-card--custom { border-color: rgba(255,140,0,0.35); background: linear-gradient(160deg, rgba(255,140,0,0.08), var(--bg-dark) 60%); }
+    .svc-en { margin: 0 0 0.4rem; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: #777; }
+    .svc-title { margin: 0 0 0.8rem; font-family: var(--font-base); font-size: 1.35rem; letter-spacing: -0.01em; color: var(--text-light); }
+    .svc-desc { margin: 0 0 1.2rem; color: #b5b5b5; line-height: 1.65; font-size: 0.95rem; }
+    .svc-list { list-style: none; margin: 0 0 1.6rem; padding: 0; display: grid; gap: 0.5rem; }
+    .svc-list li { position: relative; padding-left: 1.1rem; color: #ddd; font-size: 0.92rem; }
+    .svc-list li::before { content: ''; position: absolute; left: 0; top: 0.6em; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .svc-actions { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap; }
+    .svc-link { color: var(--accent); text-decoration: none; font-weight: 600; font-size: 0.92rem; min-height: 44px; display: inline-flex; align-items: center; }
+    .btn-sm { min-height: 44px; padding: 0 1.1rem; font-size: 0.9rem; }
+
+    /* ---------- FAQ ---------- */
+    #faq { background: var(--bg-dark); max-width: 100%; padding: 6rem 0 4rem; }
+    .faq-inner { max-width: 820px; }
+    .faq-list { margin-top: 1rem; text-align: left; border-top: 1px solid #2c2c2c; }
+    .faq-item { border-bottom: 1px solid #2c2c2c; }
+    .faq-item summary { list-style: none; cursor: pointer; padding: 1.25rem 2.5rem 1.25rem 0; font-weight: 600; font-size: 1.02rem; position: relative; color: var(--text-light); }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 1.4rem; font-weight: 400; transition: transform 0.2s; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { margin: 0 0 1.3rem; color: #b5b5b5; line-height: 1.7; }
+
     /* ---------- 모바일 고정 문의 버튼 ---------- */
     .sticky-cta { display: none; }
     @media (max-width: 768px) {
@@ -448,6 +483,7 @@
     @media (max-width: 1024px) {
       .card-grid { grid-template-columns: repeat(2, 1fr); }
       .work-grid { grid-template-columns: repeat(2, 1fr); }
+      .svc-grid { grid-template-columns: repeat(2, 1fr); }
       .pipeline-tabs-container { display: flex; justify-content: space-between; gap: 0.5rem; margin-bottom: 2rem; width: 100%; }
       .pipe-tab-btn { flex: 1; background: transparent; border: 1px solid #444; color: #888; padding: 0.6rem 0; border-radius: 30px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em; text-align: center; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; min-width: 0; }
       .pipe-tab-btn.active { background: rgba(255, 140, 0, 0.15); border-color: var(--accent); color: var(--accent); }
@@ -460,8 +496,9 @@
     @media (max-width: 768px) {
       header { height: 56px; }
       .header-inner { padding: 0 1rem; }
-      header .logo { font-size: 1.05rem; white-space: nowrap; }
-      header nav { gap: 14px; }
+      .logo-mark { display: block; }
+      .logo-text { display: none; }
+      header nav { gap: 13px; }
       header nav a { margin-left: 0; font-size: 0.85rem; padding: 0.9rem 0; }
 
       #home { min-height: 100svh; padding: 80px 1rem 4rem; }
@@ -470,6 +507,10 @@
       .hero-cta .btn { flex: 1 1 140px; }
 
       .work-inner { padding: 0 1rem; }
+      .svc-inner, .faq-inner { padding: 0 1rem; }
+      .svc-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .svc-card { padding: 1.6rem 1.3rem; }
+      #services, #faq { padding: 4.5rem 0; }
       .featured-grid { grid-template-columns: 1fr; margin-bottom: 3rem; }
       .featured-grid .portfolio-item:first-child { grid-row: auto; }
       .featured-grid .portfolio-item:first-child .video-wrapper { aspect-ratio: 16 / 9; min-height: 0; }
@@ -512,9 +553,10 @@
   <!-- 헤더 -->
   <header>
     <div class="header-inner">
-      <a class="logo" href="#home" aria-label="Film Sospeso 처음으로">Film Sospeso</a>
+      <a class="logo" href="#home" aria-label="Film Sospeso 처음으로"><img class="logo-mark" src="assets/favicon-64.png" alt="" width="28" height="28"><span class="logo-text">Film Sospeso</span></a>
       <nav aria-label="주요 메뉴">
         <a href="#project">Work</a>
+        <a href="#services">Services</a>
         <a href="#process" id="navProcessBtn">Process</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
@@ -776,6 +818,78 @@
     </div>
   </section>
 
+  <!-- Services -->
+  <section id="services" aria-labelledby="svc-title">
+    <div class="svc-inner">
+      <div class="title-group" style="margin:0 auto">
+        <h2 id="svc-title" class="section-title">SERVICES</h2>
+        <div class="motif-line"></div>
+      </div>
+      <p class="section-lead">필요한 영상의 종류를 골라보세요. 프로젝트마다 범위와 일정이 달라, 내용을 확인한 뒤 맞춤으로 제안드립니다.</p>
+      <div class="svc-grid">
+        <article class="svc-card">
+          <p class="svc-en">Music Video</p>
+          <h3 class="svc-title">뮤직비디오</h3>
+          <p class="svc-desc">아티스트의 세계관과 곡의 감정을 한 편의 영상으로 완성합니다.</p>
+          <ul class="svc-list"><li>콘셉트 기획 · 콘티</li><li>연출 · 촬영 · 조명</li><li>편집 · 색보정 · 후반 작업</li></ul>
+          <div class="svc-actions">
+            <a class="svc-link" href="#project" data-filter-go="mv">작업 보기 →</a>
+            <a class="btn btn-ghost btn-sm" href="#contact" data-type="뮤비">이 영상 문의하기</a>
+          </div>
+        </article>
+        <article class="svc-card">
+          <p class="svc-en">Brand Film</p>
+          <h3 class="svc-title">브랜드 필름 · 광고</h3>
+          <p class="svc-desc">브랜드가 가진 철학과 이야기를 인터뷰·연출 영상으로 풀어냅니다.</p>
+          <ul class="svc-list"><li>브랜드 인터뷰 · 스토리 기획</li><li>제품 · 공간 촬영</li><li>편집 · 색보정 · 후반 작업</li></ul>
+          <div class="svc-actions">
+            <a class="svc-link" href="#project" data-filter-go="brand">작업 보기 →</a>
+            <a class="btn btn-ghost btn-sm" href="#contact" data-type="광고">이 영상 문의하기</a>
+          </div>
+        </article>
+        <article class="svc-card">
+          <p class="svc-en">Corporate</p>
+          <h3 class="svc-title">기업 홍보영상</h3>
+          <p class="svc-desc">기업의 기술과 현장을 신뢰감 있게 전달하는 홍보영상을 만듭니다.</p>
+          <ul class="svc-list"><li>대본 · 구성안 작성</li><li>현장 · 인터뷰 촬영</li><li>시리즈 · 다편 구성</li></ul>
+          <div class="svc-actions">
+            <a class="svc-link" href="#project" data-filter-go="pr">작업 보기 →</a>
+            <a class="btn btn-ghost btn-sm" href="#contact" data-type="홍보">이 영상 문의하기</a>
+          </div>
+        </article>
+        <article class="svc-card">
+          <p class="svc-en">Film & Documentary</p>
+          <h3 class="svc-title">영화 · 다큐멘터리</h3>
+          <p class="svc-desc">장편 영화 촬영부터 다큐멘터리 기획까지 참여합니다.</p>
+          <ul class="svc-list"><li>촬영 감독 · 특수촬영</li><li>다큐멘터리 기획 · 인터뷰</li><li>자막 등 후반 작업</li></ul>
+          <div class="svc-actions">
+            <a class="svc-link" href="#project" data-filter-go="film">작업 보기 →</a>
+            <a class="btn btn-ghost btn-sm" href="#contact" data-type="영화">이 영상 문의하기</a>
+          </div>
+        </article>
+        <article class="svc-card">
+          <p class="svc-en">Event & VJ</p>
+          <h3 class="svc-title">행사 · VJ · 스케치</h3>
+          <p class="svc-desc">현장의 분위기와 사람들의 목소리를 생생하게 기록합니다.</p>
+          <ul class="svc-list"><li>행사 · 전시 스케치</li><li>VJ 촬영 · 인터뷰 콘텐츠</li><li>현장 촬영 · 편집</li></ul>
+          <div class="svc-actions">
+            <a class="svc-link" href="#project" data-filter-go="event">작업 보기 →</a>
+            <a class="btn btn-ghost btn-sm" href="#contact" data-type="기타">이 영상 문의하기</a>
+          </div>
+        </article>
+        <article class="svc-card svc-card--custom">
+          <p class="svc-en">Custom</p>
+          <h3 class="svc-title">부분 의뢰 · 맞춤 프로젝트</h3>
+          <p class="svc-desc">기획만, 촬영만, 편집만 필요하셔도 괜찮습니다. 필요한 단계만 골라 함께할 수 있습니다.</p>
+          <ul class="svc-list"><li>기획 · 구성안만</li><li>촬영 · 조명만</li><li>편집 · 후반 작업만</li></ul>
+          <div class="svc-actions">
+            <a class="btn btn-primary btn-sm" href="#contact" data-type="기타">맞춤 문의하기</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <!-- Process (Project & Workflow) Toggle Section -->
   <section id="process">
     <div class="section-inner">
@@ -939,7 +1053,47 @@
     </div>
   </section>
 
-  <!-- Contact (문의) Section - 여백 및 마진 축소 조정 -->
+  <!-- FAQ -->
+  <section id="faq" aria-labelledby="faq-title">
+    <div class="faq-inner">
+      <div class="title-group" style="margin:0 auto">
+        <h2 id="faq-title" class="section-title">FAQ</h2>
+        <div class="motif-line"></div>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>견적은 어떻게 정해지나요?</summary>
+          <p>영상 길이, 촬영 회차와 장소, 출연, 후반 작업 범위에 따라 달라집니다. 문의를 남겨주시면 내용을 검토해 프로젝트에 맞는 견적을 안내드립니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>기획만, 촬영만, 편집만 맡길 수도 있나요?</summary>
+          <p>네, 가능합니다. 필요한 단계만 골라 의뢰하실 수 있습니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>수정은 몇 번까지 가능한가요?</summary>
+          <p>프로젝트 규모와 일정에 맞춰 계약 시 협의해 정합니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>지방이나 해외 촬영도 가능한가요?</summary>
+          <p>가능합니다. 이동·숙박 등 출장비는 별도로 산정됩니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>원본 촬영본도 받을 수 있나요?</summary>
+          <p>원본 제공 여부와 범위는 별도로 협의합니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>세금계산서 발행이 되나요?</summary>
+          <p>네, 세금계산서 발행 가능합니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>문의하면 언제 연락을 받을 수 있나요?</summary>
+          <p>문의를 남겨주시면 24시간 안으로 연락드립니다.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact (문의) Section -->
   <section id="contact">
     <div class="contact-inner">
       
@@ -1116,6 +1270,16 @@
       btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true');
       currentFilter = btn.dataset.filter;
       renderWork();
+    }));
+    // 서비스 카드 '작업 보기' → 해당 분류로 필터, '이 영상 문의하기' → 문의 폼 영상 종류 자동 선택
+    document.querySelectorAll('[data-filter-go]').forEach(a => a.addEventListener('click', () => {
+      const btn = document.querySelector('.filter-btn[data-filter="' + a.dataset.filterGo + '"]');
+      if (btn) btn.click();
+    }));
+    document.querySelectorAll('a[data-type]').forEach(a => a.addEventListener('click', () => {
+      const r = document.querySelector('input[name="video_type"][value="' + a.dataset.type + '"]');
+      if (r) r.checked = true;
+      setTimeout(() => { const f = document.getElementById('user_name'); if (f) f.focus({ preventScroll: true }); }, 600);
     }));
     moreBtn.addEventListener('click', () => { if (expanded) collapseWork(); else { expanded = true; renderWork(); } });
     collapseFab.addEventListener('click', collapseWork);
