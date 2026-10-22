@@ -170,6 +170,8 @@
     .featured-grid { display: grid; grid-template-columns: 1.4fr 1fr; grid-template-rows: auto auto; gap: 1.5rem; margin-bottom: 4rem; }
     .featured-grid .portfolio-item:first-child { grid-row: span 2; }
     .featured-grid .portfolio-item:first-child .proj-title { font-size: 1.5rem; }
+    .featured-grid .portfolio-item:first-child .video-wrapper { aspect-ratio: auto; flex: 1 1 auto; min-height: 320px; }
+    .featured-grid .portfolio-item:first-child figcaption { flex-grow: 0; }
     .work-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
     .portfolio-item {
       margin: 0; background: #1a1a1a; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;
@@ -458,6 +460,7 @@
       .work-inner { padding: 0 1rem; }
       .featured-grid { grid-template-columns: 1fr; margin-bottom: 3rem; }
       .featured-grid .portfolio-item:first-child { grid-row: auto; }
+      .featured-grid .portfolio-item:first-child .video-wrapper { aspect-ratio: 16 / 9; min-height: 0; }
       .featured-grid .portfolio-item:first-child .proj-title { font-size: 1.2rem; }
       .work-grid { grid-template-columns: 1fr; gap: 1.2rem; }
       
@@ -538,7 +541,7 @@
       <div class="featured-grid">
         <figure class="portfolio-item" data-category="mv" data-featured>
           <a href="https://www.youtube.com/watch?v=FCWUGhVX-D4" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="달샤벳 Serri - LIKE 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/FCWUGhVX-D4/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/FCWUGhVX-D4/hqdefault.jpg'" alt="달샤벳 Serri - LIKE 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/FCWUGhVX-D4/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/FCWUGhVX-D4/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/FCWUGhVX-D4/hqdefault.jpg'" alt="달샤벳 Serri - LIKE 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">뮤직비디오</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -550,7 +553,7 @@
         </figure>
         <figure class="portfolio-item" data-category="mv" data-featured>
           <a href="https://www.youtube.com/watch?v=fLhuUJyFfeQ" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="익스펜더블4 x 넉살 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/fLhuUJyFfeQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/fLhuUJyFfeQ/hqdefault.jpg'" alt="익스펜더블4 x 넉살 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/fLhuUJyFfeQ/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/fLhuUJyFfeQ/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/fLhuUJyFfeQ/hqdefault.jpg'" alt="익스펜더블4 x 넉살 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">뮤직비디오</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -562,7 +565,7 @@
         </figure>
         <figure class="portfolio-item" data-category="brand" data-featured>
           <a href="https://www.youtube.com/watch?v=S8koo5hrLOE" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="IHHI 브랜드 필름 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/S8koo5hrLOE/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/S8koo5hrLOE/hqdefault.jpg'" alt="IHHI 브랜드 필름 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/S8koo5hrLOE/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/S8koo5hrLOE/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/S8koo5hrLOE/hqdefault.jpg'" alt="IHHI 브랜드 필름 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">브랜드/광고</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -587,7 +590,7 @@
       <div class="work-grid" id="workGrid">
         <figure class="portfolio-item" data-category="mv">
           <a href="https://www.youtube.com/watch?v=LUlyTXQG2Hk" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="달샤벳 Serri - Spotlight 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/LUlyTXQG2Hk/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/LUlyTXQG2Hk/hqdefault.jpg'" alt="달샤벳 Serri - Spotlight 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/LUlyTXQG2Hk/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/LUlyTXQG2Hk/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/LUlyTXQG2Hk/hqdefault.jpg'" alt="달샤벳 Serri - Spotlight 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">뮤직비디오</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -599,7 +602,7 @@
         </figure>
         <figure class="portfolio-item" data-category="film">
           <a href="https://www.youtube.com/watch?v=yrsDCDcqLu8" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="투헤븐 To Heaven 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/yrsDCDcqLu8/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/yrsDCDcqLu8/hqdefault.jpg'" alt="투헤븐 To Heaven 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/yrsDCDcqLu8/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/yrsDCDcqLu8/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/yrsDCDcqLu8/hqdefault.jpg'" alt="투헤븐 To Heaven 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">영화</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -611,7 +614,7 @@
         </figure>
         <figure class="portfolio-item" data-category="vj">
           <a href="https://www.youtube.com/watch?v=c2GJCM3nfiU" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="왓챠 오리지널 「더블트러블」 VJ 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/c2GJCM3nfiU/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/c2GJCM3nfiU/hqdefault.jpg'" alt="왓챠 오리지널 「더블트러블」 VJ 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/c2GJCM3nfiU/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/c2GJCM3nfiU/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/c2GJCM3nfiU/hqdefault.jpg'" alt="왓챠 오리지널 「더블트러블」 VJ 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">VJ</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -624,7 +627,7 @@
         </figure>
         <figure class="portfolio-item" data-category="brand">
           <a href="https://www.youtube.com/watch?v=NjuMTw3MobQ" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="yhel 제품 브랜드 필름 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/NjuMTw3MobQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/NjuMTw3MobQ/hqdefault.jpg'" alt="yhel 제품 브랜드 필름 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/NjuMTw3MobQ/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/NjuMTw3MobQ/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/NjuMTw3MobQ/hqdefault.jpg'" alt="yhel 제품 브랜드 필름 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">브랜드/광고</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -636,7 +639,7 @@
         </figure>
         <figure class="portfolio-item" data-category="brand">
           <a href="https://www.youtube.com/watch?v=bc7jdEes0eM" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="수작카츠 홍보영상 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/bc7jdEes0eM/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/bc7jdEes0eM/hqdefault.jpg'" alt="수작카츠 홍보영상 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/bc7jdEes0eM/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/bc7jdEes0eM/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/bc7jdEes0eM/hqdefault.jpg'" alt="수작카츠 홍보영상 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">브랜드/광고</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -648,7 +651,7 @@
         </figure>
         <figure class="portfolio-item" data-category="film">
           <a href="https://www.youtube.com/watch?v=DrNM5QhAr_M" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="호프 HOPE 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/DrNM5QhAr_M/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/DrNM5QhAr_M/hqdefault.jpg'" alt="호프 HOPE 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/DrNM5QhAr_M/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/DrNM5QhAr_M/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/DrNM5QhAr_M/hqdefault.jpg'" alt="호프 HOPE 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">영화</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -660,7 +663,7 @@
         </figure>
         <figure class="portfolio-item" data-category="pr">
           <a href="https://www.youtube.com/watch?v=Ih2UpxsUHAQ" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="에코플러스바이오차 기업홍보 시리즈 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/Ih2UpxsUHAQ/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/Ih2UpxsUHAQ/hqdefault.jpg'" alt="에코플러스바이오차 기업홍보 시리즈 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/Ih2UpxsUHAQ/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/Ih2UpxsUHAQ/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/Ih2UpxsUHAQ/hqdefault.jpg'" alt="에코플러스바이오차 기업홍보 시리즈 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">기업홍보영상</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -673,7 +676,7 @@
         </figure>
         <figure class="portfolio-item" data-category="mv">
           <a href="https://www.youtube.com/watch?v=BHlT0ypEcWI" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="I Wish I knew 퍼포먼스 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/BHlT0ypEcWI/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/BHlT0ypEcWI/hqdefault.jpg'" alt="I Wish I knew 퍼포먼스 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/BHlT0ypEcWI/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/BHlT0ypEcWI/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/BHlT0ypEcWI/hqdefault.jpg'" alt="I Wish I knew 퍼포먼스 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">뮤직비디오</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -685,7 +688,7 @@
         </figure>
         <figure class="portfolio-item" data-category="mv">
           <a href="https://www.youtube.com/watch?v=wUmlWvrNcTc" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="1980 x 임을 위한 행진곡 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/wUmlWvrNcTc/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/wUmlWvrNcTc/hqdefault.jpg'" alt="1980 x 임을 위한 행진곡 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/wUmlWvrNcTc/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/wUmlWvrNcTc/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/wUmlWvrNcTc/hqdefault.jpg'" alt="1980 x 임을 위한 행진곡 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">뮤직비디오</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -697,7 +700,7 @@
         </figure>
         <figure class="portfolio-item" data-category="brand">
           <a href="https://www.youtube.com/watch?v=PE_o2DZI8GU" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="JART 은파 더 레이크 분양 홍보 영상 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/PE_o2DZI8GU/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/PE_o2DZI8GU/hqdefault.jpg'" alt="JART 은파 더 레이크 분양 홍보 영상 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/PE_o2DZI8GU/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/PE_o2DZI8GU/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/PE_o2DZI8GU/hqdefault.jpg'" alt="JART 은파 더 레이크 분양 홍보 영상 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">브랜드/광고</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -709,7 +712,7 @@
         </figure>
         <figure class="portfolio-item" data-category="event">
           <a href="https://www.youtube.com/watch?v=f9RdOgIAJCc" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="풀파티 행사 스케치 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/f9RdOgIAJCc/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/f9RdOgIAJCc/hqdefault.jpg'" alt="풀파티 행사 스케치 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/f9RdOgIAJCc/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/f9RdOgIAJCc/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/f9RdOgIAJCc/hqdefault.jpg'" alt="풀파티 행사 스케치 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">행사</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -721,7 +724,7 @@
         </figure>
         <figure class="portfolio-item" data-category="event">
           <a href="https://www.youtube.com/watch?v=d2dkXeVkUTc" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="첸웬링 전시 · 제이미컬렉션 갤러리 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/d2dkXeVkUTc/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/d2dkXeVkUTc/hqdefault.jpg'" alt="첸웬링 전시 · 제이미컬렉션 갤러리 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/d2dkXeVkUTc/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/d2dkXeVkUTc/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/d2dkXeVkUTc/hqdefault.jpg'" alt="첸웬링 전시 · 제이미컬렉션 갤러리 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">행사</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -733,7 +736,7 @@
         </figure>
         <figure class="portfolio-item" data-category="film">
           <a href="https://www.youtube.com/watch?v=J-pmjGgqfpo" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="본회퍼 : 목사. 스파이. 암살자 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/J-pmjGgqfpo/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/J-pmjGgqfpo/hqdefault.jpg'" alt="본회퍼 : 목사. 스파이. 암살자 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/J-pmjGgqfpo/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/J-pmjGgqfpo/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/J-pmjGgqfpo/hqdefault.jpg'" alt="본회퍼 : 목사. 스파이. 암살자 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">영화</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
@@ -745,7 +748,7 @@
         </figure>
         <figure class="portfolio-item" data-category="film">
           <a href="https://www.youtube.com/watch?v=pDIuyAMA8Nk" target="_blank" rel="noopener noreferrer" class="video-wrapper" aria-label="사운드 오브 호프 : 포썸 트롯의 기적 영상 보기 (유튜브)">
-            <img src="https://img.youtube.com/vi/pDIuyAMA8Nk/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/pDIuyAMA8Nk/hqdefault.jpg'" alt="사운드 오브 호프 : 포썸 트롯의 기적 썸네일" loading="lazy" width="1280" height="720">
+            <img src="https://img.youtube.com/vi/pDIuyAMA8Nk/maxresdefault.jpg" onload="if(this.naturalWidth<=120&&!this.dataset.fb){this.dataset.fb=1;this.src='https://img.youtube.com/vi/pDIuyAMA8Nk/hqdefault.jpg'}" onerror="this.onerror=null;this.src='https://img.youtube.com/vi/pDIuyAMA8Nk/hqdefault.jpg'" alt="사운드 오브 호프 : 포썸 트롯의 기적 썸네일" loading="lazy" width="1280" height="720">
             <span class="badge">영화</span>
             <span class="play-btn" aria-hidden="true"></span>
           </a>
