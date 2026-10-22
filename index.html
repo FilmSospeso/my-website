@@ -401,6 +401,13 @@
       transition: opacity 0.3s ease; align-self: flex-start; border-radius: 4px;
     }
     .submit-btn:hover { opacity: 0.8; }
+    .submit-btn:disabled { cursor: progress; opacity: 0.75; }
+    .submit-btn.is-sending::before {
+      content: ""; display: inline-block; width: 0.9em; height: 0.9em; margin-right: 0.55em; vertical-align: -0.12em;
+      border: 2px solid rgba(0,0,0,0.25); border-top-color: #000; border-radius: 50%; animation: btnspin 0.7s linear infinite;
+    }
+    @keyframes btnspin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .submit-btn.is-sending::before { animation-duration: 2s; } }
 
     /* --- 수정된 토스트 메시지 스타일 (배경 없는 투명 글씨) --- */
     .submit-action-wrapper {
@@ -1180,7 +1187,7 @@
               <!-- 새롭게 수정된 버튼 및 토스트 팝업 래퍼 -->
               <div class="submit-action-wrapper">
                 <button type="submit" class="submit-btn">문의 보내기</button>
-                <span id="toastMessage" class="toast-message"></span>
+                <span id="toastMessage" class="toast-message" role="status" aria-live="polite"></span>
               </div>
               
             </div>
@@ -1409,7 +1416,9 @@
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxr6SZpRmbhQFYG8Cy7xOr36XX3F2YnKMTq9399-SLpgbWKwTNAsw2KvwclAmfaMuQCLw/exec';
 
     // 토스트 메시지를 띄우는 함수
-    function showToast(message, isError = false) {
+    let toastTimer;
+    function showToast(message, isError = false, ms = 3000) {
+      clearTimeout(toastTimer);
       toastMessage.textContent = message;
       if (isError) {
         toastMessage.classList.add('error');
@@ -1419,10 +1428,9 @@
       
       toastMessage.classList.add('show');
       
-      // 3초(3000ms) 뒤에 사라짐
-      setTimeout(() => {
+      toastTimer = setTimeout(() => {
         toastMessage.classList.remove('show');
-      }, 3000);
+      }, ms);
     }
 
     // 🛡️ [보안 추가] 악성 코드 및 스프레드시트 수식 무력화 함수 (XSS & Injection 방지)
@@ -1438,15 +1446,39 @@
       return sanitized;
     }
 
+    // ⚡ 예열: 문의 영역이 보이거나 폼을 만지면 서버를 미리 깨워 둠 (전송 대기 시간 단축)
+    let lastWarm = 0;
+    function warmUp() {
+      if (Date.now() - lastWarm < 4 * 60 * 1000) return;
+      lastWarm = Date.now();
+      fetch(scriptURL, { method: 'GET', mode: 'no-cors', cache: 'no-store' }).catch(() => {});
+    }
+    contactForm.addEventListener('focusin', warmUp);
+    contactForm.addEventListener('pointerdown', warmUp, { passive: true });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((ents, ob) => {
+        if (ents.some(x => x.isIntersecting)) { warmUp(); ob.disconnect(); }
+      }, { rootMargin: '200px 0px' }).observe(contactForm);
+    }
+
 contactForm.addEventListener('submit', e => {
       e.preventDefault(); // 기본 새로고침 방지
-      
+
       const submitBtn = contactForm.querySelector('.submit-btn');
-      const originalBtnText = submitBtn.textContent;
-      
+      const originalBtnText = '문의 보내기';
+      if (submitBtn.disabled) return;
+
       // 전송 중 버튼 상태 변경
-      submitBtn.textContent = '전송 중...';
+      submitBtn.textContent = '접수 중';
+      submitBtn.classList.add('is-sending');
       submitBtn.disabled = true;
+      toastMessage.classList.remove('show', 'error');
+      const slowNote = setTimeout(() => {
+        toastMessage.textContent = '안전하게 접수하고 있어요. 잠시만 기다려 주세요.';
+        toastMessage.classList.remove('error');
+        toastMessage.classList.add('show');
+      }, 1500);
+      const done = () => { clearTimeout(slowNote); submitBtn.classList.remove('is-sending'); submitBtn.textContent = originalBtnText; submitBtn.disabled = false; };
 
       // 폼 데이터를 가져와서 보안 검사(Sanitize) 실행
       const formData = new FormData(contactForm);
@@ -1465,16 +1497,14 @@ contactForm.addEventListener('submit', e => {
         .then(response => response.json())
         .then(data => {
           if (!data || data.result !== 'success') throw new Error(data && data.reason || 'failed');
-          showToast('문의가 접수되었습니다. 24시간 안으로 연락드리겠습니다!');
+          done();
+          showToast('문의가 접수되었습니다. 24시간 안으로 연락드리겠습니다!', false, 6000);
           contactForm.reset(); // 폼 내용 비우기
-          submitBtn.textContent = originalBtnText;
-          submitBtn.disabled = false;
         })
         .catch(error => {
           console.error('Error!', error.message);
-          showToast('일시적인 오류가 발생했습니다. 다시 시도해주세요.', true);
-          submitBtn.textContent = originalBtnText;
-          submitBtn.disabled = false;
+          done();
+          showToast('일시적인 오류가 발생했습니다. 다시 시도해주세요.', true, 6000);
         });
     });
   </script>

@@ -38,6 +38,9 @@ var FORMULA_HEADERS = ['잔금'];   // 새 행에 위 행 수식을 이어 붙�
 
 /* ───────────────────────── 1. 홈페이지 문의 접수 ───────────────────────── */
 
+// 예열용: 방문자가 문의 폼을 만지기 시작하면 홈페이지가 한 번 호출 → 실제 전송 때 서버가 이미 깨어 있음
+function doGet() { return json_({ ok: true }); }
+
 function doPost(e) {
   var lock = LockService.getScriptLock();
   var locked = false;
@@ -227,15 +230,31 @@ function tab_(ss, name) {
 // 마지막 데이터 행 다음 줄에 머리글 기준으로 기록 (미리 깔아둔 드롭다운 보존, 잔금 수식은 위 행에서 복사)
 function append_(T, values) {
   var row = T.lastData + 1;
+  var n = T.headers.length;
   if (row > T.sh.getMaxRows()) T.sh.insertRowsAfter(T.sh.getMaxRows(), 5);
-  if (row > 2) {
-    var fx = T.sh.getRange(row - 1, 1, 1, T.headers.length).getFormulasR1C1()[0];
-    fx.forEach(function (f, c) { if (f && FORMULA_HEADERS.indexOf(T.headers[c]) > -1 && values[T.headers[c]] === undefined) T.sh.getRange(row, c + 1).setFormulaR1C1(f); });
-  }
-  Object.keys(values).forEach(function (h) {
-    var c = T.headers.indexOf(h);
-    if (c > -1 && values[h] !== undefined) T.sh.getRange(row, c + 1).setValue(values[h]);
+  // 한 번에 읽고 한 번에 쓰기 (칸마다 따로 쓰면 느림). 기존 칸의 수식·값과 드롭다운은 그대로 둠
+  var target = T.sh.getRange(row, 1, 1, n);
+  var curF = target.getFormulasR1C1()[0], curV = target.getValues()[0];
+  var prevF = row > 2 ? T.sh.getRange(row - 1, 1, 1, n).getFormulasR1C1()[0] : [];
+  var isF = T.headers.map(function (h, c) {
+    return values[h] === undefined && !!(curF[c] || (prevF[c] && FORMULA_HEADERS.indexOf(h) > -1));
   });
+  var out = T.headers.map(function (h, c) {
+    if (values[h] !== undefined) return values[h];
+    if (isF[c]) return curF[c] || prevF[c];
+    return curV[c];
+  });
+  if (isF.indexOf(true) === -1) {
+    target.setValues([out]);              // 보통(문의 탭): 한 번에 기록
+  } else {
+    // 수식 칸은 R1C1 수식으로, 나머지는 연속 구간끼리 묶어서 값으로
+    var start = -1;
+    for (var c = 0; c <= n; c++) {
+      if (c < n && !isF[c]) { if (start < 0) start = c; continue; }
+      if (start > -1) { T.sh.getRange(row, start + 1, 1, c - start).setValues([out.slice(start, c)]); start = -1; }
+      if (c < n) T.sh.getRange(row, c + 1).setFormulaR1C1(out[c]);
+    }
+  }
   var cells = T.headers.map(function (h) { return values[h] === undefined ? '' : String(values[h]); });
   T.data[row - 2] = cells;
   T.lastData = row;
