@@ -142,9 +142,10 @@ function readEntity_(key, ss) {
     const range = sh.getRange(2, 1, lastRow - 1, width);
     const display = range.getDisplayValues();
     const raw = range.getValues();
-    const formulas = range.getFormulas();
+    // 수식 열을 쓰는 탭(입금현황)만 수식을 읽음 → 나머지 탭은 읽기 1회 절약
+    const formulas = (E.formula && E.formula.length) ? range.getFormulas() : null;
     display.forEach(function (cells, i) {
-      formulas[i].forEach(function (fx, c) { if (fx) formulaCols[c] = true; });
+      if (formulas) formulas[i].forEach(function (fx, c) { if (fx) formulaCols[c] = true; });
       if (isBlankRow_(cells)) return;
       rows.push({ row: i + 2, cells: cells, raw: raw[i].map(serial_) });
       lastDataRow = i + 2;
@@ -345,9 +346,12 @@ function ensureSchema_(ss) {
 
 /* ───────────────────────── 화면 데이터 ───────────────────────── */
 
-function getAll() {
+function getAll() { return getAll_(null, true); }
+
+// ss: 이미 연 스프레드시트(재사용), withCal: 캘린더 일정까지 불러올지 (느린 편이라 필요할 때만)
+function getAll_(ss, withCal) {
   const email = requireUser_();
-  const ss = ss_();
+  ss = ss || ss_();
   ensureSchema_(ss);
   const out = { email: email, sheetUrl: ss.getUrl(), today: today_(), t: {}, events: [], missing: [] };
   Object.keys(ENT).forEach(function (k) {
@@ -356,6 +360,7 @@ function getAll() {
     out.t[k] = { headers: T.headers, fields: T.fields, formulaCols: T.formulaCols, options: options_(T),
                  rows: T.rows.map(function (r) { return { row: r.row, cells: r.cells, raw: r.raw, v: version_(r.cells) }; }) };
   });
+  if (!withCal) { out.events = null; return out; }   // null = 화면에 있던 일정 그대로 사용
   try {
     const now = new Date();
     const from = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
@@ -389,15 +394,18 @@ function act(name, p) {
   requireUser_();
   const fn = ACTIONS[name];
   if (!fn) throw new Error('알 수 없는 작업입니다.');
-  return withLock_(function (ss) { return fn(ss, p || {}); });
+  // 캘린더를 건드리는 작업일 때만 일정을 다시 불러옴
+  const withCal = name === 'task' || /"calendar":true/.test(JSON.stringify(p || {}));
+  return withLock_(function (ss) { return fn(ss, p || {}); }, withCal);
 }
 
-function withLock_(fn) {
+function withLock_(fn, withCal) {
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   let msg;
-  try { msg = fn(ss_()); } finally { lock.releaseLock(); }
-  const data = getAll();
+  const ss = ss_();
+  try { msg = fn(ss); SpreadsheetApp.flush(); } finally { lock.releaseLock(); }
+  const data = getAll_(ss, !!withCal);
   data.message = msg;
   return data;
 }

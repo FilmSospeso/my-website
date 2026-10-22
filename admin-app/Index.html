@@ -485,9 +485,16 @@ window.addEventListener('scroll', () => $('top').classList.toggle('scrolled', wi
 async function refresh() {
   try { D = await run('getAll'); render(); toast('최신 상태로 불러왔습니다'); } catch (e) { toast(errMsg(e), true); }
 }
+// 저장 후 서버가 캘린더를 다시 안 읽었으면(events: null) 화면에 있던 일정을 그대로 유지
+function setData(data) {
+  if (data && data.events == null && D) { data.events = D.events; if (D.calendarError) data.calendarError = D.calendarError; }
+  D = data;
+}
+let pending = Promise.resolve();   // 저장을 차례대로 (빠르게 연달아 눌러도 충돌 안 나게)
+function queue(task) { const p = pending.then(task, task); pending = p.catch(() => {}); return p; }
 async function doAct(name, p) {
   const data = await run('act', name, p);
-  D = data; closeAll(); render(); toast(data.message || '저장했습니다');
+  setData(data); closeAll(); render(); toast(data.message || '저장했습니다');
   return data;
 }
 
@@ -690,9 +697,27 @@ function mailTo(r) {
   const email = g('inquiry', r, 'email'); if (!email) return toast('이메일이 없습니다', true);
   window.open('mailto:' + encodeURIComponent(email) + '?subject=' + encodeURIComponent('[Film Sospeso] 문의 회신'), '_blank');
 }
-async function setStatus(r, status, touch) {
+// 진행상태: 화면은 즉시 바꾸고, 저장은 뒤에서 (실패하면 원래대로 되돌림)
+function setStatus(r, status, touch) {
   if (!status || status === g('inquiry', r, 'status')) return;
-  try { await doAct('inqStatus', { row: r.row, v: r.v, status, touch: touch || /검토|미팅|견적|계약/.test(status) }); } catch (e) { toast(errMsg(e), true); }
+  const si = col('inquiry', 'status'), li = col('inquiry', 'lastContact');
+  const doTouch = touch || /검토|미팅|견적|계약/.test(status);
+  const before = { cells: r.cells.slice(), raw: r.raw.slice() };
+  const row = r.row;
+  r.cells[si] = status; r.raw[si] = status;
+  if (doTouch && li > -1) { const t = ymd(today()); r.cells[li] = t; r.raw[li] = t; }
+  render(); toast("'" + status + "' 으로 변경 · 저장 중…");
+  return queue(async () => {
+    const cur = rows('inquiry').find(x => x.row === row) || r;   // 앞선 저장으로 새 버전을 받았으면 그걸 사용
+    try {
+      const data = await run('act', 'inqStatus', { row, v: cur.v, status, touch: doTouch });
+      setData(data); render(); toast(data.message || '저장했습니다');
+    } catch (e) {
+      const x = rows('inquiry').find(y => y.row === row);
+      if (x) { x.cells = before.cells; x.raw = before.raw; }
+      render(); toast('저장하지 못했습니다: ' + errMsg(e), true);
+    }
+  });
 }
 async function applyAnalysis(r, a) {
   const ch = {};
@@ -1045,7 +1070,7 @@ function editSheet(key, r, only, preset) {
       if (!r && preset) Object.entries(preset).forEach(([f, v]) => { const i = col(key, f); if (i > -1 && !ch[t.headers[i]]) ch[t.headers[i]] = v; });
       if (!Object.keys(ch).length) { closeAll(); return; }
       const data = await run('saveRecord', key, r ? r.row : null, r ? r.v : null, ch);
-      D = data; closeAll(); render(); toast(data.message || '저장했습니다');
+      setData(data); closeAll(); render(); toast(data.message || '저장했습니다');
     })]);
 }
 
