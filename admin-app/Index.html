@@ -1030,7 +1030,7 @@ function editSheet(key, r, only, preset) {
     if (ro) el = inp(disp || (i === idIdx ? '자동 생성' : ''), { readonly: true });
     else if (o && o.length) el = sel(o, disp);
     else if (/일시$/.test(hd)) el = inp(typeof raw === 'string' && /T/.test(raw) ? raw.slice(0, 16) : '', { type: 'datetime-local' });
-    else if (/(일|날짜|일자)$/.test(hd) && !/요일/.test(hd)) el = inp(typeof raw === 'string' && /^\d{4}-/.test(raw) ? raw.slice(0, 10) : (/^\d{4}-\d{2}-\d{2}$/.test(disp) ? disp : ''), { type: 'date' });
+    else if (/(일|날짜|일자)$/.test(hd) && !/(요일|메일)$/.test(hd)) el = inp(typeof raw === 'string' && /^\d{4}-/.test(raw) ? raw.slice(0, 10) : (/^\d{4}-\d{2}-\d{2}$/.test(disp) ? disp : ''), { type: 'date' });
     else if (/견적|액$|^선금$|^후금$|중간입금$/.test(hd)) el = moneyInp(num(raw || disp));
     else if (full) el = h('textarea', { value: disp });
     else el = inp(disp, /이메일/.test(hd) ? { inputmode: 'email' } : /연락처|전화/.test(hd) ? { inputmode: 'tel' } : {});
