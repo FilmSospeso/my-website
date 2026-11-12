@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>임창빈 이력서 | Film Sospeso</title>
+  <meta name="description" content="임창빈 이력서: 음반 녹음, 커피·외식, 영상·영화 제작 경력.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="임창빈 이력서 | Film Sospeso">
+  <meta property="og:description" content="음반 녹음, 커피·외식, 영상·영화 제작 경력">
+  <meta property="og:url" content="https://filmsospeso.github.io/my-website/resume/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --accent: #ff8c00;
+      --bg-dark: #141414;
+      --bg-darker: #0a0a0a;
+      --bg-lighter: #1a1a1a;
+      --line: #2c2c2c;
+      --text-light: #F7F6F2;
+      --text-dim: #a9a7a0;
+      --font-base: 'Noto Sans KR', sans-serif;
+      --font-display: 'Playfair Display', serif;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0;
+      font-family: var(--font-base);
+      font-weight: 300;
+      color: var(--text-light);
+      background-color: var(--bg-dark);
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-height: 1.7;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .top {
+      background: var(--bg-darker);
+      border-bottom: 1px solid var(--line);
+    }
+    .top-inner, main, footer p {
+      max-width: 900px; margin: 0 auto; padding-left: 16px; padding-right: 16px;
+    }
+    .top-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 14px; padding-bottom: 14px;
+    }
+    .brand { font-family: var(--font-display); font-size: 1.15rem; color: var(--text-light); }
+    .print-btn {
+      font: inherit; font-size: 0.85rem; color: var(--text-light);
+      background: transparent; border: 1px solid var(--line); border-radius: 999px;
+      padding: 6px 16px; cursor: pointer;
+    }
+    .print-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    main { padding-top: 56px; padding-bottom: 72px; }
+    .eyebrow {
+      font-family: var(--font-display); font-style: italic;
+      color: var(--accent); letter-spacing: 0.08em; margin: 0 0 6px;
+    }
+    h1 { font-size: clamp(2rem, 6vw, 3rem); font-weight: 700; margin: 0 0 12px; line-height: 1.2; }
+    .lead { color: var(--text-dim); max-width: 640px; margin: 0; }
+
+    section { margin-top: 56px; }
+    h2 {
+      font-size: 1.25rem; font-weight: 700; margin: 0 0 18px;
+      padding-bottom: 10px; border-bottom: 1px solid var(--line);
+    }
+    h2::before { content: ""; display: inline-block; width: 18px; height: 2px; background: var(--accent); vertical-align: middle; margin-right: 10px; }
+    h3 { font-size: 1rem; font-weight: 700; color: var(--accent); margin: 36px 0 12px; }
+
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+    th { font-weight: 500; color: var(--text-dim); white-space: nowrap; font-size: 0.82rem; }
+    table.kv th { width: 110px; }
+    td.when { white-space: nowrap; color: var(--text-dim); }
+
+    .job { margin: 0 0 26px; }
+    .job-head { margin: 0 0 6px; }
+    .job-head strong { font-weight: 700; }
+    .job-head span { color: var(--text-dim); font-size: 0.9rem; }
+    ul { margin: 0; padding-left: 20px; }
+    li { margin: 2px 0; }
+    li ul { margin-top: 2px; color: var(--text-dim); }
+    .note { color: var(--text-dim); font-size: 0.9rem; margin: 18px 0 8px; }
+
+    .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .gallery.one { grid-template-columns: 1fr; }
+    figure { margin: 0; background: var(--bg-lighter); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+    figure img { display: block; width: 100%; height: auto; }
+    figcaption { padding: 10px 14px; font-size: 0.85rem; color: var(--text-dim); }
+
+    footer { background: var(--bg-darker); border-top: 1px solid var(--line); }
+    footer p { padding-top: 22px; padding-bottom: 22px; margin: 0 auto; font-size: 0.85rem; color: var(--text-dim); }
+
+    @media (max-width: 640px) {
+      .gallery { grid-template-columns: 1fr; }
+      main { padding-top: 36px; }
+      table { min-width: 480px; }
+      table.kv { min-width: 0; }
+    }
+
+    @media print {
+      html, body { background: #fff; color: #111; font-size: 10.5pt; }
+      .top, footer, .print-btn { display: none; }
+      main { padding: 0; max-width: none; }
+      a { color: #111; }
+      .lead, th, td.when, .job-head span, li ul, .note, figcaption { color: #444; }
+      th, td, h2 { border-color: #ccc; }
+      h3, .eyebrow { color: #b35f00; }
+      section { margin-top: 28px; }
+      figure { background: #fff; border-color: #ccc; break-inside: avoid; }
+      .job, tr { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top">
+    <div class="top-inner">
+      <a class="brand" href="../">Film Sospeso</a>
+      <button class="print-btn" type="button" onclick="window.print()">인쇄 · PDF 저장</button>
+    </div>
+  </header>
+
+  <main>
+    <p class="eyebrow">Résumé</p>
+    <h1>임창빈 이력서</h1>
+    <p class="lead">2005년 음반 녹음 스튜디오에서 일을 시작해, 2009년부터 커피·외식, 2016년부터 영상·영화 제작으로 영역을 넓혀 왔습니다.</p>
+
+    <section>
+      <h2>인적 사항</h2>
+      <div class="table-wrap">
+        <table class="kv">
+          <tr><th>이름</th><td>임창빈</td></tr>
+          <tr><th>생년월일</th><td>1985년 4월 8일</td></tr>
+          <tr><th>성별</th><td>남</td></tr>
+          <tr><th>주소</th><td>서울시 종로구 창신동 660-17번지 402호</td></tr>
+          <tr><th>연락처</th><td><a href="tel:010-8793-6235">010-8793-6235</a></td></tr>
+          <tr><th>이메일</th><td><a href="mailto:filmsospeso@gmail.com">filmsospeso@gmail.com</a></td></tr>
+          <tr><th>웹사이트</th><td><a href="https://filmsospeso.github.io/my-website/">filmsospeso.github.io/my-website</a></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>학력</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>기간</th><th>학교</th><th>구분</th><th>비고</th></tr>
+          <tr><td class="when">2004년 입학</td><td>한국영상대학교 (구 공주영상대학) 촬영조명학부 음향제작과</td><td>1년 수료 후 자퇴</td><td>축제 대회 밴드 부문 금상 수상으로 특별전형 입학</td></tr>
+          <tr><td class="when">2001년 ~ 2004년</td><td>서울 중앙고등학교</td><td>졸업</td><td>밴드부 퍼스트 기타</td></tr>
+          <tr><td class="when">1998년 ~ 2001년</td><td>서울 중앙중학교</td><td>졸업</td><td></td></tr>
+          <tr><td class="when">1992년 ~ 1998년</td><td>서울 재동초등학교</td><td>졸업</td><td></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>병역</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>기간</th><th>소속</th><th>보직</th><th>구분</th></tr>
+          <tr><td class="when">2007년 4월 9일 ~ 2009년 3월 28일</td><td>육군 제11사단 127기계화보병대대</td><td>장갑차 조종수</td><td>병장 전역</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>경력 요약</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>시기</th><th>소속</th><th>역할</th><th>분야</th></tr>
+          <tr><td class="when">2018년 ~</td><td>Filmsospeso (필름 소스페소)</td><td>대표 (개인사업자), 연출·촬영</td><td>영상·영화</td></tr>
+          <tr><td class="when">2016년 ~ 현재</td><td>영화 제작·홍보·배급사</td><td>스틸, 메이킹, 행사 참여</td><td>영화</td></tr>
+          <tr><td class="when">2016년 11월 ~ 2017년 4월</td><td>스테디컬쳐 (기업 홍보영상 대행사)</td><td>프로젝트 조감독</td><td>영상</td></tr>
+          <tr><td class="when">2015년 ~ 2016년 10월</td><td>DFD패션그룹 신규 외식사업부</td><td>점장 (스카우트)</td><td>외식</td></tr>
+          <tr><td class="when">2011년 9월 ~</td><td>카페 컨설팅·교육 (독립 활동)</td><td>컨설턴트, 강사</td><td>커피</td></tr>
+          <tr><td class="when">2010년 3월 ~ 2011년 9월</td><td>코피티암</td><td>바리스타</td><td>커피</td></tr>
+          <tr><td class="when">2009년 3월 ~ 2010년 3월</td><td>빈스빈스</td><td>입사 후 지원 슈퍼바이저까지</td><td>커피</td></tr>
+          <tr><td class="when">2007년 4월 ~ 2009년 3월</td><td>육군 제11사단</td><td>장갑차 조종수</td><td>병역</td></tr>
+          <tr><td class="when">2005년 ~ 2007년</td><td>기타 레슨·홍대 공연 활동</td><td>기타리스트, 강사</td><td>음악</td></tr>
+          <tr><td class="when">2005년</td><td>헤븐스튜디오 (양재)</td><td>녹음 어시스턴트</td><td>음반 녹음</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>경력 상세</h2>
+
+      <h3>영상·영화</h3>
+
+      <div class="job">
+        <p class="job-head"><strong>Filmsospeso (필름 소스페소)</strong> <span>· 2018년 ~ · 대표 (개인사업자)</span></p>
+        <ul>
+          <li>뮤직비디오, 브랜드 필름, 기업 홍보영상, 영화·다큐멘터리를 기획부터 연출, 촬영, 편집까지 제작</li>
+          <li>다큐멘터리 영화 「투헤븐」 촬영 감독 (2025년 11월 개봉)</li>
+          <li>영상 제작용 웹앱 「Readi Studio」 개발 (2026년 10월 ~ 개발 중)
+            <ul>
+              <li>영상 제작 아이디어부터 스토리보드, 제안서까지 한곳에서 진행</li>
+              <li>150~300명 이상이 함께 보는 스토리보드, 일일촬영표 등 영상 업계에 필요한 기능 수록</li>
+            </ul>
+          </li>
+        </ul>
+        <p class="note">주요 작업</p>
+        <div class="table-wrap">
+          <table>
+            <tr><th>분야</th><th>작품</th><th>역할</th></tr>
+            <tr><td class="when">뮤직비디오</td><td>달샤벳 Serri 「Spotlight」</td><td>기획·연출·촬영·편집</td></tr>
+            <tr><td class="when">뮤직비디오</td><td>달샤벳 Serri 「LIKE」</td><td>기획·연출·촬영·편집</td></tr>
+            <tr><td class="when">뮤직비디오</td><td>영화 「익스펜더블4」 x 넉살</td><td>기획·연출·촬영·조명</td></tr>
+            <tr><td class="when">뮤직비디오</td><td>영화 「1980」 x 임을 위한 행진곡</td><td>촬영</td></tr>
+            <tr><td class="when">뮤직비디오</td><td>「I Wish I knew」 퍼포먼스</td><td>연출·촬영·조명·편집</td></tr>
+            <tr><td class="when">영화</td><td>「투헤븐 To Heaven」</td><td>촬영 감독</td></tr>
+            <tr><td class="when">영화</td><td>「호프 HOPE」</td><td>XM2 특수촬영팀 참여</td></tr>
+            <tr><td class="when">영화</td><td>「본회퍼: 목사. 스파이. 암살자」</td><td>자막 후반작업</td></tr>
+            <tr><td class="when">영화</td><td>「사운드 오브 호프: 포썸 트롯의 기적」</td><td>자막 후반작업</td></tr>
+            <tr><td class="when">영화</td><td>「안녕하세요」</td><td>메이킹</td></tr>
+            <tr><td class="when">영화</td><td>「나는 여기에 있다」, 「로맨스」</td><td>스틸</td></tr>
+            <tr><td class="when">브랜드·광고</td><td>IHHI 브랜드 필름</td><td>기획·연출·촬영·편집</td></tr>
+            <tr><td class="when">브랜드·광고</td><td>yhel 제품 브랜드 필름</td><td>기획·연출·촬영·편집</td></tr>
+            <tr><td class="when">브랜드·광고</td><td>수작카츠 홍보영상</td><td>기획·연출·촬영·편집</td></tr>
+            <tr><td class="when">브랜드·광고</td><td>JART 은파 더 레이크 분양 홍보영상</td><td>대본·연출·촬영·편집</td></tr>
+            <tr><td class="when">기업 홍보</td><td>에코플러스바이오차 기업홍보 시리즈 (5편)</td><td>대본·기획·연출·촬영·편집</td></tr>
+            <tr><td class="when">기업 홍보</td><td>networksY ESG 영상</td><td>홍보영상 제작</td></tr>
+            <tr><td class="when">지역 홍보</td><td>노화도·보길도 지역 홍보영상</td><td>홍보영상 제작</td></tr>
+            <tr><td class="when">VJ</td><td>왓챠 오리지널 「더블트러블」 (3편)</td><td>촬영·편집</td></tr>
+            <tr><td class="when">행사</td><td>풀파티 행사 스케치</td><td>촬영·편집</td></tr>
+            <tr><td class="when">행사</td><td>첸웬링 전시 (제이미컬렉션 갤러리)</td><td>촬영</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="job">
+        <p class="job-head"><strong>영화 제작·홍보·배급사</strong> <span>· 2016년 ~ 현재</span></p>
+        <ul>
+          <li>영화 스틸 촬영, 메이킹 촬영</li>
+          <li>영화 관련 행사 참여</li>
+          <li>홍보사: 날개엔터테인먼트 외 다수</li>
+          <li>제작사: 조이엔시네마 외 다수</li>
+          <li>배급사: 드림팩트엔터테인먼트 외 다수</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <p class="job-head"><strong>스테디컬쳐 (기업 홍보영상 대행사)</strong> <span>· 2016년 11월 ~ 2017년 4월 · 프로젝트 조감독</span></p>
+        <ul>
+          <li>프로젝트 조감독으로 기업 홍보영상 제작 참여</li>
+          <li>카페 컨설팅 겸업</li>
+        </ul>
+      </div>
+
+      <h3>커피·외식</h3>
+
+      <div class="job">
+        <p class="job-head"><strong>DFD패션그룹 신규 외식사업부</strong> <span>· 2015년 ~ 2016년 10월 · 점장</span></p>
+        <ul>
+          <li>외식사업부 신설에 맞춰 점장으로 스카우트</li>
+          <li>테스트 매장 「Blooming Club MAY」 운영</li>
+          <li>정식 브랜드 「9Block」 출범</li>
+          <li>재고·POS 시스템 구축에 6개월간 참여</li>
+          <li>건강상의 문제로 2016년 10월 퇴사</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <p class="job-head"><strong>카페 컨설팅·교육 (독립 활동)</strong> <span>· 2011년 9월 ~</span></p>
+        <ul>
+          <li>코피티암 퇴사 직후 개인 카페를 대상으로 컨설팅 시작</li>
+          <li>커피 교육과 출장 교육 진행</li>
+          <li>Creative 13 커피 파트 강사로 출강
+            <ul>
+              <li>국가과학기술인력개발원(KIRD): 2017년 말부터 정기 진행, 전국 연구원 약 400명 수강</li>
+              <li>국가인재교육개발원: 2018년 4월</li>
+            </ul>
+          </li>
+          <li>SCA Korea 대회 진행 테스터 (2019년 3월, 학여울 SETEC)</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <p class="job-head"><strong>코피티암</strong> <span>· 2010년 3월 ~ 2011년 9월</span></p>
+        <ul>
+          <li>바리스타로 근무하며 바리스타 대회 준비</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <p class="job-head"><strong>빈스빈스</strong> <span>· 2009년 3월 ~ 2010년 3월</span></p>
+        <ul>
+          <li>매장 근무로 시작해 지원 슈퍼바이저까지 맡음</li>
+          <li>당시 이사님의 말 "네가 목표하는 그 이상을 보아라"를 일의 기준으로 삼음</li>
+        </ul>
+      </div>
+
+      <h3>음악·음반 녹음</h3>
+
+      <div class="job">
+        <p class="job-head"><strong>기타 레슨·공연 활동</strong> <span>· 2005년 ~ 2007년</span></p>
+        <ul>
+          <li>합주실을 마련해 기타 레슨 진행</li>
+          <li>홍대에서 공연 활동</li>
+        </ul>
+      </div>
+
+      <div class="job">
+        <p class="job-head"><strong>헤븐스튜디오 (서울 양재, 음반 녹음 스튜디오)</strong> <span>· 2005년 · 녹음 어시스턴트</span></p>
+        <ul>
+          <li>임수정 3집 「놓칠 수 없는 사랑」 녹음 어시스턴트 참여 (2005)</li>
+          <li>소리엘 4집, 5집 녹음 어시스턴트 참여 (2005)</li>
+          <li>「테일즈런너」 OST 녹음 어시스턴트 참여 (2005)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>수상 및 매체 게재</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>연도</th><th>내용</th><th>결과</th></tr>
+          <tr><td class="when">2015년 초</td><td>해외 「Barista Magazine」 Field Report: South Korea, 한국 바리스타 부문 (2014년 11월 서울 행사 취재)</td><td>게재</td></tr>
+          <tr><td class="when">2014년</td><td>Korea Team Barista Championship (KTBC), 팀 스트라다 팀장으로 출전</td><td>준우승</td></tr>
+          <tr><td class="when">2013년</td><td>「Coffee&amp;Tea」 2013년 12월호(143호) 34쪽 행사 기사, 최종 우승자로 소개</td><td>게재</td></tr>
+          <tr><td class="when">2013년</td><td>Klatch배 Latte Art Throwdown</td><td>우승</td></tr>
+          <tr><td class="when">2004년 입학 전</td><td>축제 대회 밴드 부문</td><td>금상</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>참고 자료</h2>
+
+      <h3>매체 게재</h3>
+      <div class="gallery one">
+        <figure>
+          <img src="img/barista-magazine.jpg" alt="Barista Magazine Field Report: South Korea 지면" loading="lazy" width="2115" height="1449">
+          <figcaption>해외 「Barista Magazine」 Field Report: South Korea (글 Sarah Allen). 2014년 11월 서울 카페쇼 기간에 열린 라떼아트 스로다운 취재 기사.</figcaption>
+        </figure>
+      </div>
+      <div class="gallery" style="margin-top:20px">
+        <figure>
+          <img src="img/coffee-and-tea.jpg" alt="Coffee&amp;Tea 34쪽 라떼아트 스로다운 기사 지면" loading="lazy" width="1230" height="2150">
+          <figcaption>「Coffee&amp;Tea」 2013년 12월호(143호) 34쪽 Event 기사 (취재 강승훈). Klatch Coffee 라떼아트 스로다운 최종 우승자로 소개.</figcaption>
+        </figure>
+        <figure>
+          <img src="img/ktbc-2014.jpg" alt="2014 KTBC 준우승 트로피를 든 팀 사진" loading="lazy" width="1284" height="1282">
+          <figcaption>2014 Korea Team Barista Championship 준우승, 팀 스트라다.</figcaption>
+        </figure>
+      </div>
+
+      <h3>강의·행사</h3>
+      <div class="gallery">
+        <figure>
+          <img src="img/kird-2018-11.jpg" alt="국가과학기술인력개발원 커피 강의 현장" loading="lazy" width="1284" height="1282">
+          <figcaption>국가과학기술인력개발원(KIRD) Creative 13 커피 파트 강의 (2018년 11월).</figcaption>
+        </figure>
+        <figure>
+          <img src="img/lecture-2018-04.jpg" alt="국가인재교육개발원 커피 강의 현장" loading="lazy" width="1284" height="1282">
+          <figcaption>국가인재교육개발원 Creative 13 커피 파트 강의 (2018년 4월).</figcaption>
+        </figure>
+        <figure>
+          <img src="img/sca-korea-2019.jpg" alt="SCA Korea 대회 현장, 학여울 SETEC" loading="lazy" width="1284" height="960">
+          <figcaption>SCA Korea 대회 진행 테스터, 학여울 SETEC (2019년 3월).</figcaption>
+        </figure>
+      </div>
+
+      <h3>Filmsospeso 포트폴리오</h3>
+      <div class="gallery one">
+        <figure>
+          <img src="img/film-sospeso-portfolio.jpg" alt="Film Sospeso 포트폴리오 소개 슬라이드" loading="lazy" width="2200" height="1238">
+          <figcaption>Film Sospeso 소개 자료: 기업·제품 홍보, VJ·영화 메이킹, 영화 촬영 감독, 뮤직비디오 연출 이력.</figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2026 Film Sospeso – A story in motion. <a href="mailto:filmsospeso@gmail.com">filmsospeso@gmail.com</a></p>
+  </footer>
+
+</body>
+</html>
